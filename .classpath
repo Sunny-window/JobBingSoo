@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="job/src/main/java"/>
+	<classpathentry kind="src" path="job/src/test/java"/>
+	<classpathentry kind="src" path="job-view/src/main/java"/>
+	<classpathentry kind="src" path="job-view/src/test/java"/>
+	<classpathentry kind="lib" path="job/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="job-view/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
