@@ -8,7 +8,9 @@ group = 'com.bingsoo'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	languageVersion = JavaLanguageVersion.of(17)
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
 }
 
 configurations {
@@ -31,8 +33,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// swagger
-	implementation group: 'org.spirngdoc', name:'springdoc-openapi-stater-webmvc-ui', version:'2.1.0'
+	// swagger-ui
+	// implementation group: 'org.spirngdoc', name:'springdoc-openapi-stater-webmvc-ui', version:'2.1.0'
 }
 
 tasks.named('test') {
