@@ -1,4 +1,4 @@
-package com.bingsoo.job.entity;
+  package com.bingsoo.job.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
