@@ -3,8 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+.hidden {
+        display: none;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+	crossorigin="anonymous"></script>
 </head>
-<body>
 
+<body>
+<h1>mypage</h1>
+<button id =infoBtn >정보수정</button>
+
+<div id="infoDiv" class="hidden">
+이름<input type="text" id="name" name="name" ><br>
+생일<input type="text" id="birth" name="birth" ><br>
+전화<input type="text" id="tel" name="tel" ><br>
+주소<input type="text" id="address" name="address" ><br>
+메일<input type="text" id="email" name="email" ><br>
+성별<input type="text" id="gender" name="gender" ><br>
+필/미필<input type="text" id="military" name="military" ><br>
+<button id =updateInfo onclick="updateInfo(event)" >수정하기</button>
+<div id = resultUpdateInfo></div>
+
+
+</div>
 </body>
+<script>
+$(document).ready(function() {
+    // 정보수정 버튼 클릭 시
+    $("#infoBtn").click(function() {
+        // editInput 필드를 보이게 함
+        $("#infoDiv").removeClass("hidden");
+    });
+});
+
+function updateInfo(event){
+	event.preventDefault();
+	var name = document.querySelector('input[id="name"]').value;
+	var birth = document.querySelector('input[id="birth"]').value;
+	var tel = document.querySelector('input[id="tel"]').value;
+	var address = document.querySelector('input[id="address"]').value;
+	var email = document.querySelector('input[id="email"]').value;
+	var gender = document.querySelector('input[id="gender"]').value;
+	var military= document.querySelector('input[id="military"]').value;
+	  const member = {
+			  name: name,
+			  birth: birth,
+			  tel:tel,
+			  address:address,
+			  email:email,
+			  gender:gender,
+			  military:military,
+		    }
+	console.log("============= member"+member);
+	const sendData = JSON.stringify(member);
+    fetch("http://localhost:9001/updateInfo", { // 서버에 요청을 보냅니다.
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+        body: sendData // 전송할 데이터
+    })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("resultUpdateInfo").innerHTML = data;
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("resultUpdateInfo").innerHTML = error;
+        });
+
+}
+</script>
 </html>
