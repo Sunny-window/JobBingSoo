@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 
-public class cover_letter {
+public class Cover_letter {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
