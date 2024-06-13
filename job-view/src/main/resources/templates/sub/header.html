@@ -1,0 +1,38 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<head>
+<!-- 폰트 첨부 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <style>
+        html {
+            margin:0;
+            min-height:99.99%;
+        }
+        section{
+            max-width:1120px;
+            margin:8px auto;
+        }
+        body {
+            font-family: "Gowun Dodum", sans-serif;
+            background-color: whitesmoke;
+        }
+        nav{
+            display:flex;
+            justify-content: space-evenly;
+        }
+        nav a{
+            font-size:1.33rem;
+            text-decoration: none;
+            color: #0069d9;
+        }
+    </style>
+</head>
+
+<nav>
+    <a href="/"> Home </a> |
+    <a href="/"> Home </a> |
+    <a href="/"> Home </a>
+</nav>
+<hr>
+<th:block th:insert="~{/sub/notice.html}"></th:block>
