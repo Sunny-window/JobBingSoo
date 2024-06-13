@@ -29,7 +29,7 @@ public class Application {
 	@JoinColumn(name ="rid")
 	private Member rid;
 	
-	String result;
+	private String result;
 	
 	
 }

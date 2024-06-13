@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class FAQ {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	long faq_code;
+	private long faq_code;
 	
-	String title;
+	private String title;
 	
-	String content;
+	private String content;
 }
