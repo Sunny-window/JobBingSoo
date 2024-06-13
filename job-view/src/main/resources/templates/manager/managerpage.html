@@ -1,10 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>관리자 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .search-box {
+            margin-bottom: 10px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        function loadData() {
+            fetch('http://localhost:9001/manager/member-all')
+                .then(response => response.json())
+                .then(data => {
+                    let type = document.querySelector('input[name="type"]:checked').value;
+                    if (type === "member") {
+                        loadMembers(data.members);
+                    } else {
+                        loadCompanies(data.companies);
+                    }
+                });
+        }
+
+        function loadMembers(members) {
+            let memberTableBody = document.getElementById("memberTableBody");
+            memberTableBody.innerHTML = "";
+            members.forEach(member => {
+                let row = `<tr>
+                    <td><input type="checkbox" name="receiver" value="${member.username}"></td>
+                    <td>${member.username}</td>
+                    <td>${member.role}</td>
+                </tr>`;
+                memberTableBody.innerHTML += row;
+            });
+        }
+
+        function loadCompanies(companies) {
+            let companyTableBody = document.getElementById("companyTableBody");
+            companyTableBody.innerHTML = "";
+            companies.forEach(company => {
+                let row = `<tr>
+                    <td><input type="checkbox" name="receiver" value="${company.manager_name}"></td>
+                    <td>${company.cno}</td>
+                    <td>${company.company_name}</td>
+                    <td>${company.manager_name}</td>
+                    <td>${company.manager_tel}</td>
+                </tr>`;
+                companyTableBody.innerHTML += row;
+            });
+        }
+
+        function searchMembers() {
+            let input = document.getElementById("memberSearch").value.toLowerCase();
+            let rows = document.querySelectorAll("#memberTableBody tr");
+            rows.forEach(row => {
+                let username = row.querySelector("td:nth-child(2)").innerText.toLowerCase();
+                row.style.display = username.includes(input) ? "" : "none";
+            });
+        }
+
+        function searchCompanies() {
+            let input = document.getElementById("companySearch").value.toLowerCase();
+            let rows = document.querySelectorAll("#companyTableBody tr");
+            rows.forEach(row => {
+                let companyName = row.querySelector("td:nth-child(3)").innerText.toLowerCase();
+                row.style.display = companyName.includes(input) ? "" : "none";
+            });
+        }
+
+        function handleTypeChange() {
+            let type = document.querySelector('input[name="type"]:checked').value;
+            document.getElementById("memberSection").style.display = type === "member" ? "block" : "none";
+            document.getElementById("companySection").style.display = type === "company" ? "block" : "none";
+            loadData();
+        }
+
+        function sendNotices() {
+            let selectedReceivers = Array.from(document.querySelectorAll('input[name="receiver"]:checked'))
+                .map(input => input.value)
+                .join(",");
+            if (selectedReceivers) {
+                window.location.href = `/manager/send_notice?receiver=${selectedReceivers}`;
+            } else {
+                alert("수신자를 선택하세요.");
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById("sendNoticeButton").addEventListener("click", sendNotices);
+            document.getElementById("typeMember").addEventListener("change", handleTypeChange);
+            document.getElementById("typeCompany").addEventListener("change", handleTypeChange);
+            handleTypeChange();
+        }
+    </script>
 </head>
 <body>
+    <div class="container">
+        <h1>관리자 페이지</h1>
 
+        <div>
+            <label><input type="radio" name="type" value="member" id="typeMember" checked> 개인</label>
+            <label><input type="radio" name="type" value="company" id="typeCompany"> 기업</label>
+        </div>
+
+        <div id="memberSection">
+            <h2>회원 리스트</h2>
+            <input type="text" id="memberSearch" placeholder="회원 검색" onkeyup="searchMembers()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>선택</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody">
+                    <!-- 데이터가 여기에 로드됩니다 -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="companySection" style="display:none;">
+            <h2>기업 리스트</h2>
+            <input type="text" id="companySearch" placeholder="기업 검색" onkeyup="searchCompanies()">
+            <table>
+                <thead>
+                    <tr>
+                        <th>선택</th>
+                        <th>Company Number</th>
+                        <th>Company Name</th>
+                        <th>Manager Name</th>
+                        <th>Manager Tel</th>
+                    </tr>
+                </thead>
+                <tbody id="companyTableBody">
+                    <!-- 데이터가 여기에 로드됩니다 -->
+                </tbody>
+            </table>
+        </div>
+
+        <button id="sendNoticeButton" class="button">알림 보내기</button>
+    </div>
 </body>
 </html>
