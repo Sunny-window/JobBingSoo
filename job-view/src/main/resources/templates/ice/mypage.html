@@ -7,33 +7,46 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!--jquery 의존성 주입-->
 </head>
 <style>
+    #myCompany{
+        font-size: 30px;
+        text-align: center;
+        margin-top: 80px;
+    }
     .button-container {
         display: flex;
         justify-content: center;
-    	gap: 10px;
-    	margin-top: 20px; 
+    	gap: 127px;
+    	margin-top: 80px; 
     }
     button {
-    	width: 150px;
-    	height: 50px;
-    	font-size: 16px;
+    	width: 230px;
+    	height: 215px;
+    	font-size: 20px;
+        color: #7e7e7e;
     	background-color: white; 
-    	color: black;
-    	border: 1px solid black;
-    	border-radius: 5px;
+    	border: 1px solid #D9D9D9;
     	cursor: pointer; 
     }
     button:hover {
-    	background-color: #f0f0f0; 
+    	background-color: #FFD6E1; 
     }
 
 </style>
 <body>
 <h1>기업 마이 페이지</h1>
 <hr>
+    <p id = "myCompany">우리회사 정보 관리</p>
     <div class="button-container">
-        <button>채용공고관리</button> 
-        <button>기업정보관리</button>
+        <button onclick="employ_notice_list()">채용공고관리</button> 
+        <button onclick="infomation()">기업정보관리</button>
     </div>
+<script>
+    function infomation(){
+        window.location.href = '/ice/infomation';
+    }
+    function employ_notice_list() {
+        window.location.href = '/ice/employ_notice_list';
+    }
+</script>
 </body>
 </html>
