@@ -21,19 +21,19 @@ public class Cs_reply {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	long csr_code;
+	private long csr_code;
 	
 	@ManyToOne
 	@JoinColumn(name="cs_code")
 	@ToString.Exclude
-	Cs cs_code;
+	private Cs cs_code;
 	
 	
 	@ManyToOne
 	@JoinColumn(name="mid")
 	@ToString.Exclude
-	Member mid;
+	private Member mid;
 	
-	String comment;
+	private String comment;
 	
 }

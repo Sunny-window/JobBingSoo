@@ -19,20 +19,20 @@ import lombok.ToString;
 @Data
 public class Certificate {
 	@Id
-	long certi_code;
+	private long certi_code;
 	
 	@ManyToOne
 	@JoinColumn(name="resume_code")
 	@ToString.Exclude
-	Resume resume_code;
+	private Resume resume_code;
 	@ManyToOne
 	@JoinColumn(name="rid")
 	@ToString.Exclude
-	Member rid;
+	private Member rid;
 	
-	String stack;
-	LocalDate optain_date;
-	String issuer;
+	private String stack;
+	private LocalDate optain_date;
+	private String issuer;
 	
 	
 	
