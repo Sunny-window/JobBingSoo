@@ -28,7 +28,6 @@ public class Company {
 	private String company_name;
 	private String size;
 	private String ceo;
-	private Subscribe sub_category;
 	private String tel;
 	private String address;
 	private Integer sales;
