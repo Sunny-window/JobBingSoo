@@ -1,4 +1,4 @@
-package com.bingsoo.job.entity;
+  package com.bingsoo.job.entity;
 
 public class Cs_reply {
 
