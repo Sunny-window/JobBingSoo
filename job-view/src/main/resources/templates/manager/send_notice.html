@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>알림 보내기</title>
 </head>
 <body>
-
+    <div class="container">
+        <h1>알림 보내기</h1>
+        <form action="/manager/notice" method="post">
+            <div>
+                <label for="receivers">수신자:</label>
+                <input type="text" id="receivers" name="receivers" th:value="${receivers}" readonly>
+            </div>
+            <div>
+                <label for="title">제목:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div>
+                <label for="content">내용:</label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <button type="submit">전송</button>
+        </form>
+    </div>
 </body>
 </html>
+
+
+
