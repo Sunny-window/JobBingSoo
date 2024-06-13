@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class IceController {
     
 
-    @GetMapping("/company-all")
-    public List<company> companyAll(){
+    // @GetMapping("/company-all")
+    // public List<Company> companyAll(){
 
-    }
+    // }
 
-    @GetMapping("/company/{cid}")
-    public Company 
+    // @GetMapping("/company/{cid}")
+    // public Company 
 
 
 }
