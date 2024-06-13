@@ -13,13 +13,9 @@
             padding: 0;
         }
 
-        header {
-            height: 150px;
-        }
-
         section {
             min-height: calc(96vh - 210px);
-            max-width: 1120px;
+            max-width: 1240px;
             margin: 8px auto;
         }
 
@@ -31,7 +27,7 @@
             text-decoration: none;
             color: #333;
         }
-
+        
         header {
             min-width: 1240px;
             margin: 0 auto;
@@ -56,6 +52,11 @@
 
         .head_top .logo {
             padding-left: 15px;
+        }
+        
+        .logo img{
+            width: 55px;
+            height: 50px;
         }
 
         .head_top .logo2 {
@@ -130,7 +131,6 @@
         .head_bottom {
             display: flex;
             justify-content: space-between;
-            padding-top: 50px;
         }
 
         .head_bottom .menu_list #menu_list_item {
@@ -217,10 +217,6 @@
             color: #ff006f;
         }
 
-        #access {
-            margin-top: 10px;
-            margin-left: 300px;
-        }
     </style>
 </head>
 
@@ -228,7 +224,7 @@
     <div class="head">
         <div class="head_top">
             <div class="logo">
-                <a href="/"><img src="/resource/static/images/logo.png"></a>
+                <a href="/"><img src="/images/logo.png"></a>
             </div>
             <form action="" method="get">
                 <div class="search_bar">
@@ -243,21 +239,17 @@
                         </div>
                         <label id="search_glass_label">
                             <input type="submit" value="">
-                            <img src="/resource/img/search.png" class="search_glasses">
+                            <img src="/images/search.png" class="search_glasses">
                         </label>
                     </label>
                 </div>
             </form>
-            <div class="logo2">
-                <a href="/manage/manageLoginForm"><img src="/resource/img/logo2.png"></a>
-            </div>
         </div>
         <div class="head_bottom">
             <div class="menu_list">
                 <ul id="menu_list_item">
                     <li><a href="/">채용공고</a></li>
                     <li><a href="/enter/hunterList">기업·인재</a></li>
-                    <li><a href="/board/openForum">커뮤니티</a></li>
                     <li><a href="/cs/csList">고객센터</a></li>
                 </ul>
             </div>
@@ -279,9 +271,6 @@
                 <li><a href="/enterpriseList">기업전체</a></li>
                 <li><a href="/enter/hunterList">인재정보</a></li>
             </ul>
-            <ul>
-                <li><a href="/board/openForum">자유게시판</a></li>
-                <li><a href="/manage/noticeList">공지사항</a></li>
             </ul>
             <ul>
                 <li><a href="/cs/csList">FAQ</a></li>
