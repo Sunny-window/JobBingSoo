@@ -1,10 +1,637 @@
 <!DOCTYPE html>
-<html>
+<html lang="UTF-8">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            width: 680px;
+            margin: 50px auto 0;
+            background-color: #ff006f;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 5px solid #ff006f;
+        }
+
+        #header .sub {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #header .sub li {
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        #header .sub li button {
+            height: 70px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0;
+        }
+
+        #red {
+            background-color: #ff006f;
+            color: #fff;
+            flex-grow: 3;
+            font-weight: bold;
+        }
+
+        #com {
+            background-color: #ffffff;
+            color: #000000;
+            flex-grow: 2;
+        }
+
+		.selected {
+            background-color: #ff006f !important; /* 선택된 버튼 배경색 */
+            color: #fff !important; /* 선택된 버튼 텍스트 색 */
+        }
+		
+        #container {
+            width: 620px;
+            margin: 0 auto 30px;
+            background-color: #fff;
+            padding: 20px 40px 20px 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .row_group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .subTx {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .required-star {
+            color: red;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .col_1 {
+            flex: 1;
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+
+        .col_2 {
+            flex: 3;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: relative;
+            height: 30px;
+        }
+
+        .input-label {
+            position: absolute;
+            left: 10px;
+            top: 8px;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        input:focus + .input-label, 
+        input:not(:placeholder-shown) + .input-label {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .input-label span {
+            color: gray;
+        }
+
+        .input-label .required {
+            color: red;
+        }
+
+        .button, .btnConfirm {
+            padding: 12px 16px;
+            margin-left: 10px;
+            background-color: #d4d4d4;
+            color: #1b1b1b;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 150px;
+        }
+
+        .button:hover, .btnConfirm:hover {
+            background-color: #bbb;
+        }
+
+        .notice_msg {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #e60000;
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .policy_check_service label {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .chk_age strong {
+            color: red;
+        }
+
+        .line_all_poliy {
+            margin-top: 30px;
+        }
+
+        .chk_all {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .policy_check_all {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mbrBtnRegist {
+            width: 640px;
+            background-color: #ff006f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 15px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .mbrBtnRegist:hover {
+            background-color: #e5005e;
+        }
+    </style>
 </head>
 <body>
+<header>
+<div th:replace="/sub/header"></div>
+</header>
+<section>
+    <div id="header">
+        <ul class="sub">
+            <li class="red">
+                <button id="red">개인회원</button>
+            </li>
+            <li class="com">
+                <button id="com">기업회원</button>
+            </li>
+        </ul>
+    </div>	
+    <div id="personalMember" style="display: block;">
+    <div id="container" class="memRegist">
+            <fieldset>
+            	<form id="memberRegistrationForm" method="POST" action="http://localhost:9001/main/join-form/job-seeker" onsubmit="return validateForm();">
+	                <div class="row_group mbr_info">
+	                    <p class="subTx"><span class="required-star">*</span> 필수 입력 정보입니다.</p>
+	                    <div class="row mbr_name">
+	                        <div class="col_2">
+	                            <input type="text" id="M_Name" name="name" class="mbr_name devReadOnly dev-name" maxlength="12" placeholder=" ">
+	                            <label class="input-label" for="M_Name"><span>이름(실명)</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_name"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_id">
+	                        <div class="col_2">
+	                            <input type="text" id="idcheck" name="username" maxlength="16" class="dev-id" value="" style="ime-mode:disabled;" placeholder=" ">
+	                            <label class="input-label" for="idcheck"><span>아이디</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_id"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_passwd">
+	                        <div class="col_2">
+	                            <input type="password" id="M_Pwd" name="password" class="dev-password" maxlength="16" style="ime-mode:disabled;" placeholder=" ">
+	                            <label class="input-label" for="M_Pwd"><span>비밀번호(8~16자의 영문, 숫자, 특수기호)</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_pwd"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_email">
+	                        <div class="col_2">
+	                            <input type="text" id="M_Email" name="email" class="mbr_email_id dev-mail" size="8" maxlength="30" placeholder=" ">
+	                            <label class="input-label" for="M_Email"><span>이메일</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_mail"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_addr">
+	                        <div class="col_2">
+	                            <input type="text" id="M_Addr" name="address" class="mbr_addr_id dev-addr" size="8" maxlength="30" placeholder=" ">
+	                            <label class="input-label" for="M_Addr"><span>주소</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_addr"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_phone">
+	                        <div class="col_2">
+	                            <input type="text" id="M_Phone" name="tel" size="4" maxlength="13" class="dev-phone" placeholder=" ">
+	                            <label class="input-label" for="M_Phone"><span>휴대폰번호</span><span class="required">*</span></label>
+	                            <button type="button" class="button buttonSendCertification" id="btnSendCert"><span>인증번호 전송</span></button>
+	                            <div class="notice_msg" id="notice_msg_phone"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row authentication_check">
+	                        <div class="col_2 button-group">
+	                            <input type="hidden" name="lb_certifytype" value="2">
+	                            <input type="text" id="Certify_Num" name="Certify_Num" class="authentication_number" maxlength="6" placeholder=" ">
+	                            <label class="input-label" for="Certify_Num"><span>인증번호 입력</span><span class="required">*</span></label>
+	                            <button type="button" class="btnConfirm" id="btnCheckCert"><span>확인</span></button>
+	                            <div class="notice_msg" id="notice_msg_certify"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_bday">
+	                        <div class="col_2">
+	                            <input type="text" id="M_Bday" name="birth" class="mbr_birth_id dev-birth" size="8" maxlength="30" placeholder=" ">
+	                            <label class="input-label" for="M_Bday"><span>생년월일 (yyyy-MM-dd)</span><span class="required">*</span></label>
+	                            <div class="notice_msg" id="notice_msg_brith"></div>
+	                        </div>
+	                    </div>
+	                    <div class="row mbr_gender">
+		                    <div>성별</div>
+		                        <div class="col_2">
+		                            <input type="radio" id="M_Gender" name="gender" class="mbr_gender_id dev-gender" value="남성" checked>
+		                            남성
+		                            <label class="input-label" for="male"></label>
+		                        </div>
+		                        <div class="col_2">
+		                            <input type="radio" id="M_Gender" name="gender" class="mbr_gender_id dev-gender" value="여성">
+		                            여성
+		                            <label class="input-label" for="female"></label>
+		                        </div>                        
+	                	</div>
+	                    <div class="row mbr_military">
+		                    <div>병역사항</div>
+		                        <div class="col_2">
+		                            <input type="radio" id="military" name="military" class="mbr_military_id dev-military" value="미필" checked>
+		                            미필
+		                            <label class="input-label" for="unfulfilled"></label>
+		                        </div>
+		                        <div class="col_2">
+		                            <input type="radio" id="military" name="military" class="mbr_military_id dev-military" value="군필">
+		                            군필
+		                            <label class="input-label" for="fulfilled"></label>
+		                        </div>
+		                        <div class="col_2">
+		                            <input type="radio" id="military" name="military" class="mbr_military_id dev-military" value="면제">
+		                            면제
+		                            <label class="input-label" for="Exempted"></label>
+		                        </div>	                                                
+	                	</div>
+	                	</div>                	
+	                <div class="row_group line_all_poliy">
+	                    <div class="row policy_check_all">
+	                        <label for="lb_chk_all" class="chk_all"><span class="txt">필수동의 항목 및 선택동의 항목에 모두 동의합니다.ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</span></label>
+	                        <input type="checkbox" id="lb_chk_all" class="mbrCheckOff">
+	                    </div>
+	                    <div class="row policy_check_service required">
+	                        <label for="lb_chk_age" class="chk_age"><strong>[필수]</strong> 만 15세 이상입니다 <input type="checkbox" id="lb_chk_age" name="Y15_Older_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                    <div class="row policy_check_service required">
+	                        <label for="lb_chk_terms" class="chk_age"><strong>[필수]</strong> 이용약관 동의 <input type="checkbox" id="lb_chk_terms" name="Terms_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                    <div class="row policy_check_service required">
+	                        <label for="lb_chk_privacy" class="chk_age"><strong>[필수]</strong> 개인정보 수집 및 이용 동의 <input type="checkbox" id="lb_chk_privacy" name="Privacy_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                    <div class="row policy_check_service optional">
+	                        <label for="lb_chk_optional_privacy" class="chk_age2"><strong>[선택]</strong> 개인정보 수집 및 이용 동의 <input type="checkbox" id="lb_chk_optional_privacy" name="Optional_Privacy_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                    <div class="row policy_check_service optional">
+	                        <label for="lb_chk_email_ads" class="chk_age2"><strong>[선택]</strong> 광고성 정보 이메일 수신 동의 <input type="checkbox" id="lb_chk_email_ads" name="Email_Ads_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                    <div class="row policy_check_service optional">
+	                        <label for="lb_chk_sms_ads" class="chk_age2"><strong>[선택]</strong> 광고성 정보 SMS 수신 동의 <input type="checkbox" id="lb_chk_sms_ads" name="SMS_Ads_Agree" class="mbrCheckOn" value="1"></label>
+	                    </div>
+	                </div>
+	                <div class="row_group line_none regist_complete" style="position:relative;">
+	                    <div class="row">
+	                        <button type="submit" class="mbrBtnRegist"><span>가입하기</span></button>
+	                    </div>
+	                </div>
+	                </form>
+	            </fieldset>
+	    </div>
+        </div>
+        <div id="container" class="ComRegist">	
+        <div id="corporateMember" style="display:none;">	
+            <!-- Corporate Member Content -->
+            <fieldset>
+            <form id="memberRegistrationForm" method="POST" action="http://localhost:9001/main/join-form/company" onsubmit="return validateForm2();">
+                <div class="row_group com_info">
+                    <p class="subTx"><span class="required-star">*</span> 필수 입력 정보입니다.</p>
+                    <div class="row com_type">
+                        <div class="col_2">
+                            <input type="text" id="C_Size" name="size" class="com_name devReadOnly dev-type" maxlength="12" placeholder=" ">
+                            <label class="input-label" for="C_Type"><span>사원수</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_size"></div>
+                        </div>
+                    </div>
+                    <div class="row com_comNo">
+                        <div class="col_2">
+                            <input type="text" id="comNo" name="cno" maxlength="16" class="dev-comNo" value="" style="ime-mode:disabled;" placeholder=" ">
+                            <label class="input-label" for="comNo"><span>사업자등록번호</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_comNo"></div>
+                        </div>
+                    </div>
+                    <div class="row com_name">
+                        <div class="col_2">
+                            <input type="text" id="C_Name" name="companyName" class="dev-name" maxlength="16" style="ime-mode:disabled;" placeholder=" ">
+                            <label class="input-label" for="C_Name"><span>회사명</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_name"></div>
+                        </div>
+                    </div>
+                    <div class="row com_ceo">
+                        <div class="col_2">
+                            <input type="text" id="C_Ceo" name="ceo" class="com_ceo_id dev-ceo" maxlength="30" placeholder=" ">
+                            <label class="input-label" for="C_Ceo"><span>대표자명</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_ceo"></div>
+                        </div>
+                    </div>
+                    <div class="row com_tel">
+                        <div class="col_2">
+                            <input type="text" id="C_Tel" name="tel" class="com_tel dev-tel" maxlength="30" placeholder=" ">
+                            <label class="input-label" for="C_Tel"><span>대표 번호</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_tel"></div>
+                        </div>
+                    </div>                    
+                    <div class="row com_addr">
+                        <div class="col_2">
+                            <input type="text" id="C_Addr" name="address" maxlength="13" class="dev-addr" placeholder=" ">
+                            <label class="input-label" for="C_Addr"><span>회사주소</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_addr"></div>
+                        </div>
+                    </div>
+                    <div class="row com_sales">
+                        <div class="col_2">
+                            <input type="text" id="C_Sales" name="sales" maxlength="13" class="dev-sales" placeholder=" ">
+                            <label class="input-label" for="C_Sales"><span>작년 매출액</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_sales"></div>
+                        </div>
+                    </div>                    
+                    <h2>인사담당자 정보</h2>
+                    <div class="row com_cmName">
+                        <div class="col_2 button-group">
+                            <input type="hidden" name="CM_Id" value="2">
+                            <input type="text" id="CM_Name" name="managerName" class="CM_Name" maxlength="13" placeholder=" ">
+                            <label class="input-label" for="CM_Name"><span>이름(실명)</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_name"></div>
+                        </div>
+                    </div>
+                    <div class="row com_cmid">
+                        <div class="col_2 button-group">
+                            <input type="hidden" name="CM_Id" value="2">
+                            <input type="text" id="CM_Id" name="username" class="CM_Id" maxlength="13" placeholder=" ">
+                            <label class="input-label" for="CM_Id"><span>아이디</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_id"></div>
+                        </div>
+                    </div>
+                    <div class="row com_passwd">
+                        <div class="col_2">
+                            <input type="password" id="CM_Pwd" name="password" class="dev-password" maxlength="16" style="ime-mode:disabled;" placeholder=" ">
+                            <label class="input-label" for="CM_Pwd"><span>비밀번호(8~16자의 영문, 숫자, 특수기호)</span><span class="required">*</span></label>
+                            <div class="notice_msg" id="notice_msg_pwd"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row com_email">
+	                    <div class="col_2">
+	                        <input type="text" id="CM_Email" name="managerEmail" class="com_email_id dev-mail" maxlength="30" placeholder=" ">
+	                        <label class="input-label" for="CM_Email"><span>이메일</span><span class="required">*</span></label>
+	                        <div class="notice_msg" id="notice_msg_mail"></div>
+	                    </div>
+	                </div>
+	                <div class="row com_phone">
+	                    <div class="col_2">
+	                        <input type="text" id="CM_Phone" name="managerTel"maxlength="13" class="dev-phone" placeholder=" ">
+	                        <label class="input-label" for="CM_Phone"><span>휴대폰번호</span><span class="required">*</span></label>
+	                        <div class="notice_msg" id="notice_msg_phone"></div>
+	                    </div>
+	                </div>
+                </div>
+                <div class="row_group line_all_poliy">
+                    <div class="row policy_check_all">
+                        <label for="lb_chk_all" class="chk_all"><span class="txt">필수동의 항목 및 선택동의 항목에 모두 동의합니다.ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</span></label>
+                        <input type="checkbox" id="lb_chk_all2" class="mbrCheckOff">
+                    </div>
+                    <div class="row policy_check_service required">
+                        <label for="lb_chk_age" class="chk_age"><strong>[필수]</strong> 이용약관 동의 <input type="checkbox" id="lb_chk_age" name="Y15_Older_Agree" class="mbrCheckOn2" value="1"></label>
+                    </div>
+                    <div class="row policy_check_service required">
+                        <label for="lb_chk_terms" class="chk_age"><strong>[필수]</strong> 개인정보 수집 및 이용 동의 <input type="checkbox" id="lb_chk_terms" name="Terms_Agree" class="mbrCheckOn2" value="1"></label>
+                    </div>
+                    <div class="row policy_check_service required">
+                        <label for="lb_chk_privacy" class="chk_age"><strong>[필수]</strong> 문자서비스 이용약관 동의 <input type="checkbox" id="lb_chk_privacy" name="Privacy_Agree" class="mbrCheckOn2" value="1"></label>
+                    </div>
+                    <div class="row policy_check_service optional">
+                        <label for="lb_chk_optional_privacy" class="chk_age2"><strong>[선택]</strong> 개인정보 수집 및 이용 동의 <input type="checkbox" id="lb_chk_optional_privacy" name="Optional_Privacy_Agree" class="mbrCheckOn2" value="1"></label>
+                    </div>
+                    <div class="row policy_check_service optional">
+                        <label for="lb_chk_email_ads" class="chk_age2"><strong>[선택]</strong> 광고성 정보 수신 동의 <input type="checkbox" id="lb_chk_email_ads" name="Email_Ads_Agree" class="mbrCheckOn2" value="1"></label>
+                    </div>
+                </div>
+                <div class="row_group line_none regist_complete" style="position:relative;">
+                    <div class="row">
+                        <button type="submit" class="mbrBtnRegist"><span>가입하기</span></button>
+                    </div>
+                </div>
+               </form>
+            </fieldset>
+        </div>
+        </div>
+        </section>
+        <footer>
+			<div th:replace="/sub/footer"></div>
+        </footer>
 
-</body>
-</html>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+
+                inputs.forEach(function(input) {
+                    input.addEventListener('input', function() {
+                        var label = input.nextElementSibling;
+                        if (input.value) {
+                            label.style.visibility = 'hidden';
+                            label.style.opacity = '0';
+                        } else {
+                            label.style.visibility = 'visible';
+                            label.style.opacity = '1';
+                        }
+                    });
+                });
+
+                var personalBtn = document.getElementById('red');
+                var corporateBtn = document.getElementById('com');
+
+                // 개인회원과 기업회원 멤버 요소 가져오기
+                var personalMember = document.getElementById('personalMember');
+                var corporateMember = document.getElementById('corporateMember');
+
+                // 초기 상태: 개인회원 버튼이 선택된 상태로 설정
+                personalBtn.classList.add('selected');
+
+                // 개인회원 버튼 클릭 시
+                personalBtn.addEventListener('click', function() {
+                    if (!personalBtn.classList.contains('selected')) {
+                        personalBtn.classList.add('selected');
+                        corporateBtn.classList.remove('selected');
+                        personalBtn.style.backgroundColor = '#fff';
+                        personalBtn.style.color = '#000';
+                        corporateBtn.style.backgroundColor = '#fff';
+                        corporateBtn.style.color = '#000';
+                        personalMember.style.display = 'block';
+                        corporateMember.style.display = 'none';
+                    }
+                });
+
+                // 기업회원 버튼 클릭 시
+                corporateBtn.addEventListener('click', function() {
+                    if (!corporateBtn.classList.contains('selected')) {
+                        corporateBtn.classList.add('selected');
+                        personalBtn.classList.remove('selected');
+                        corporateBtn.style.backgroundColor = '#ff006f';
+                        corporateBtn.style.color = '#fff';
+                        personalBtn.style.backgroundColor = '#fff';
+                        personalBtn.style.color = '#000';
+                        personalMember.style.display = 'none';
+                        corporateMember.style.display = 'block';
+                    }
+                });
+            });
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                const chkAll = document.getElementById("lb_chk_all");
+                const checkboxes = document.querySelectorAll(".mbrCheckOn");
+
+                chkAll.addEventListener("change", function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = chkAll.checked;
+                    });
+                });
+
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener("change", function() {
+                        if ([...checkboxes].every(chk => chk.checked)) {
+                            chkAll.checked = true;
+                        } else {
+                            chkAll.checked = false;
+                        }
+                    });
+                });
+            });
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                const chkAll = document.getElementById("lb_chk_all2");
+                const checkboxes = document.querySelectorAll(".mbrCheckOn2");
+
+                chkAll.addEventListener("change", function() {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = chkAll.checked;
+                    });
+                });
+
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener("change", function() {
+                        if ([...checkboxes].every(chk => chk.checked)) {
+                            chkAll.checked = true;
+                        } else {
+                            chkAll.checked = false;
+                        }
+                    });
+                });
+            });
+            
+            function validateForm() {
+                const name = document.getElementById('M_Name').value.trim();
+                const id = document.getElementById('idcheck').value.trim();
+                const password = document.getElementById('M_Pwd').value.trim();
+                const email = document.getElementById('M_Email').value.trim();
+                const addr = document.getElementById('M_Addr').value.trim();
+                const phone = document.getElementById('M_Phone').value.trim();
+                
+                if (name === "" || id === "" || password === "" ||
+                		email === "" || addr === "" || phone === "") {
+                    alert('모든 필수 항목을 입력해주세요.');
+                    return false; 
+                }
+                return true;
+            }
+            
+            function validateForm2() {
+                const size = document.getElementById('C_Size').value.trim();
+                const cno = document.getElementById('comNo').value.trim();
+                const name = document.getElementById('C_Name').value.trim();
+                const ceo = document.getElementById('C_Ceo').value.trim();
+                const tel = document.getElementById('C_Tel').value.trim();
+                const addr = document.getElementById('C_Addr').value.trim();
+                const sales = document.getElementById('C_Sales').value.trim();
+                const cmid = document.getElementById('CM_Id').value.trim();
+                const cmpw = document.getElementById('CM_Pwd').value.trim();
+                const email = document.getElementById('CM_Email').value.trim();
+                const phone = document.getElementById('CM_Phone').value.trim();
+                
+                if (size === "" || cno === "" || name === "" ||
+                		ceo === "" || tel === "" || addr === "" || sales === "" || smid === "" ||
+                		cmid === "" || cmpw === "" || email === "" || phone === "") {
+                    alert('모든 필수 항목을 입력해주세요.');
+                    return false; 
+                }
+                return true;
+            }
+        </script>
+    </body>
+    </html>
