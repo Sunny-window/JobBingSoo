@@ -28,7 +28,7 @@ public class Notice {
 	@ToString.Exclude
 	private Member resiever;
 	@ManyToOne
-	@JoinColumn(name="resiever")
+	@JoinColumn(name="sender")
 	@ToString.Exclude
 	private Member sender;
 	private String type;
