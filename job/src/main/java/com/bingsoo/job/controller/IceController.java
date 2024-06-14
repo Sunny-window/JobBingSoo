@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bingsoo.job.dto.PostingDto;
+import com.bingsoo.job.dto.RedBeanDto;
+import com.bingsoo.job.entity.Application;
+import com.bingsoo.job.entity.Posting;
+import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.PostingRepository;
+import com.bingsoo.job.repository.RedBeanRepository;
 
 @CrossOrigin("*")
 @RestController
@@ -22,13 +27,27 @@ public class IceController {
     @Autowired
     private PostingRepository postingRepository;
 
-    // @GetMapping("/company-all")
-    // public List<Company> companyAll(){
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private RedBeanRepository redBeanRepository;
+
+    // @GetMapping("/redbean-per-mypost/{postCode}")
+    // public List<Application> redBeanApplication(@PathVariable("postCode") Long postCode) {
+    //     Posting posting = new Posting();
+    //     posting.setPost_code(postCode);
+    //     return applicationRepository.findByPostCode(posting);
     // }
 
-    // @GetMapping("/company/{cid}")
-    // public Company 
+    @GetMapping("/redbean-per-mypost")
+    public List<RedBeanDto> RedBeanList(@RequestParam("postcode") Long postCode) {
+        
+        List<RedBeanDto> reds = applicationRepository.findRedBeanByRid(postCode);
+
+        return reds;
+
+    }
 
     @GetMapping("/my-postings")
     public List<PostingDto> postingList(@RequestParam("cid") String cid) {

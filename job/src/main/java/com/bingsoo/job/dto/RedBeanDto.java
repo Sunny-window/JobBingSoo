@@ -1,6 +1,6 @@
 package com.bingsoo.job.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PostingDto {
-    private Long post_code;
-    private String title;
-    private Date deadline;
+public class RedBeanDto {
+    private String name;
     private String address;
-    private String company_name;
+    private Date birth;
+    private String gender;
+
 }

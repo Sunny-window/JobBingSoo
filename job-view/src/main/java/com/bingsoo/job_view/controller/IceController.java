@@ -1,7 +1,9 @@
 package com.bingsoo.job_view.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/ice")
@@ -20,8 +22,9 @@ public class IceController {
     }
 
     @RequestMapping("/red_bean_list")
-    public String red_bean_list(){
+    public String red_bean_list(@RequestParam("postCode") Long postCode, Model model){
 
+        model.addAttribute("postCode", postCode);
         return "ice/red_bean_list";
     }
 
