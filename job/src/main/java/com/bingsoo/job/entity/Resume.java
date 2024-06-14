@@ -28,7 +28,7 @@ public class Resume {
 	@ManyToOne
 	@JoinColumn(name = "rid")
 	private Member rid;
-	
+	private String title;
 	private String edu_name;
 	private String edu_type;
 	private String edu_major;
