@@ -7,6 +7,64 @@
 .hidden {
         display: none;
     }
+    
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f9;
+    }
+    h1 {
+        color: #333;
+    }
+    button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    .hidden {
+        display: none;
+    }
+    #infoDiv, #showResumeList, #subscribeListDiv, #showFavoriteListDiv, #totalResult {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    
+    
 </style>
 <script src="https://code.jquery.com/jquery-3.7.1.js"
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -16,8 +74,21 @@
 <body>
 <h1>mypage</h1>
 <button id =infoBtn >정보수정</button>
+<br>
+
+
+
+<button id ="resumeManage" onclick ="showResumeList(event)" >이력서관리</button><br>
+
+
+<div id = "showResumeList" class="hidden"></div>
+
+<div id = "showResumeDetail"></div>
+<button id = "showSubscribeList" onclick ="showSubscribeList(event)" >관심기업</button><br>
+<button id = "showFavoriteList" onclick ="showFavoriteList(event)" >스크랩공고</button>
 
 <div id="infoDiv" class="hidden">
+기본키<input type="text" id="rb_code" name="rb_code" ><br>
 이름<input type="text" id="name" name="name" ><br>
 생일<input type="text" id="birth" name="birth" ><br>
 전화<input type="text" id="tel" name="tel" ><br>
@@ -26,22 +97,146 @@
 성별<input type="text" id="gender" name="gender" ><br>
 필/미필<input type="text" id="military" name="military" ><br>
 <button id =updateInfo onclick="updateInfo(event)" >수정하기</button>
-<div id = resultUpdateInfo></div>
-
+<div id = resultUpdateInfo onclick="updateInfo(event)"></div>
 
 </div>
+
+<div id="resumeUpdateFormDiv" class="hidden">
+인적사항
+<hr>
+이름<input type="text" id="title" name="title" ><br>
+주소<input type="text" id="edu_name" name="title" ><br>
+휴대전화<input type="text" id="edu_type" name="title" ><br>
+Email<input type="text" id="edu_major" name="title" ><br>
+학력사항
+<hr>
+제목<input type="text" id="title" name="title" ><br>
+학력<input type="text" id="edu_name" name="title" ><br>
+학력구분<input type="text" id="edu_type" name="title" ><br>
+전공<input type="text" id="edu_major" name="title" ><br>
+
+<button id =resumeUpdateInfo onclick="resumeUpdateInfo(event)" >수정하기</button>
+<form action="review" method="post" enctype="multipart/form-data">
+				<input
+					type="file" name="imageFile">
+
+			</form>
+
+</div>
+
+
+<div id = "subscribeListDiv"></div>
+<div id = "showFavoriteListDiv"></div>
+<div id = totalResult></div>
+
 </body>
 <script>
 $(document).ready(function() {
+    var cnt = 0; // cnt 변수를 이곳으로 이동
+
     // 정보수정 버튼 클릭 시
     $("#infoBtn").click(function() {
-        // editInput 필드를 보이게 함
-        $("#infoDiv").removeClass("hidden");
+
+        if (cnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#infoDiv").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#infoDiv").addClass("hidden"); // infoDiv 숨김
+        }
+        cnt++; // 클릭할 때마다 cnt 증가
     });
 });
 
+
+
+$(document).ready(function() {
+    var cnt = 0;
+
+    // 이벤트 위임 사용
+    $(document).on("click", "#resumeUpdateBtn", function() {
+        if (cnt % 2 === 0) {
+            $("#resumeUpdateFormDiv").removeClass("hidden"); // 폼 보이기
+        } else {
+            $("#resumeUpdateFormDiv").addClass("hidden"); // 폼 숨기기
+        }
+        cnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+$(document).ready(function() {
+    var resumeListCnt = 0; // cnt 변수를 이곳으로 이동
+
+    // 정보수정 버튼 클릭 시
+    $("#resumeManage").click(function() {
+
+        if (resumeListCnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#showResumeList").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#showResumeList").addClass("hidden"); // infoDiv 숨김
+        }
+        resumeListCnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+
+
+
+
+$(document).ready(function() {
+    var subscribeListCnt = 0; // cnt 변수를 이곳으로 이동
+
+    // 정보수정 버튼 클릭 시
+    $("#showSubscribeList").click(function() {
+
+        if (subscribeListCnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#subscribeListDiv").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#subscribeListDiv").addClass("hidden"); // infoDiv 숨김
+        }
+        subscribeListCnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+
+
+
+
+$(document).ready(function() {
+    var favoriteListCnt = 0; // cnt 변수를 이곳으로 이동
+
+    // 정보수정 버튼 클릭 시
+    $("#showFavoriteList").click(function() {
+
+        if (favoriteListCnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#showFavoriteListDiv").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#showFavoriteListDiv").addClass("hidden"); // infoDiv 숨김
+        }
+        favoriteListCnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+$(document).ready(function() {
+    var favoriteListCnt = 0; // cnt 변수를 이곳으로 이동
+
+    // 정보수정 버튼 클릭 시
+    $("#showFavoriteList").click(function() {
+
+        if (favoriteListCnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#showFavoriteListDiv").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#showFavoriteListDiv").addClass("hidden"); // infoDiv 숨김
+        }
+        favoriteListCnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+
+
+
+
 function updateInfo(event){
 	event.preventDefault();
+	var rb_code = document.querySelector('input[id="rb_code"]').value;
 	var name = document.querySelector('input[id="name"]').value;
 	var birth = document.querySelector('input[id="birth"]').value;
 	var tel = document.querySelector('input[id="tel"]').value;
@@ -50,6 +245,7 @@ function updateInfo(event){
 	var gender = document.querySelector('input[id="gender"]').value;
 	var military= document.querySelector('input[id="military"]').value;
 	  const member = {
+			  rb_code:rb_code,
 			  name: name,
 			  birth: birth,
 			  tel:tel,
@@ -69,13 +265,240 @@ function updateInfo(event){
     })
         .then(response => response.text())
         .then(data => {
-            document.getElementById("resultUpdateInfo").innerHTML = data;
+            document.getElementById("totalResult").innerHTML = data;
             /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
         })
         .catch(error => {
-            document.getElementById("resultUpdateInfo").innerHTML = error;
+            document.getElementById("totalResult").innerHTML = error;
         });
 
 }
+
+function showResumeList(event){
+	event.preventDefault();
+    fetch("http://localhost:9001/showResumeList", { // 서버에 요청을 보냅니다.
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+        	console.log("==============================="+data)
+            document.getElementById("totalResult").innerHTML = createResumeTable(data);
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("totalResult").innerHTML = error;
+        });
+
+
+}
+
+function showResumeDetail(event){
+	event.preventDefault();
+	var resume_code = parseInt(document.querySelector('input[id="resume_code"]').value);
+
+
+	document.addEventListener('DOMContentLoaded', (event) => {
+		    document.querySelectorAll('.recommend').forEach(button => {
+		        button.addEventListener('click', function(event) {
+		            event.preventDefault();
+		      
+		        
+		        });
+		    });
+		});
+	
+	
+	
+	
+	fetch("http://localhost:9001/showResumeDetail?resume_code="+resume_code, { // 서버에 요청을 보냅니다.
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+    })
+        .then(response => response.text())
+        .then(data => {
+        	console.log("==============================="+data)
+            document.getElementById("showResumeDetail").innerHTML = data;
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("showResumeDetail").innerHTML = error;
+        });
+}
+
+function createResumeTable(jsonData) {
+    var html = '<table border="1">';
+    // 헤더 추가
+    html += '<tr>';
+    html += '<th>title</th>';
+    html += '<th>수정</th>';
+    html += '<th>삭제</th>';
+    html += '</tr>';
+    
+    // 데이터 추가
+    jsonData.forEach(item => {
+        html += '<tr>';
+        html += '<input id = "resume_code" type="hidden" value='+item.resume_code+'>';
+        html += '<td id ="resumeDetailTd" onclick ="showResumeDetail(event)">' + item.title + '</td>'; // 각 객체의 title 속성 접근
+        html += '<td id ="resumeUpdateBtn" > 수정</td>'; // 각 객체의 title 속성 접근
+        html += '<td> 삭제</td>'; // 각 객체의 title 속성 접근
+        html += '</tr>';
+    });
+
+    html += '</table>';
+    
+    return html;
+}
+
+function createResumeDetailTable(jsonData) {
+    var html = '<table border="1">';
+    // 헤더 추가
+    html += '<tr>';
+    html += '<th>title</th>';
+    html += '<th>edu_name</th>';
+    html += '<th>edu_type</th>';
+    html += '<th>edu_major</th>';
+    html += '<th>edu_state</th>';
+    html += '<th>edu_state</th>';
+    html += '</tr>';
+    
+    // 데이터 추가
+    jsonData.forEach(item => {
+        html += '<tr>';
+        html += '<input id = "resume_code" type="hidden" value='+item.resume_code+'>';
+        html += '<td id ="resumeDetailTd" onclick ="showResumeDetail(event)">' + item.title + '</td>'; // 각 객체의 title 속성 접근
+        html += '</tr>';
+    });
+
+    html += '</table>';
+    return html;
+}
+
+
+
+function createSubscribeTable(jsonData) {
+    var html = '<table border="1">';
+    // 헤더 추가
+    html += '<tr>';
+    html += '<th>cid</th>';
+    html += '<th>rid</th>';
+    html += '</tr>';
+    
+    // 데이터 추가
+    jsonData.forEach(item => {
+        html += '<tr>';
+        
+        html += '<td >' + item.cid.username + '</td>'; // 각 객체의 title 속성 접근
+        html += '<td >' + item.rid.username + '</td>'; // 각 객체의 title 속성 접근
+        html += '</tr>';
+    });
+
+    html += '</table>';
+    
+    return html;
+    /**/
+
+    
+    
+}
+
+function createFavoriteTable(jsonData) {
+    var html = '<table border="1">';
+    // 헤더 추가
+    html += '<tr>';
+    html += '<th>post_code</th>';
+    html += '<th>username</th>';
+    html += '</tr>';
+    
+    // 데이터 추가
+    jsonData.forEach(item => {
+        html += '<tr>';
+        
+        html += '<td >' + item.post_code.post_code + '</td>'; // 각 객체의 title 속성 접근
+        html += '<td >' + item.username.username + '</td>'; // 각 객체의 title 속성 접근
+        html += '</tr>';
+    });
+
+    html += '</table>';
+    
+    return html;
+    /**/
+
+    
+    
+}
+
+
+function showSubscribeList(event){
+	event.preventDefault();
+    fetch("http://localhost:9001/showSubscribeList", { // 서버에 요청을 보냅니다.
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+        	console.log("==============================="+data)
+            document.getElementById("totalResult").innerHTML = createSubscribeTable(data);
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("totalResult").innerHTML = error;
+        });
+
+
+}
+
+
+
+function showFavoriteList(event){
+	event.preventDefault();
+    fetch("http://localhost:9001/showFavoriteList", { // 서버에 요청을 보냅니다.
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+        	console.log("==============================="+data)
+            document.getElementById("totalResult").innerHTML = createFavoriteTable(data);
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("totalResult").innerHTML = error;
+        });
+
+
+}
+
+
+
+function resumeUpdateInfo(event){
+	event.preventDefault();
+	 fetch("http://localhost:9001/resumeUpdate", { // 서버에 요청을 보냅니다.
+	        method: "GET",
+	        headers: {
+	            "Content-Type": "application/json" // 요청의 헤더 설정
+	        },
+	    })
+	        .then(response => response.json())
+	        .then(data => {
+	        	console.log("==============================="+data)
+	            document.getElementById("totalResult").innerHTML = createFavoriteTable(data);
+	            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+	        })
+	        .catch(error => {
+	            document.getElementById("totalResult").innerHTML = error;
+	        });
+	
+}
+
+
 </script>
 </html>
