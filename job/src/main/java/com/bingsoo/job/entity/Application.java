@@ -23,7 +23,7 @@ public class Application {
 	
 	@ManyToOne
 	@JoinColumn(name ="post_code")
-	private Posting post_code;
+	private Posting postCode;
 	
 	@ManyToOne
 	@JoinColumn(name ="rid")
