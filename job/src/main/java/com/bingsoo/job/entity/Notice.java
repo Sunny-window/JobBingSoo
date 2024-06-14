@@ -1,7 +1,5 @@
 package com.bingsoo.job.entity;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,16 +21,15 @@ public class Notice {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long nt_code;
-	
+
 	@ManyToOne
-	@JoinColumn(name="resiever")
+	@JoinColumn(name = "resiever")
 	@ToString.Exclude
 	private Member resiever;
 	@ManyToOne
-	@JoinColumn(name="sender")
+	@JoinColumn(name = "sender")
 	@ToString.Exclude
 	private Member sender;
+	private String message;
 	private String type;
-	
-	
 }
