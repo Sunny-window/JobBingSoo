@@ -1,7 +1,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-    <meta charset="UTF-8">
+    <head>
+<meta charset="UTF-8">
 
     <!-- 폰트 첨부 -->
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
@@ -28,7 +27,7 @@
             text-decoration: none;
             color: #333;
         }
-
+        
         header {
             min-width: 1240px;
             margin: 0 auto;
@@ -54,8 +53,8 @@
         .head_top .logo {
             padding-left: 15px;
         }
-
-        .logo img {
+        
+        .logo img{
             width: 55px;
             height: 50px;
         }
@@ -135,7 +134,7 @@
 
         .head_bottom .menu_list #menu_list_item {
             display: flex;
-            padding-left: 0;
+            padding-left:0;
         }
 
         .head_bottom .menu_list #menu_list_item li a {
@@ -216,67 +215,68 @@
         #head_menu_slide ul li a:hover {
             color: #ff006f;
         }
+
     </style>
 </head>
 
-<div class="head">
-    <div class="head_top">
-        <div class="logo">
-            <a href="/"><img src="/images/logo.png"></a>
-        </div>
-        <form action="" method="get">
-            <div class="search_bar">
-                <label for="search_input" class="search_label">
-                    <input type="text" id="header_search_input" name="search">
-                    <div class="header_search_bar_select">
-                        <select>
-                            <option value="전체">전체</option>
-                            <option value="기업">기업</option>
-                            <option value="공고">공고</option>
-                        </select>
-                    </div>
-                    <label id="search_glass_label">
-                        <input type="submit" value="">
-                        <img src="/images/search.png" class="search_glasses">
-                    </label>
-                </label>
+    <div class="head">
+        <div class="head_top">
+            <div class="logo">
+                <a href="/"><img src="/images/logo.png"></a>
             </div>
-        </form>
-    </div>
-    <div class="head_bottom">
-        <div class="menu_list">
-            <ul id="menu_list_item">
-                <li><a href="/">채용공고</a></li>
-                <li><a href="/enter/hunterList">기업·인재</a></li>
-                <li><a href="/cs/csList">고객센터</a></li>
-            </ul>
+            <form action="" method="get">
+                <div class="search_bar">
+                    <label for="search_input" class="search_label">
+                        <input type="text" id="header_search_input" name="search">
+                        <div class="header_search_bar_select">
+                            <select>
+                                <option value="전체">전체</option>
+                                <option value="기업">기업</option>
+                                <option value="공고">공고</option>
+                            </select>
+                        </div>
+                        <label id="search_glass_label">
+                            <input type="submit" value="">
+                            <img src="/images/search.png" class="search_glasses">
+                        </label>
+                    </label>
+                </div>
+            </form>
         </div>
+        <div class="head_bottom">
+            <div class="menu_list">
+                <ul id="menu_list_item">
+                    <li><a href="/">채용공고</a></li>
+                    <li><a href="/enter/hunterList">기업·인재</a></li>
+                    <li><a href="/cs/csList">고객센터</a></li>
+                </ul>
+            </div>
 
-        <div class="user_log_list">
+            <div class="user_log_list">
+                <ul>
+                    <li><a href="/loginForm">로그인</a></li>
+                    <li><a href="/registForm">회원가입</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="head_menu_slide_container" class="active">
+        <div id="head_menu_slide">
             <ul>
-                <li><a href="/loginForm">로그인</a></li>
-                <li><a href="/registForm">회원가입</a></li>
+                <li><a href="/">추천공고</a></li>
+            </ul>
+            <ul>
+                <li><a href="/enterpriseList">기업전체</a></li>
+                <li><a href="/enter/hunterList">인재정보</a></li>
+            </ul>
+            </ul>
+            <ul>
+                <li><a href="/cs/csList">FAQ</a></li>
+                <li><a href="/cs/csList">문의/신고</a></li>
+                <li><a href="/cs/csList">나의문의</a></li>
             </ul>
         </div>
     </div>
-</div>
-<div id="head_menu_slide_container" class="active">
-    <div id="head_menu_slide">
-        <ul>
-            <li><a href="/">추천공고</a></li>
-        </ul>
-        <ul>
-            <li><a href="/enterpriseList">기업전체</a></li>
-            <li><a href="/enter/hunterList">인재정보</a></li>
-        </ul>
-        </ul>
-        <ul>
-            <li><a href="/cs/csList">FAQ</a></li>
-            <li><a href="/cs/csList">문의/신고</a></li>
-            <li><a href="/cs/csList">나의문의</a></li>
-        </ul>
-    </div>
-</div>
 <th:block th:insert="~{/sub/notice.html}"></th:block>
 <script>
     const slide = document.getElementById("head_menu_slide_container");

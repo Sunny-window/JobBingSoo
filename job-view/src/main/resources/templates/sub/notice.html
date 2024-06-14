@@ -19,7 +19,7 @@
     }
 
     #notice-bell {
-        border: 3px solid #ff006f;
+        border: 2px solid #ff006f;
         border-radius: 100px;
         position: fixed;
         bottom: 15%;
@@ -58,8 +58,15 @@
 
     let cnt = 1;
 
+    function reloadnotice() {
+        console.log('reloading notice');
+        fetch('http://localhost:9001/sub/notice/jobseeker1')
+    }
+
     document.addEventListener('DOMContentLoaded',()=>{
         bell.addEventListener('click', f);
+        reloadnotice();
+        setInterval(reloadnotice,5000);
     });
 
 
@@ -78,5 +85,7 @@
             cnt = 0;
         }
     }
+
+
 
 </script>
