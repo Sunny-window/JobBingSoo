@@ -1,7 +1,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8">
 
-<head>
+<header-head>
     <!-- 폰트 첨부 -->
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
             color: #333;
         }
         
-        header {
+        header-header {
             min-width: 1240px;
             margin: 0 auto;
             height: 150px;
@@ -37,7 +37,7 @@
             background: #fff;
         }
 
-        .head {
+        .header-head {
             width: 1240px;
             height: 100%;
             margin: 0 auto;
@@ -67,7 +67,6 @@
             position: absolute;
             top: 20px;
             left: calc(50% - 206.5px);
-
         }
 
         #header_search_input {
@@ -135,6 +134,7 @@
 
         .head_bottom .menu_list #menu_list_item {
             display: flex;
+            padding-left:0;
         }
 
         .head_bottom .menu_list #menu_list_item li a {
@@ -179,7 +179,6 @@
             margin: 0 auto;
             display: flex;
             padding-top: 15px;
-            padding-left:0;
         }
 
         #head_menu_slide ul {
@@ -218,10 +217,10 @@
         }
 
     </style>
-</head>
+</header-head>
 
-<div id="header">
-    <div class="head">
+<div id="header-header">
+    <div class="header-head">
         <div class="head_top">
             <div class="logo">
                 <a href="/"><img src="/images/logo.png"></a>
@@ -232,7 +231,6 @@
                         <input type="text" id="header_search_input" name="search">
                         <div class="header_search_bar_select">
                             <select>
-                                <option value="전체">전체</option>
                                 <option value="기업">기업</option>
                                 <option value="공고">공고</option>
                             </select>
