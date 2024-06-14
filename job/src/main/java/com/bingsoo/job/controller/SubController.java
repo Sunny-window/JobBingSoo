@@ -23,9 +23,9 @@ public class SubController {
     
     @GetMapping("/notice/{username}")
     public List<Notice> myNoticeList(@PathVariable("username")String username){
-        Member resiever = new Member();
-        resiever.setUsername(username);
-        return nr.fingAllbyResiever(resiever);
+        Member reciever = new Member();
+        reciever.setUsername(username);
+        return nr.findAllByReciever(reciever);
     }
 
 }

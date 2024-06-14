@@ -56,10 +56,11 @@ public class ManagerController {
 		return data;
 	}
 
-	@PostMapping("/notice")
-	public Notice sendNotice(@RequestBody Notice notice) {
-		return noticeRepository.save(notice);
-	}
+    @PostMapping("/notice")
+    public Notice sendNotice(@RequestBody Notice notice) {
+        return noticeRepository.save(notice);
+    }
+
 
 	@GetMapping("/admin-csList")
 	public List<Cs> getCsList(@RequestParam("type") String type) {
