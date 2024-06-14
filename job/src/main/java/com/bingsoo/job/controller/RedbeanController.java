@@ -58,6 +58,12 @@ public class RedbeanController {
 	CertificateRepository certificateRepository;
 	
 	
+	@GetMapping("/showInfoForm")
+	public String showInfoForm() {
+		
+		return "등록성공";
+	}
+	
 	@PutMapping("/updateInfo")
 	public String updateInfo(@RequestBody RedBean redBean) {
 		System.out.println("==============================redBean : "+redBean);
@@ -86,8 +92,8 @@ public class RedbeanController {
 	
 	@GetMapping("/showResumeList")
 	public List<Resume> showResumeList() {
-		System.out.println("==============================redBean : ");
 		List<Resume> list =resumeRepository.findAll();
+		System.out.println("==============================showResumeList : "+list);
 		return list;
 	}
 	
