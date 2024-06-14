@@ -34,4 +34,8 @@ public class Company {
 	private String manager_name;
 	private String manager_tel;
 	private String manager_email;
+	
+	@ManyToOne
+	@JoinColumn(name="sccode")
+	private SubCategory sccode;
 }
