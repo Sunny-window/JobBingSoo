@@ -33,4 +33,11 @@ public class ManagerController {
         return "manager/cs_detailAndReply"; 
     }
     
+    @GetMapping("/mypage")
+    public String myPage(@RequestParam("username") String username, Model model) {
+        model.addAttribute("username", username);
+        return "manager/mypage";
+    }
+    
+    
 }

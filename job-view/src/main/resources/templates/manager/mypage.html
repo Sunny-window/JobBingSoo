@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>마이 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+    <script>
+        function loadNotifications(username) {
+            fetch(`http://localhost:9001/manager/notifications?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    let tableBody = document.getElementById("notificationsTableBody");
+                    tableBody.innerHTML = "";
+                    data.forEach(notification => {
+                        let row = `<tr>
+                            <td>${notification.title}</td>
+                            <td>${notification.content}</td>
+                            <td>${notification.date}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        window.onload = function() {
+            const username = document.getElementById("username").value;
+            loadNotifications(username);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>마이 페이지</h1>
+        <h2>알림 메시지</h2>
+        <input type="hidden" id="username" th:value="${username}">
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>날짜</th>
+                </tr>
+            </thead>
+            <tbody id="notificationsTableBody">
+                <!-- 데이터가 여기에 로드됩니다 -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.Cs;
 import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.Member;
@@ -47,69 +46,75 @@ public class ManagerController {
 	Cs_replyRepository cs_replyRepository;
 
 	@GetMapping("/member-all")
-	public Map<String, List<?>> getData() {
-		List<Member> members = memberRepository.findAll();
-		List<Company> companies = companyRepository.findAll();
-		Map<String, List<?>> data = new HashMap<>();
+	public Map<String, List<Member>> getData() {
+		List<Member> members = memberRepository.findByRole("ROLE_RED_BEAN");
+		List<Member> companies = memberRepository.findByRole("ROLE_ICE");
+		Map<String, List<Member>> data = new HashMap<>();
 		data.put("members", members);
 		data.put("companies", companies);
 		return data;
 	}
 
-    @PostMapping("/notice")
-    public Notice sendNotice(@RequestBody Notice notice) {
-        return noticeRepository.save(notice);
-    }
-
+	@PostMapping("/notice")
+	public Notice sendNotice(@RequestBody Notice notice) {
+		return noticeRepository.save(notice);
+	}
 
 	@GetMapping("/admin-csList")
 	public List<Cs> getCsList(@RequestParam("type") String type) {
 		return csRepository.findByTypeOrderByResultAscDateAsc(type);
 	}
 
-	 @GetMapping("/cs-detail")
-	    public Map<String, Object> getCsDetail(@RequestParam("cs_code") long csCode) {
-	        Map<String, Object> response = new HashMap<>();
-	        Cs cs = csRepository.findById(csCode).orElse(null);
-	        if (cs != null) {
-	            response.put("cs", cs);
-	            List<Cs_reply> replies = cs_replyRepository.findByCsCode(cs);
-	            response.put("replies", replies);
-	        }
-	        return response;
-	    }
+	@GetMapping("/cs-detail")
+	public Map<String, Object> getCsDetail(@RequestParam("cs_code") long csCode) {
+		Map<String, Object> response = new HashMap<>();
+		Cs cs = csRepository.findById(csCode).orElse(null);
+		if (cs != null) {
+			response.put("cs", cs);
+			List<Cs_reply> replies = cs_replyRepository.findByCsCode(cs);
+			response.put("replies", replies);
+		}
+		return response;
+	}
 
-	 @PostMapping("/reply")
-	 public Cs_reply addOrUpdateReply(@RequestParam("cs_code") long csCode, @RequestParam("comment") String comment, @RequestParam("reply_id") Optional<Long> replyId) {
-	     Cs cs = csRepository.findById(csCode).orElse(null);
-	     if (cs != null) {
-	         Cs_reply reply;
-	         if (replyId.isPresent()) {
-	             Optional<Cs_reply> optionalReply = cs_replyRepository.findById(replyId.get());
-	             if (optionalReply.isPresent()) {
-	                 reply = optionalReply.get();
-	             } else {
-	                 reply = new Cs_reply();
-	             }
-	         } else {
-	             reply = new Cs_reply();
-	         }
-	         reply.setCsCode(cs);
-	         reply.setComment(comment);
-	         cs.setResult("답변");
-	         csRepository.save(cs);
-	         return cs_replyRepository.save(reply);
-	     }
-	     return null;
-	 }
+	@PostMapping("/reply")
+	public Cs_reply addOrUpdateReply(@RequestParam("cs_code") long csCode, @RequestParam("comment") String comment,
+			@RequestParam("reply_id") Optional<Long> replyId) {
+		Cs cs = csRepository.findById(csCode).orElse(null);
+		if (cs != null) {
+			Cs_reply reply;
+			if (replyId.isPresent()) {
+				Optional<Cs_reply> optionalReply = cs_replyRepository.findById(replyId.get());
+				if (optionalReply.isPresent()) {
+					reply = optionalReply.get();
+				} else {
+					reply = new Cs_reply();
+				}
+			} else {
+				reply = new Cs_reply();
+			}
+			reply.setCsCode(cs);
+			reply.setComment(comment);
+			cs.setResult("답변");
+			csRepository.save(cs);
+			return cs_replyRepository.save(reply);
+		}
+		return null;
+	}
 
-	    @PostMapping("/reply/{replyId}/edit")
-	    public Cs_reply editReply(@PathVariable("replyId") long replyId, @RequestParam("comment") String comment) {
-	        Cs_reply reply = cs_replyRepository.findById(replyId).orElse(null);
-	        if (reply != null) {
-	            reply.setComment(comment);
-	            return cs_replyRepository.save(reply);
-	        }
-	        return null;
-	    }
+	@PostMapping("/reply/{replyId}/edit")
+	public Cs_reply editReply(@PathVariable("replyId") long replyId, @RequestParam("comment") String comment) {
+		Cs_reply reply = cs_replyRepository.findById(replyId).orElse(null);
+		if (reply != null) {
+			reply.setComment(comment);
+			return cs_replyRepository.save(reply);
+		}
+		return null;
+	}
+
+	@GetMapping("/notifications")
+	public List<Notice> getNotifications(@RequestParam("username") String username) {
+		Member member = memberRepository.findByUsername(username);
+		return noticeRepository.findAllByReciever(member);
+	}
 }
