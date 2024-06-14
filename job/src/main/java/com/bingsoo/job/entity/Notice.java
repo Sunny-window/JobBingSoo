@@ -23,9 +23,9 @@ public class Notice {
 	private long nt_code;
 
 	@ManyToOne
-	@JoinColumn(name = "resiever")
+	@JoinColumn(name = "reciever")
 	@ToString.Exclude
-	private Member resiever;
+	private Member reciever;
 	@ManyToOne
 	@JoinColumn(name = "sender")
 	@ToString.Exclude

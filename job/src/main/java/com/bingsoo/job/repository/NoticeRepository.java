@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 
-public interface NoticeRepository extends JpaRepository<Notice, Long>{
-    public List<Notice> fingAllbyResiever(Member resiever);
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
+    List<Notice> findAllByReciever(Member reciever);
 }
