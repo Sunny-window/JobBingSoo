@@ -4,9 +4,50 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+
+
+.container {
+	width: 500px;
+	margin: 0 auto;
+}
+
+ul.tabs {
+	text-align:center;
+	margin-bottom:30px;
+}
+
+ul.tabs li {
+	background: none;
+	color: #222;
+	display: inline-block;
+	padding:0px 10px;
+	cursor: pointer;
+}
+.tabs .line{
+	color:#333;
+}
+
+ul.tabs li.current {
+	color:#d44958;
+	font-weight:bold;
+}
+
+.tab-content {
+	display: none;
+	padding: 15px;
+}
+
+.tab-content.current {
+	display: block;
+}
+
+
 .hidden {
         display: none;
     }
+    
+    
+    
     
     body {
         font-family: Arial, sans-serif;
@@ -84,9 +125,14 @@
 <div id = "showResumeList" class="hidden"></div>
 
 <div id = "showResumeDetail"></div>
+
+
+
+<button id = "showSubscribeFavoriteList" onclick ="showSubscribeFavoriteList(event)">관심기업/스크랩공고</button><br>
+
 <button id = "showSubscribeList" onclick ="showSubscribeList(event)" >관심기업</button><br>
 <button id = "showFavoriteList" onclick ="showFavoriteList(event)" >스크랩공고</button>
-
+<!--  정보수정폼  -->
 <div id="infoDiv" class="hidden">
 기본키<input type="text" id="rb_code" name="rb_code" ><br>
 이름<input type="text" id="name" name="name" ><br>
@@ -101,39 +147,92 @@
 
 </div>
 
+<!--  이력서 업데이트 폼  -->
 <div id="resumeUpdateFormDiv" class="hidden">
-인적사항
+이력서제목<input type="text" id="title" name="title" ><br>
 <hr>
-이름<input type="text" id="title" name="title" ><br>
-주소<input type="text" id="edu_name" name="title" ><br>
-휴대전화<input type="text" id="edu_type" name="title" ><br>
-Email<input type="text" id="edu_major" name="title" ><br>
+인적사항 
+<hr>
+성명<input type="text" id="name" name="name" ><br>
+주소<input type="text" id="address" name="address" ><br>
+휴대전화<input type="text" id="tel" name="tel" ><br>
+이메일<input type="text" id="email" name="email" ><br>
+<hr>
 학력사항
 <hr>
-제목<input type="text" id="title" name="title" ><br>
-학력<input type="text" id="edu_name" name="title" ><br>
-학력구분<input type="text" id="edu_type" name="title" ><br>
-전공<input type="text" id="edu_major" name="title" ><br>
+학력<input type="text" id="edu_name" name="edu_name" ><br>
+학력구분<input type="text" id="edu_type" name="edu_type" ><br>
+전공<input type="text" id="edu_major" name="edu_major" ><br>
+학력상태<input type="text" id="edu_state" name="edu_state" ><br>
+<hr>
+자소서
+<hr>
+<textarea></textarea>
+<hr>
+희망근무지역
+<hr>
+1지망<input type="text" id="area_main" name="area_main" ><br>
+2지망<input type="text" id="area_sub" name="area_sub" ><br>
+희망직무산업
+<hr>
+산업<input type="text" id="industry" name="industry" ><br>
+직무<input type="text" id="job" name="job" ><br>
+<hr>
+경력사항
+<hr>
+사명<input type="text" id="companyname" name="companyname" ><br>
+입사일<input type="text" id="cardate" name="cardate" ><br>
+퇴사일<input type="text" id="enddate" name="enddate" ><br>
+산업군<input type="text" id="industry" name="industry" ><br>
+직책<input type="text" id="position" name="position" ><br>
+직무<input type="text" id="job" name="job" ><br>
+<hr>
+이력서 기술스택
+<hr>
+<br>
+<hr>
+보유 자격증
+
+<hr> 
+자격증명 <input type="text" id="edu_name" name="title" ><br>
+취득일 <input type="text" id="optain_date" name="optain_date" ><br>
+발급기관 <input type="text" id="issuer" name="issuer" ><br>
+<button>자격증 추가</button>
+<br>
 
 <button id =resumeUpdateInfo onclick="resumeUpdateInfo(event)" >수정하기</button>
 <form action="review" method="post" enctype="multipart/form-data">
-				<input
-					type="file" name="imageFile">
+<input type="file" name="imageFile">
 
-			</form>
+</form>
 
 </div>
 
-
+<!-- div 영역 -->
 <div id = "subscribeListDiv"></div>
 <div id = "showFavoriteListDiv"></div>
+<div id = "showSubFavorDiv" class="hidden">
+<div class="container">
+		<ul class="tabs">
+			<li class="tab-link current" data-tab="tab-1">관심기업 리스트</li>
+			<li class="line">|</li>
+			<li class="tab-link" data-tab="tab-2">스크랩공고 리스트</li>
+		</ul>
+		<div id="tab-1" class="tab-content current">
+			test1
+		</div>
+
+		<div id="tab-2" class="tab-content">
+			test2
+		</div>
+</div>
 <div id = totalResult></div>
 
 </body>
 <script>
 $(document).ready(function() {
     var cnt = 0; // cnt 변수를 이곳으로 이동
-
+	
     // 정보수정 버튼 클릭 시
     $("#infoBtn").click(function() {
 
@@ -141,6 +240,21 @@ $(document).ready(function() {
             $("#infoDiv").removeClass("hidden"); // infoDiv 보이게 함
         } else { // cnt가 홀수인 경우
             $("#infoDiv").addClass("hidden"); // infoDiv 숨김
+        }
+        cnt++; // 클릭할 때마다 cnt 증가
+    });
+});
+
+$(document).ready(function() {
+    var cnt = 0; // cnt 변수를 이곳으로 이동
+	
+    // 정보수정 버튼 클릭 시
+    $("#showSubscribeFavoriteList").click(function() {
+
+        if (cnt % 2 === 0) { // cnt가 짝수인 경우
+            $("#showSubFavorDiv").removeClass("hidden"); // infoDiv 보이게 함
+        } else { // cnt가 홀수인 경우
+            $("#showSubFavorDiv").addClass("hidden"); // infoDiv 숨김
         }
         cnt++; // 클릭할 때마다 cnt 증가
     });
@@ -154,14 +268,20 @@ $(document).ready(function() {
     // 이벤트 위임 사용
     $(document).on("click", "#resumeUpdateBtn", function() {
         if (cnt % 2 === 0) {
-            $("#resumeUpdateFormDiv").removeClass("hidden"); // 폼 보이기
+
+        	$("#resumeUpdateFormDiv").removeClass("hidden"); // 폼 보이기
+            $("#totalResult").addClass("hidden"); // infoDiv 숨김
         } else {
             $("#resumeUpdateFormDiv").addClass("hidden"); // 폼 숨기기
+            $("#totalResult").addClass("hidden"); // infoDiv 숨김
         }
         cnt++; // 클릭할 때마다 cnt 증가
     });
 });
 
+
+
+/*이력서 목록 나타내기*/
 $(document).ready(function() {
     var resumeListCnt = 0; // cnt 변수를 이곳으로 이동
 
@@ -180,7 +300,7 @@ $(document).ready(function() {
 
 
 
-
+/*관심기업 목록 나타내기*/
 $(document).ready(function() {
     var subscribeListCnt = 0; // cnt 변수를 이곳으로 이동
 
@@ -199,7 +319,7 @@ $(document).ready(function() {
 
 
 
-
+/*스크랩 목록 나타내기*/
 $(document).ready(function() {
     var favoriteListCnt = 0; // cnt 변수를 이곳으로 이동
 
@@ -215,6 +335,9 @@ $(document).ready(function() {
     });
 });
 
+
+
+/*스크랩 목록 나타내기*/
 $(document).ready(function() {
     var favoriteListCnt = 0; // cnt 변수를 이곳으로 이동
 
@@ -273,6 +396,34 @@ function updateInfo(event){
         });
 
 }
+
+function resumeUpdateInfo(event){
+	event.preventDefault();
+	var rb_code = document.querySelector('input[id="rb_code"]').value;
+	
+	  const member = {
+			  rb_code:rb_code,
+			
+		    }
+	console.log("============= member");
+	const sendData = JSON.stringify(member);
+    fetch("http://localhost:9001/resumeUpdate", { // 서버에 요청을 보냅니다.
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+        body: sendData // 전송할 데이터
+    })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("totalResult").innerHTML = data;
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("totalResult").innerHTML = error;
+        });
+}
+
 
 function showResumeList(event){
 	event.preventDefault();
@@ -474,30 +625,28 @@ function showFavoriteList(event){
             document.getElementById("totalResult").innerHTML = error;
         });
 
-
 }
 
+const btn1 = document.querySelector("[data-tab='tab-1']");
+const btn2 = document.querySelector("[data-tab='tab-2']");
+const tabContent1 = document.getElementById("tab-1");
+const tabContent2 = document.getElementById("tab-2");
+
+btn1.addEventListener("click", function() {
+	btn1.classList.add("current");
+	btn2.classList.remove("current");
+	tabContent1.classList.add("current");
+	tabContent2.classList.remove("current");
+});
+
+btn2.addEventListener("click", function() {
+	btn2.classList.add("current");
+	btn1.classList.remove("current");
+	tabContent2.classList.add("current");
+	tabContent1.classList.remove("current");
+});
 
 
-function resumeUpdateInfo(event){
-	event.preventDefault();
-	 fetch("http://localhost:9001/resumeUpdate", { // 서버에 요청을 보냅니다.
-	        method: "GET",
-	        headers: {
-	            "Content-Type": "application/json" // 요청의 헤더 설정
-	        },
-	    })
-	        .then(response => response.json())
-	        .then(data => {
-	        	console.log("==============================="+data)
-	            document.getElementById("totalResult").innerHTML = createFavoriteTable(data);
-	            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
-	        })
-	        .catch(error => {
-	            document.getElementById("totalResult").innerHTML = error;
-	        });
-	
-}
 
 
 </script>
