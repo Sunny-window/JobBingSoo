@@ -22,4 +22,15 @@ public class ManagerController {
         model.addAttribute("receivers", receiver);
         return "manager/send_notice";
     }
+    
+    @GetMapping("/admin-csList")
+    public String csList() {
+        return "manager/cs_list";
+    }
+    
+    @GetMapping("/admin-cs_detailAndReply")
+    public String cs_detailAndReply() {
+        return "manager/cs_detailAndReply"; 
+    }
+    
 }

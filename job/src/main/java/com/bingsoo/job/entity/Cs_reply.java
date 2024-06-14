@@ -1,4 +1,4 @@
-  package com.bingsoo.job.entity;
+package com.bingsoo.job.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +26,7 @@ public class Cs_reply {
 	@ManyToOne
 	@JoinColumn(name="cs_code")
 	@ToString.Exclude
-	private Cs cs_code;
+	private Cs csCode;
 	
 	
 	@ManyToOne
