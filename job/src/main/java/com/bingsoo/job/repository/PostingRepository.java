@@ -1,7 +1,6 @@
 package com.bingsoo.job.repository;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import com.bingsoo.job.entity.Posting;
 public interface PostingRepository extends JpaRepository<Posting, Long>{
 
 
-    @Query(value = "SELECT p.title, p.deadline, c.address, c.company_name, c.ceo " +
+    @Query(value = "SELECT  p.title, p.deadline, c.address, c.company_name, p.post_code " +
         "FROM Posting p " +
         "JOIN Company c " +
         "ON p.cid = c.cid " +
@@ -36,7 +35,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long>{
             dto.setDeadline((Date) db_result[1]);
             dto.setAddress((String) db_result[2]);
             dto.setCompany_name((String) db_result[3]);
-            dto.setCeo((String) db_result[4]);
+            dto.setPost_code((Long) db_result[4]);
 
             dtos.add(dto);
         }
