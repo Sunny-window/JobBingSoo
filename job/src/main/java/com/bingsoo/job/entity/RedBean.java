@@ -1,6 +1,6 @@
 package com.bingsoo.job.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class RedBean {
 	private Member rid;
 	
 	private String name;
-	private Date birth;
+	private LocalDate birth;
 	private String tel;
 	private String address;
 	private String email;
