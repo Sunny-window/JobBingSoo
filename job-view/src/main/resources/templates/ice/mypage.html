@@ -33,13 +33,21 @@
 
 </style>
 <body>
-<h1>기업 마이 페이지</h1>
-<hr>
-    <p id = "myCompany">우리회사 정보 관리</p>
-    <div class="button-container">
-        <button onclick="employ_notice_list()">채용공고관리</button> 
-        <button onclick="infomation()">기업정보관리</button>
-    </div>
+    <header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
+    <section>
+        <h1>기업 마이 페이지</h1>
+        <hr>
+            <p id = "myCompany">우리회사 정보 관리</p>
+            <div class="button-container">
+                <button onclick="employ_notice_list()">채용공고관리</button> 
+                <button onclick="infomation()">기업정보관리</button>
+            </div>
+    </section>
+    <footer>
+        <th:block th:insert="~{/sub/footer.html}"></th:block>
+    </footer>
 <script>
     function infomation(){
         window.location.href = '/ice/infomation';

@@ -7,10 +7,18 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>지원자 목록 페이지</h1>
-<hr>
-<div class="content" id="application-list"></div>
-<input type="text" id="postCode" th:value="${postCode}">
+    <header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
+    <section>
+        <h1>지원자 목록 페이지</h1>
+        <hr>
+        <div class="content" id="application-list"></div>
+        <input type="text" id="postCode" th:value="${postCode}">
+    </section>
+    <footer>
+        <th:block th:insert="~{/sub/footer.html}"></th:block>
+    </footer>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // 페이지가 로드될 때 실행되는 함수
