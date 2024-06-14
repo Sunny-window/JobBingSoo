@@ -13,4 +13,7 @@ public class RedbeanController {
 		
 		return "red_bean/mypage";
 	}
+	
+	
+	
 }
