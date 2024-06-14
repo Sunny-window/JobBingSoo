@@ -1,10 +1,82 @@
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<style>
+    #notice-bell-container {
+        position: fixed;
+        bottom: 25%;
+        right: 45px;
+        width: 370px;
+        background: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border: 1px solid #ff006f;
+        border-radius: 8px;
+        z-index: 9999;
+        padding-top: 2px;
+        display:none;
+    }
 
-</body>
-</html>
+    div#chat-list-container {
+        height: 300px;
+    }
+
+    #notice-bell {
+        border: 3px solid #ff006f;
+        border-radius: 100px;
+        position: fixed;
+        bottom: 15%;
+        right: 250px;
+        width: 80px;
+        height: 80px;
+    }
+    #notice{
+        margin : 8px 0;
+        padding: 0 10px;
+    }
+    #notice-type{
+        display:inline-block;
+        width:60px;
+        margin: 0 12px;
+    }    
+    #notice-message{
+        display:inline-block;
+        min-width:230px;
+        margin: 0 12px;
+    }
+</style>
+<div id="notice-bell-container">
+    <div id="chat-list-container">
+        <ul id="notice"><div id="notice-type">채용공고</div><div id="notice-message">메세지내용</div></ul>
+        <ul id="notice"><div id="notice-type">지원결과</div><div id="notice-message">메세지내용</div></ul>
+        <ul id="notice"><div id="notice-type">기업알림</div><div id="notice-message">메세지내용</div></ul>
+        <ul id="notice"><div id="notice-type">채용공고</div><div id="notice-message">메세지내용</div></ul>
+        <ul id="notice"><div id="notice-type">고객센터</div><div id="notice-message">메세지내용</div></ul>
+    </div>
+</div>
+<img id="notice-bell" src="/images/notice_bell.png">
+
+<script>
+    const bell = document.getElementById('notice-bell');
+
+    let cnt = 1;
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        bell.addEventListener('click', f);
+    });
+
+
+    function f() {
+        const noticecontainer = document.getElementById('notice-bell-container');
+        if (cnt === 0) {
+            console.log(cnt);
+            // bell.src = "/images/yestice_bell.png";
+            noticecontainer.style.display = "none";
+            cnt = 1;
+        }
+        else {
+            console.log(cnt);
+            // bell.src = "/images/notice_bell.png";
+            noticecontainer.style.display = "block";
+            cnt = 0;
+        }
+    }
+
+</script>
