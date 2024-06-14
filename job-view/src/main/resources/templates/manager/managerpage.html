@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>관리자 페이지</title>
+    <title>기업/개인 회원 알림 전송 페이지</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -46,6 +46,84 @@
         .button:hover {
             background-color: #45a049;
         }
+        /* 모달 창 스타일 추가 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation-name: animatetop;
+            animation-duration: 0.4s;
+        }
+
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group textarea {
+            height: 95px;
+            resize: none;
+        }
+
+        .modal-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-button:hover {
+            background-color: #45a049;
+        }
     </style>
     <script>
         function loadData() {
@@ -56,7 +134,7 @@
                     if (type === "member") {
                         loadMembers(data.members);
                     } else {
-                        loadCompanies(data.companies);
+                        loadMembers(data.companies);
                     }
                 });
         }
@@ -74,21 +152,6 @@
             });
         }
 
-        function loadCompanies(companies) {
-            let companyTableBody = document.getElementById("companyTableBody");
-            companyTableBody.innerHTML = "";
-            companies.forEach(company => {
-                let row = `<tr>
-                    <td><input type="checkbox" name="receiver" value="${company.manager_name}"></td>
-                    <td>${company.cno}</td>
-                    <td>${company.company_name}</td>
-                    <td>${company.manager_name}</td>
-                    <td>${company.manager_tel}</td>
-                </tr>`;
-                companyTableBody.innerHTML += row;
-            });
-        }
-
         function searchMembers() {
             let input = document.getElementById("memberSearch").value.toLowerCase();
             let rows = document.querySelectorAll("#memberTableBody tr");
@@ -98,35 +161,54 @@
             });
         }
 
-        function searchCompanies() {
-            let input = document.getElementById("companySearch").value.toLowerCase();
-            let rows = document.querySelectorAll("#companyTableBody tr");
-            rows.forEach(row => {
-                let companyName = row.querySelector("td:nth-child(3)").innerText.toLowerCase();
-                row.style.display = companyName.includes(input) ? "" : "none";
-            });
-        }
-
         function handleTypeChange() {
             let type = document.querySelector('input[name="type"]:checked').value;
-            document.getElementById("memberSection").style.display = type === "member" ? "block" : "none";
-            document.getElementById("companySection").style.display = type === "company" ? "block" : "none";
+            document.getElementById("listTitle").innerText = type === "member" ? "회원 리스트" : "기업 리스트";
             loadData();
         }
 
-        function sendNotices() {
+        function showModal() {
             let selectedReceivers = Array.from(document.querySelectorAll('input[name="receiver"]:checked'))
                 .map(input => input.value)
-                .join(",");
+                .join(", ");
             if (selectedReceivers) {
-                window.location.href = `/manager/send_notice?receiver=${selectedReceivers}`;
+                document.getElementById('receivers').value = selectedReceivers;
+                document.getElementById('myModal').style.display = "block";
             } else {
                 alert("수신자를 선택하세요.");
             }
         }
 
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        function sendNotice() {
+            let receivers = document.getElementById('receivers').value;
+            let title = document.getElementById('title').value;
+            let content = document.getElementById('content').value;
+
+            fetch('http://localhost:9001/manager/send_notice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    receivers: receivers,
+                    title: title,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('알림이 전송되었습니다.');
+                closeModal();
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
         window.onload = function() {
-            document.getElementById("sendNoticeButton").addEventListener("click", sendNotices);
+            document.getElementById("sendNoticeButton").addEventListener("click", showModal);
             document.getElementById("typeMember").addEventListener("change", handleTypeChange);
             document.getElementById("typeCompany").addEventListener("change", handleTypeChange);
             handleTypeChange();
@@ -142,8 +224,8 @@
             <label><input type="radio" name="type" value="company" id="typeCompany"> 기업</label>
         </div>
 
-        <div id="memberSection">
-            <h2>회원 리스트</h2>
+        <div>
+            <h2 id="listTitle">회원 리스트</h2>
             <input type="text" id="memberSearch" placeholder="회원 검색" onkeyup="searchMembers()">
             <table>
                 <thead>
@@ -159,26 +241,31 @@
             </table>
         </div>
 
-        <div id="companySection" style="display:none;">
-            <h2>기업 리스트</h2>
-            <input type="text" id="companySearch" placeholder="기업 검색" onkeyup="searchCompanies()">
-            <table>
-                <thead>
-                    <tr>
-                        <th>선택</th>
-                        <th>Company Number</th>
-                        <th>Company Name</th>
-                        <th>Manager Name</th>
-                        <th>Manager Tel</th>
-                    </tr>
-                </thead>
-                <tbody id="companyTableBody">
-                    <!-- 데이터가 여기에 로드됩니다 -->
-                </tbody>
-            </table>
-        </div>
-
         <button id="sendNoticeButton" class="button">알림 보내기</button>
+    </div>
+
+    <!-- 모달 창 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>알림 보내기</h2>
+            <form id="noticeForm">
+                <div class="form-group">
+                    <label for="receivers">수신자:</label>
+                    <input type="text" id="receivers" name="receivers" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="title">제목:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">내용:</label>
+                    <textarea id="content" name="content" required></textarea>
+                </div>
+                <button type="button" class="modal-button" onclick="sendNotice()">전송</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
+
