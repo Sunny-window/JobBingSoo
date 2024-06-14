@@ -3,8 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header2 {
+            width: 680px;
+            margin: 50px auto 0;
+            background-color: #ff006f;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 5px solid #ff006f;
+        }
+
+        #header2 .sub {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        #header2 .sub li {
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        #header2 .sub li button {
+            height: 70px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0;
+        }
+
+        #red {
+            background-color: #ff006f;
+            color: #fff;
+            flex-grow: 3;
+            font-weight: bold;
+        }
+
+        #com {
+            background-color: #ffffff;
+            color: #000000;
+            flex-grow: 2;
+        }
+
+        .selected {
+            background-color: #ff006f !important; /* 선택된 버튼 배경색 */
+            color: #fff !important; /* 선택된 버튼 텍스트 색 */
+        }
+
+        #container {
+            width: 620px;
+            margin: 0 auto 30px;
+            background-color: #fff;
+            padding: 20px 40px 20px 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .row_group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .col_2 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-right: 10px; /* input 필드 간격 추가 */
+        }
+
+        .row_group:last-child .col_2 {
+            margin-right: 0; /* 마지막 row_group의 margin-right를 0으로 설정 */
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            position: relative;
+            height: 30px;
+        }
+
+        .input-label {
+            position: absolute;
+            left: 10px;
+            top: 8px;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        input:focus + .input-label, 
+        input:not(:placeholder-shown) + .input-label {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .input-label span {
+            color: gray;
+        }
+
+        .mbrBtnRegist {
+            width: 200px; /* 로그인 버튼 크기 조정 */
+            background-color: #ff006f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 15px;
+            font-size: 16px;
+            text-align: center;
+            height: 80px; /* 버튼 높이 조정 */
+        }
+
+        .mbrBtnRegist:hover {
+            background-color: #e5005e;
+        }
+</style>
 </head>
 <body>
+<header>
+<div th:replace="/sub/header"></div>
+</header>
 
+<section>
+    <div id="header2">
+        <ul class="sub">
+            <li class="red">
+                <button id="red">개인회원</button>
+            </li>
+            <li class="com">
+                <button id="com">기업회원</button>
+            </li>
+        </ul>
+    </div>
+    
+    <div id="personalMember" style="display:block;">
+        <div id="container" class="memLogin">
+        <fieldset>
+            <form id="redbeanLoginForm" method="" action="">
+                <div class="row_group">
+                    <div class="col_2">
+                        <input type="text" id="red_username" name="username" placeholder=" ">
+                        <label class="input-label" for="red_username"><span>개인 회원 아이디</span></label>
+                    </div>
+                    <button type="submit" class="mbrBtnRegist"><span>로그인</span></button>
+                </div>
+                <div class="row_group">
+                    <div class="col_2">
+                        <input type="password" id="red_pwd" name="password" placeholder=" ">
+                        <label class="input-label" for="red_pwd"><span>비밀번호</span></label>
+                    </div>
+                </div>                    
+            </form>
+            </fieldset>
+        </div>
+    </div>
+        
+    <div id="corporateMember" style="display:none;">
+    <div id="container" class="iceLogin">
+    <fieldset>
+        <form id="iceLoginForm" method="" action="">
+            <div class="row_group">
+                <div class="col_2">
+                    <input type="text" id="ice_username" name="username" placeholder=" ">
+                    <label class="input-label" for="ice_username"><span>기업 회원 아이디</span></label>
+                </div>
+                <button type="submit" class="mbrBtnRegist"><span>로그인</span></button>
+            </div>
+            <div class="row_group">
+                <div class="col_2">
+                    <input type="password" id="ice_pwd" name="password" placeholder=" ">
+                    <label class="input-label" for="ice_pwd"><span>비밀번호</span></label>
+                </div>
+            </div>
+            
+            
+        </form>
+        </fieldset>
+    </div>
+    </div>
+</section>
+<footer>
+<div th:replace="/sub/footer"></div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+
+    inputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            var label = input.nextElementSibling;
+            if (input.value) {
+                label.style.visibility = 'hidden';
+                label.style.opacity = '0';
+            } else {
+                label.style.visibility = 'visible';
+                label.style.opacity = '1';
+            }
+        });
+    });
+
+    var personalBtn = document.getElementById('red');
+    var corporateBtn = document.getElementById('com');
+
+    // 개인회원과 기업회원 멤버 요소 가져오기
+    var personalMember = document.getElementById('personalMember');
+    var corporateMember = document.getElementById('corporateMember');
+
+    // 초기 상태: 개인회원 버튼이 선택된 상태로 설정
+    personalBtn.classList.add('selected');
+
+    // 개인회원 버튼 클릭 시
+    personalBtn.addEventListener('click', function() {
+        if (!personalBtn.classList.contains('selected')) {
+            personalBtn.classList.add('selected');
+            corporateBtn.classList.remove('selected');
+            personalBtn.style.backgroundColor = '#fff';
+            personalBtn.style.color = '#000';
+            corporateBtn.style.backgroundColor = '#fff';
+            corporateBtn.style.color = '#000';
+            personalMember.style.display = 'block';
+            corporateMember.style.display = 'none';
+        }
+    });
+
+    // 기업회원 버튼 클릭 시
+    corporateBtn.addEventListener('click', function() {
+        if (!corporateBtn.classList.contains('selected')) {
+            corporateBtn.classList.add('selected');
+            personalBtn.classList.remove('selected');
+            corporateBtn.style.backgroundColor = '#ff006f';
+            corporateBtn.style.color = '#fff';
+            personalBtn.style.backgroundColor = '#fff';
+            personalBtn.style.color = '#000';
+            personalMember.style.display = 'none';
+            corporateMember.style.display = 'block';
+        }
+    });
+});
+</script>
 </body>
 </html>
