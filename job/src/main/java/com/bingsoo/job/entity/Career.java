@@ -1,6 +1,6 @@
 package com.bingsoo.job.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-  
 
 @Data
 @AllArgsConstructor
@@ -36,12 +34,11 @@ public class Career {
 	private Member rid;
 	
 	private String companyName;
-	private Date carDate;
-	private Date endDate;
+	private LocalDate carDate;
+	private LocalDate endDate;
 	private String industry;
 	private String position;
 	private String job;
 	private String work;
-	 
 	
 }
