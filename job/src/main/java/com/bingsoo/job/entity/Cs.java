@@ -33,7 +33,7 @@ public class Cs {
 	private String title;
 	private String content;
 	private String type;
-	private LocalDate Date;
+	private LocalDate date;
 	private String result;
 	private String public_type;
 	

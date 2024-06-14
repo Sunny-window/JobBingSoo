@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CS 상세 및 답변</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <script>
+        function loadCsDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const csCode = urlParams.get('cs_code');
+            fetch(`http://localhost:9001/manager/cs-detail?cs_code=${csCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cs) {
+                        document.getElementById('cs_code').innerText = data.cs.cs_code;
+                        document.getElementById('title').innerText = data.cs.title;
+                        document.getElementById('content').innerText = data.cs.content;
+                        document.getElementById('type').innerText = data.cs.type;
+                        document.getElementById('username').innerText = data.cs.rid ? data.cs.rid.username : 'Unknown';
+                        document.getElementById('date').innerText = data.cs.date;
+                        document.getElementById('result').innerText = data.cs.result;
+                        document.getElementById('cs_code_input').value = data.cs.cs_code;
+                        document.getElementById('type_input').value = urlParams.get('type');
+
+                        let repliesDiv = document.getElementById('replies');
+                        repliesDiv.innerHTML = '';
+                        data.replies.forEach(reply => {
+                            let replyElement = document.createElement('div');
+                            replyElement.innerHTML = `<p>${reply.comment}</p><button onclick="editReply(${reply.csr_code}, '${reply.comment}')">수정</button>`;
+                            repliesDiv.appendChild(replyElement);
+                        });
+                    } else {
+                        console.error("CS data is null");
+                    }
+                })
+                .catch(error => console.error('Error fetching CS details:', error));
+        }
+
+        function editReply(csrCode, comment) {
+            document.getElementById('reply_id_input').value = csrCode;
+            document.getElementById('comment').value = comment;
+            document.getElementById('submit_button').innerText = "수정";
+        }
+
+        window.onload = loadCsDetail;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>CS 상세 및 답변</h1>
+        <p><strong>코드:</strong> <span id="cs_code">Loading...</span></p>
+        <p><strong>제목:</strong> <span id="title">Loading...</span></p>
+        <p><strong>내용:</strong> <span id="content">Loading...</span></p>
+        <p><strong>유형:</strong> <span id="type">Loading...</span></p>
+        <p><strong>작성자:</strong> <span id="username">Loading...</span></p>
+        <p><strong>날짜:</strong> <span id="date">Loading...</span></p>
+        <p><strong>결과:</strong> <span id="result">Loading...</span></p>
+        <div id="replies"></div>
+        <form id="replyForm" method="post">
+            <input type="hidden" id="cs_code_input" name="cs_code" value="">
+            <input type="hidden" id="type_input" name="type" value="">
+            <input type="hidden" id="reply_id_input" name="reply_id" value="">  <!-- Hidden input for reply ID -->
+            <textarea id="comment" name="comment" placeholder="답변을 작성하세요"></textarea><br>
+            <button type="button" class="button" id="submit_button" onclick="submitReply()">답변 보내기</button>
+        </form>
+    </div>
+    <script>
+        function submitReply() {
+            const csCode = document.getElementById('cs_code_input').value;
+            const comment = document.getElementById('comment').value;
+            const type = document.getElementById('type_input').value;
+            const replyId = document.getElementById('reply_id_input').value;  // Get reply ID
+
+            fetch('http://localhost:9001/manager/reply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'cs_code': csCode,
+                    'comment': comment,
+                    'reply_id': replyId  // Include reply ID in the request
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    window.location.href = `/manager/admin-csList?type=${type}`;
+                } else {
+                    console.error("Failed to save reply");
+                }
+            })
+            .catch(error => console.error('Error submitting reply:', error));
+        }
+    </script>
+</body>
+</html>
+
