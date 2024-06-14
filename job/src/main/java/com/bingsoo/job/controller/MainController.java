@@ -1,6 +1,5 @@
 package com.bingsoo.job.controller;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bingsoo.job.entity.Company;
@@ -26,8 +26,6 @@ import com.bingsoo.job.repository.MemberRepository;
 import com.bingsoo.job.repository.RedBeanRepository;
 import com.bingsoo.job.service.CompanyService;
 import com.bingsoo.job.service.SubCategoryService;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/main")
@@ -260,13 +258,27 @@ public class MainController {
         }
     }
     
+    /*
     @GetMapping("/company-detail/company-info/{cno}")
     public void getCompanyByCno(@PathVariable("cno") String cno, HttpServletResponse response) throws IOException {
-        Company company = companyService.getCompanyByCno(cno);
+        Company company = companyService.getCompanyByCno2(cno).orElse(null);
         if (company != null) {
             response.sendRedirect("http://localhost:8080/main/comDetail?cno=" + cno);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Company not found");
         }
     }
+    */
+    
+    @GetMapping("/company-detail/company-info/{cno}")
+    @ResponseBody
+    public ResponseEntity<Company> getCompanyByCno(@PathVariable("cno") String cno) {
+        Company company = companyService.getCompanyByCno2(cno).orElse(null);
+        if (company != null) {
+            return ResponseEntity.ok(company);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 }

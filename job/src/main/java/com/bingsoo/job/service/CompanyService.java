@@ -1,6 +1,7 @@
 package com.bingsoo.job.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,9 @@ public class CompanyService {
     
     public Company getCompanyByCno(String cno) {
         return companyRepository.findByCno(cno).orElse(null);
+    }
+    
+    public Optional<Company> getCompanyByCno2(String cno) {
+        return companyRepository.findById(cno);
     }
 }

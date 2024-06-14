@@ -1,10 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업 상세 정보</title>
+    <style>
+        /* CSS styles */
+    </style>
 </head>
 <body>
+    <header th:replace="/sub/header"></header>
 
+    <section>
+        <div class="company-info">	
+            <h2>기업정보</h2>
+            <div class="company-info-container">
+                <table class="table-info">
+                    <colgroup>
+                        <col class="col-label">
+                        <col class="col-value">
+                        <col class="col-label">
+                        <col class="col-value">
+                    </colgroup>
+                    <tbody>
+                        <tr class="field">
+                            <th class="field-label">산업</th>
+                            <td class="field-value" id="mainCategory"></td>
+                            <th class="field-label">사원수</th>
+                            <td class="field-value" id="size"></td>
+                        </tr>
+                        <tr class="field">
+                            <th class="field-label">기업구분</th>
+                            <td class="field-value" id="type"></td>
+                            <th class="field-label">매출액</th>
+                            <td class="field-value" id="sales"></td>
+                        </tr>
+                        <tr class="field">
+                            <th class="field-label">대표자</th>
+                            <td class="field-value" id="ceo"></td>
+                            <th class="field-label">대표번호</th>
+                            <td class="field-value" id="tel"></td>
+                        </tr>
+                        <tr class="field">
+                            <th class="field-label">주소</th>
+                            <td class="field-value" id="address"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="com-posting">
+            <h2>채용</h2>
+            <!-- 채용 정보 추가 -->
+        </div>
+    </section>
+
+    <footer th:replace="/sub/footer"></footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const cno = urlParams.get('cno');
+
+        if (cno) {
+            $.ajax({
+                url: `http://localhost:9001/main/company-detail/company-info/${cno}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#mainCategory').text(data.mainCategory);
+                    $('#size').text(data.size);
+                    $('#type').text(data.type);
+                    $('#sales').text(data.sales);
+                    $('#ceo').text(data.ceo);
+                    $('#tel').text(data.tel);
+                    $('#address').text(data.address);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('기업 정보를 불러오는 데 실패했습니다:', textStatus, errorThrown);
+                    console.error('응답 메시지:', jqXHR.responseText);
+                    alert('기업 정보를 불러오는 데 실패했습니다.');
+                }
+            });
+        } else {
+            alert('유효한 기업 번호가 아닙니다.');
+        }
+    });
+    </script>
 </body>
 </html>
