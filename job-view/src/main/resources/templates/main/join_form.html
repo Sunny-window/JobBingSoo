@@ -13,7 +13,7 @@
             padding: 0;
         }
 
-        #header {
+        #header2 {
             width: 680px;
             margin: 50px auto 0;
             background-color: #ff006f;
@@ -24,7 +24,7 @@
             border-bottom: 5px solid #ff006f;
         }
 
-        #header .sub {
+        #header2 .sub {
             list-style: none;
             margin: 0;
             padding: 0;
@@ -34,13 +34,13 @@
             width: 100%;
         }
 
-        #header .sub li {
+        #header2 .sub li {
             margin: 0;
             padding: 0;
             flex-grow: 1;
         }
 
-        #header .sub li button {
+        #header2 .sub li button {
             height: 70px;
             border: none;
             border-radius: 0;
@@ -226,7 +226,7 @@
 <div th:replace="/sub/header"></div>
 </header>
 <section>
-    <div id="header">
+    <div id="header2">
         <ul class="sub">
             <li class="red">
                 <button id="red">개인회원</button>
@@ -632,6 +632,7 @@
                 }
                 return true;
             }
+            
         </script>
     </body>
     </html>
