@@ -38,4 +38,14 @@ public class ManagerController {
     public String myPage(Model model) {
         return "manager/mypage";
     }
+    
+    @GetMapping("/dashboard")
+    public String dashboard() {
+    	return "manager/dashboard";
+    }
+    
+    @GetMapping("/kakao-share")
+    public String kakaoShare() {
+        return "manager/kakao_share";
+    }
 }

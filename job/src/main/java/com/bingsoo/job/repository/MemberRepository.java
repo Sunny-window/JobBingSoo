@@ -1,5 +1,6 @@
 package com.bingsoo.job.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,7 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	List<Member> findByRole(String string);
 
 	Member findByUsername(String username);
+	
+	List<Member> findByJoinDateBetween(LocalDate startDate, LocalDate endDate);
 
 }

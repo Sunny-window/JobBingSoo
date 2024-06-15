@@ -42,6 +42,7 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
+            margin-right: 10px;
         }
         .button:hover {
             background-color: #45a049;
@@ -124,6 +125,10 @@
         .modal-button:hover {
             background-color: #45a049;
         }
+
+        .button-container {
+            text-align: center;
+        }
     </style>
     <script>
         function loadData() {
@@ -133,8 +138,14 @@
                     let type = document.querySelector('input[name="type"]:checked').value;
                     if (type === "member") {
                         loadMembers(data.members);
+                        document.getElementById("downloadButton").onclick = function() {
+                            window.location.href = 'http://localhost:9001/manager/download/excel?type=member';
+                        };
                     } else {
                         loadMembers(data.companies);
+                        document.getElementById("downloadButton").onclick = function() {
+                            window.location.href = 'http://localhost:9001/manager/download/excel?type=company';
+                        };
                     }
                 });
         }
@@ -146,6 +157,7 @@
                 let row = `<tr>
                     <td><input type="checkbox" name="receiver" value="${member.username}"></td>
                     <td>${member.username}</td>
+                    <td>${member.kakaoId}</td>
                     <td>${member.role}</td>
                 </tr>`;
                 memberTableBody.innerHTML += row;
@@ -232,6 +244,7 @@
                     <tr>
                         <th>선택</th>
                         <th>Username</th>
+                        <th>KakaoID</th>
                         <th>Role</th>
                     </tr>
                 </thead>
@@ -241,7 +254,11 @@
             </table>
         </div>
 
-        <button id="sendNoticeButton" class="button">알림 보내기</button>
+        <div class="button-container">
+            <button id="downloadButton" class="button">엑셀 다운로드</button>
+            <button id="kakaoShareButton" class="button" onclick="window.location.href='/manager/kakao-share'">카카오톡 전송</button>
+            <button id="sendNoticeButton" class="button">알림 보내기</button>
+        </div>
     </div>
 
     <!-- 모달 창 -->
@@ -268,4 +285,3 @@
     </div>
 </body>
 </html>
-

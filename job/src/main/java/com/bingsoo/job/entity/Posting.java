@@ -40,6 +40,7 @@ public class Posting {
 	private String area;
 	private String industry;
 	private String job;
+	private LocalDate postedDate;
 	private LocalDate deadline;
 	private String manager_tel;
 	private String main_content;

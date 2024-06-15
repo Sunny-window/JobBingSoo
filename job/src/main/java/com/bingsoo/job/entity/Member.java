@@ -1,5 +1,7 @@
 package com.bingsoo.job.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -20,4 +22,6 @@ public class Member {
 	
 	private String password;
 	private String role;
+	private LocalDate joinDate;
+	private String kakaoId;
 }
