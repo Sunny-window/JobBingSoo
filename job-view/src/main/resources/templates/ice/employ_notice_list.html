@@ -106,16 +106,14 @@
                 fetch(`http://localhost:9001/ice/posting/${postCode}`, {
                     method: "DELETE"
                 })
-                .then(res => res.json())
-                .then(response => {
-                    const deletedDiv = document.querySelector(`div[data-postcode="${postCode}"]`);
-                    if (deletedDiv) {
-                        deletedDiv.remove();
+                .then(response=>{
+                    if(response.ok){
+                        ajax1();
                     }
-                    
                 })
                 .catch(error => console.error('Error deleting posting:', error));
             });
+
         }
 
 
