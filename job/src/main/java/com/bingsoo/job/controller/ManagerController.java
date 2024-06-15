@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bingsoo.job.dto.NoticeDto;
 import com.bingsoo.job.entity.Cs;
 import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.Member;
@@ -53,11 +54,6 @@ public class ManagerController {
 		data.put("members", members);
 		data.put("companies", companies);
 		return data;
-	}
-
-	@PostMapping("/notice")
-	public Notice sendNotice(@RequestBody Notice notice) {
-		return noticeRepository.save(notice);
 	}
 
 	@GetMapping("/admin-csList")
@@ -112,9 +108,27 @@ public class ManagerController {
 		return null;
 	}
 
-	@GetMapping("/notifications")
-	public List<Notice> getNotifications(@RequestParam("username") String username) {
-		Member member = memberRepository.findByUsername(username);
-		return noticeRepository.findAllByReciever(member);
-	}
+
+	@PostMapping("/send-notice")
+    public Notice sendNotice(@RequestBody NoticeDto noticeDto) {
+        Member sender = memberRepository.findById("admin").orElseThrow(() -> new RuntimeException("발신자 계정을 찾을 수 없습니다."));
+        String[] receiverUsernames = noticeDto.getReceivers().split(", ");
+        Notice notice = new Notice();
+        notice.setSender(sender);
+        notice.setMessage(noticeDto.getTitle() + ": " + noticeDto.getContent());
+        notice.setType("알림");
+        
+        for (String receiverUsername : receiverUsernames) {
+            Member receiver = memberRepository.findById(receiverUsername).orElseThrow(() -> new RuntimeException("수신자 계정을 찾을 수 없습니다."));
+            notice.setReciever(receiver);
+            noticeRepository.save(notice);
+        }
+        return notice;
+    }
+
+    @GetMapping("/notices")
+    public List<Notice> getAllNotices() {
+        return noticeRepository.findAll();
+    }
 }
+
