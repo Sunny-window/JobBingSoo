@@ -58,7 +58,7 @@ public class IceController {
     }
 
     @DeleteMapping("/posting/{post_code}")
-    public void deletePostingById(@PathVariable Long postCode) {
+    public void deletePostingById(@PathVariable("post_code") Long postCode) {
         
         System.out.println(postCode);
         System.out.println(postCode);
@@ -67,7 +67,7 @@ public class IceController {
         System.out.println(postCode);
         System.out.println(postCode);
         System.out.println(postCode);
-        
+
         postingRepository.deleteById(postCode);
     }
 }
