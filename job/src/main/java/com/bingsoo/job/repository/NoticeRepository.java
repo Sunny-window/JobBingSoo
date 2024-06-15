@@ -9,4 +9,8 @@ import com.bingsoo.job.entity.Notice;
 
 public interface NoticeRepository extends JpaRepository<Notice, Long> {
     List<Notice> findAllByReciever(Member reciever);
+
+	List<Notice> findBySender(Member user);
+
+	List<Notice> findByReciever(Member user);
 }

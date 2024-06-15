@@ -12,32 +12,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin(origins = "http://localhost:8080")
 public class ManagerController {
 
-    @GetMapping("/member-all")
-    public String managerPage() {
-        return "manager/managerpage";
-    }
+	@GetMapping("/member-all")
+	public String managerPage() {
+		return "manager/managerpage";
+	}
 
-    @GetMapping("/send_notice")
-    public String sendNoticeForm(@RequestParam("receiver") String receiver, Model model) {
-        model.addAttribute("receivers", receiver);
-        return "manager/send_notice";
-    }
-    
-    @GetMapping("/admin-csList")
-    public String csList() {
-        return "manager/cs_list";
-    }
-    
-    @GetMapping("/admin-cs_detailAndReply")
-    public String cs_detailAndReply() {
-        return "manager/cs_detailAndReply"; 
-    }
-    
+	@GetMapping("/send_notice")
+	public String sendNoticeForm(@RequestParam("receiver") String receiver, Model model) {
+		model.addAttribute("receivers", receiver);
+		return "manager/send_notice";
+	}
+
+	@GetMapping("/admin-csList")
+	public String csList() {
+		return "manager/cs_list";
+	}
+
+	@GetMapping("/admin-cs_detailAndReply")
+	public String cs_detailAndReply() {
+		return "manager/cs_detailAndReply";
+	}
+
+
     @GetMapping("/mypage")
-    public String myPage(@RequestParam("username") String username, Model model) {
-        model.addAttribute("username", username);
+    public String myPage(Model model) {
         return "manager/mypage";
     }
-    
-    
 }
