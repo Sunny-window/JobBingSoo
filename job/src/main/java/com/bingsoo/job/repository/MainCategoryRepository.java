@@ -8,6 +8,7 @@ import com.bingsoo.job.entity.MainCategory;
 @Repository
 public interface MainCategoryRepository extends JpaRepository<MainCategory,Long> {
     
+	MainCategory findByMccode(Long mccode);
 	//@Query(value="SELECT main FROM main_category", nativeQuery=true )
 	//public List<MainCategory> findMainCategory();
 	

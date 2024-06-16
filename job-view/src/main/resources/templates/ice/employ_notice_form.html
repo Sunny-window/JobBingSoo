@@ -13,9 +13,145 @@
     <section>
         <h1>공고 등록/수정 페이지</h1>
         <hr>
+        <input type="text" id="title" placeholder="제목">
+        <input type="number" id="head_count" placeholder="채용인원">
+        <label for="edu_type">학력</label>
+            <select id="edu_type" name="edu_type">
+                <option value="elementary">초졸</option>
+                <option value="middle">중졸</option>
+                <option value="high">고졸</option>
+                <option value="associate">초대졸</option>
+                <option value="bachelor">대졸</option>
+                <option value="etc">기타</option>
+            </select>
+        <label for="employment_type">학력</label>
+            <select id="employment_type" name="employment_type">
+                <option value="freshman">신입</option>
+                <option value="experienced ">경력</option>
+            </select>
+        <input type="text" id="career" placeholder="경력 ex)3년이상...">
+        <input type="text" id="pay" placeholder="연봉">
+        <input type="text" id="area" placeholder="근무지역">
+        
+        <select id="main_category" name="main_category">
+            <option value="">메인 카테고리 선택</option>
+        </select>
+        
+        <select id="sub_category" name="sub_category">
+            <option value="">서브 카테고리 선택</option>
+        </select>
+
+        <input type="datetime-local" id="deadline" placeholder="마감일">
+        <input type="text" id="manager_tel" placeholder="담당자 번호">
+        <textarea id="main_content" placeholder="공고 내용"></textarea>
+        <button onclick="submitPosting()">등록</button>
+    
     </section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
     </footer>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            MainCategories();
+        });
+
+        function MainCategories() {
+            fetch(`http://localhost:9001/ice/categories`, {
+                    method: "GET"
+                })
+            .then(response => response.json())
+            .then(mainCategories => {
+                console.log('Fetched main categories:', mainCategories);
+                populateMainCategories(mainCategories); // 가져온 메인 카테고리 데이터로 채우기
+            })
+            .catch(error => console.error('Error fetching main categories:', error));
+        }
+
+        function populateMainCategories(mainCategories) {
+            const mainCategorySelect = document.getElementById('main_category');
+            mainCategorySelect.innerHTML = '<option value="">메인 카테고리 선택</option>';
+
+            mainCategories.forEach(mainCategory => {
+                const option = document.createElement('option');
+                option.value = mainCategory.mccode;
+                option.textContent = mainCategory.main;
+                mainCategorySelect.appendChild(option);
+            });
+
+            mainCategorySelect.addEventListener('change', function() {
+                const mccode = this.value;
+                if (!mccode) {
+                    clearSubCategories();
+                    return;
+                }
+
+                SubCategories(mccode);
+            });
+        }
+
+        function SubCategories(mccode) {
+            fetch(`http://localhost:9001/ice/categories/${mccode}/subcategories`, {
+                    method: "GET"
+                })
+            .then(response => response.json())
+            .then(subCategories => {
+                console.log('Fetched sub categories:', subCategories);
+                populateSubCategories(subCategories); // 가져온 서브 카테고리 데이터로 채우기
+            })
+            .catch(error => console.error('Error fetching sub categories:', error));
+        }
+
+        function populateSubCategories(subCategories) {
+            const subCategorySelect = document.getElementById('sub_category');
+            subCategorySelect.innerHTML = '<option value="">서브 카테고리 선택</option>';
+
+            subCategories.forEach(subCategory => {
+                const option = document.createElement('option');
+                option.value = subCategory.sccode;
+                option.textContent = subCategory.sub;
+                subCategorySelect.appendChild(option);
+            });
+        }
+
+        function clearSubCategories() {
+            const subCategorySelect = document.getElementById('sub_category');
+            subCategorySelect.innerHTML = '<option value="">서브 카테고리 선택</option>';
+        }
+        function submitPosting() {
+            const postingData = {
+                title: document.getElementById('title').value,
+                head_count: parseInt(document.getElementById('head_count').value),
+                edu_type: document.getElementById('edu_type').value,
+                employment_type: document.getElementById('employment_type').value,
+                career: document.getElementById('career').value,
+                pay: document.getElementById('pay').value,
+                area: document.getElementById('area').value,
+                main_category: document.getElementById('main_category').value,
+                sub_category: document.getElementById('sub_category').value,
+                deadline: document.getElementById('deadline').value,
+                manager_tel: document.getElementById('manager_tel').value,
+                main_content: document.getElementById('main_content').value
+            };
+
+            fetch('http://localhost:9001/ice/posting', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postingData)
+                })
+            .then(response => response.json())
+            .then(posting => {
+                console.log('Saved posting:', posting);
+                alert('공고가 성공적으로 등록되었습니다.');
+                window.location.href = "/ice/employ_notice_list";
+            })
+            .catch(error => {
+                console.error('Error saving posting:', error);
+                alert('공고 등록 중 오류가 발생했습니다.');
+            });
+        }
+    </script>
 </body>
 </html>
