@@ -48,4 +48,9 @@ public class ManagerController {
     public String kakaoShare() {
         return "manager/kakao_share";
     }
+    
+    @GetMapping("/youtubeplayer")
+    public String youtubeplayer() {
+        return "manager/youtubeplayer";
+    }
 }
