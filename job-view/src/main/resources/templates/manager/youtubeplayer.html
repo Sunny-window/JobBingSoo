@@ -22,6 +22,7 @@
     </style>
     <script>
         var player;
+        var redirected = false;
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -63,24 +64,25 @@
         }
 
         function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED) {
+            if (event.data === YT.PlayerState.ENDED && !redirected) {
                 redirectToDashboard();
             }
         }
 
         function handleFullScreenChange() {
             if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-                !document.mozFullScreenElement && !document.msFullscreenElement) {
+                !document.mozFullScreenElement && !document.msFullscreenElement && !redirected) {
                 redirectToDashboard();
             }
         }
 
         function redirectToDashboard() {
+            redirected = true;
             window.location.href = '/manager/dashboard';
         }
 
         document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
+            if (event.key === "Escape" && !redirected) {
                 redirectToDashboard();
             }
         });
@@ -90,4 +92,3 @@
     <div id="player"></div>
 </body>
 </html>
-s

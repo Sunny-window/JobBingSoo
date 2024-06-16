@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .weather-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .good-weather {
+            color: blue;
+        }
+        .caution-weather {
+            color: red;
+        }
+        .hydration-weather {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-container" id="weather">
+        <p>Loading weather information...</p>
+    </div>
+    <script>
+        async function fetchWeather() {
+            const corsProxy = 'https://api.allorigins.win/get?url=';
+
+            // 현재 날짜와 시간 가져오기
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // base_date와 base_time 설정
+            const baseDate = `${year}${month}${date}`;
+            
+            // 기상청 초단기 실황 API는 매 시간 정각에서 10분 후에 데이터를 제공합니다.
+            // 따라서, 현재 시간이 40분 이전이면 한 시간 전의 데이터를 요청해야 합니다.
+            if (minutes < 40) {
+                hours = hours - 1;
+            }
+            if (hours < 0) {
+                hours = 23; // 자정 이전이면 한 시간 전이 23시
+            }
+
+            const baseTime = String(hours).padStart(2, '0') + '00';
+
+            // 기상청 초단기 실황 조회 API URL 설정
+            const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=1000&dataType=XML&base_date=${baseDate}&base_time=${baseTime}&nx=55&ny=127&authKey=R3NvICONTXizbyAjjT146g`;
+
+            try {
+                const response = await fetch(`${corsProxy}${encodeURIComponent(apiUrl)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const jsonResponse = await response.json();
+                const textData = jsonResponse.contents;
+
+                // XML 응답을 파싱
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(textData, "application/xml");
+
+                // 필요한 데이터를 추출
+                const items = xmlDoc.getElementsByTagName('item');
+                let temperature, humidity, windSpeed;
+
+                for (let i = 0; i < items.length; i++) {
+                    const category = items[i].getElementsByTagName('category')[0].textContent;
+                    const value = items[i].getElementsByTagName('obsrValue')[0].textContent;
+
+                    if (category === 'T1H') {
+                        temperature = value;
+                    } else if (category === 'REH') {
+                        humidity = value;
+                    } else if (category === 'WSD') {
+                        windSpeed = value;
+                    }
+                }
+
+                const weatherElement = document.getElementById('weather');
+                let message = '';
+                let messageClass = '';
+                if (temperature !== undefined) {
+                    const temp = parseFloat(temperature);
+                    if (temp >= 15 && temp <= 22.9) {
+                        message = '채용공고 넣기 좋은 날씨 입니다.';
+                        messageClass = 'good-weather';
+                    } else if (temp >= 23 && temp <= 29.9) {
+                        message = '면접가기 좋은 날씨네요 구직자분들 화이팅!.';
+                        messageClass = 'hydration-weather';
+                    } else if (temp >= 30) {
+                        message = '면접가기 전에 물을 충분히 섭취해 주세요.';
+                        messageClass = 'caution-weather';
+                    }
+                }
+
+                weatherElement.innerHTML = `
+                    <h2>현재 날씨</h2>
+                    <p>기온: ${temperature !== undefined ? temperature : '데이터 없음'} °C</p>
+                    <p>습도: ${humidity !== undefined ? humidity : '데이터 없음'}%</p>
+                    <p>바람 속도: ${windSpeed !== undefined ? windSpeed : '데이터 없음'} m/s</p>
+                    <p class="${messageClass}">${message}</p>
+                `;
+            } catch (error) {
+                console.error('API 호출 중 오류가 발생했습니다:', error);
+                document.getElementById('weather').innerHTML = '<p>Failed to load weather information.</p>';
+            }
+        }
+
+        window.onload = () => {
+            fetchWeather();
+        };
+    </script>
+</body>
+</html>
