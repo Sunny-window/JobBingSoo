@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>고객센터</title>
     <style>
         #tab-1 {
             width: 800px;
@@ -45,7 +45,6 @@
             border: 1px solid #ff006f;
         }
 
-
         .faq_box {
             width: 800px;
             min-height: 60px;
@@ -70,7 +69,6 @@
         .title_area {
             width: 100%;
             font-weight: bold;
-
         }
 
         .faq_content {
@@ -144,7 +142,6 @@
             font-weight: bold;
             display: flex;
             align-items: center;
-
         }
 
         .cs_box:hover {
@@ -219,17 +216,13 @@
             </ul><br>
             <div id="tab-1">
                 <div class="faq_box">
-                    <div class="title_area">
+                    <div class="title_area" id="faq-title">
                         <span class="title_Q"> Q. </span>
-                        <span id="faq-title">
-                            FAQ 타이틀
-                        </span>
+                        <span> FAQ 타이틀 </span>
                     </div>
-                    <div class="faq_content active">
+                    <div class="faq_content active" id="faq-content">
                         <span class="title_A"> A. </span>
-                        <span id="faq-content">
-                            FAQ 내용
-                        </span>
+                        <span> FAQ 내용 </span>
                     </div>
                 </div>
             </div>
@@ -317,15 +310,50 @@
         tabContent2.style.display = "none";
     }
 
-    function get_faq(){
+    function get_faq() {
+        fetch('http://localhost:9001/cs/faqlist')
+            .then(response => response.json())
+            .then(list => {
+                console.log(list);
+                document.getElementById('tab-1').innerHTML = "";
 
+                list.forEach(data => {
+                    document.getElementById('tab-1').innerHTML
+                        += '<div class="faq_box">'
+                        + '<div class="title_area" >'
+                        + '<span class="title_Q"> Q. </span>'
+                        + '<span>'
+                        + data.title
+                        + '</span>'
+                        + '</div>'
+                        + '<div class="faq_content active">'
+                        + '<span class="title_A"> A. </span>'
+                        + '<span>'
+                        + data.content
+                        + '</span>'
+                        + '</div>'
+                        + '</div>'
+                        ;
+                });
+
+                document.querySelectorAll(".faq_box").forEach(faqbox => {
+                    faqbox.addEventListener("click", () => {
+                        const faqcontent = faqbox.querySelector(".faq_content");
+                        faqcontent.classList.toggle("active");
+                        if (faqcontent.classList.contains("active")) {
+                            faqbox.style.height = "60px";
+                        } else {
+                            faqbox.style.height = "150px";
+                        }
+                    });
+                });
+            })
     }
 
     document.addEventListener("DOMContentLoaded", () => {
 
         btn1.addEventListener("click", () => {
             location.href = '/cs/list?menu_select=1';
-            get_faq();
         });
 
         btn2.addEventListener("click", () => {
@@ -339,6 +367,7 @@
         if (tap_menu_selection == null || tap_menu_selection == 1) {
             console.log('FAQ 탭');
             choose_tab1();
+            get_faq();
         } else if (tap_menu_selection == 2) {
             console.log('문의 게시판 탭');
             choose_tab2();
@@ -352,17 +381,7 @@
         window.location.href = "/cs/regForm";
     });
 
-    document.querySelectorAll(".faq_box").forEach(faqbox => {
-        faqbox.addEventListener("click", () => {
-            const faqcontent = faqbox.querySelector(".faq_content");
-            faqcontent.classList.toggle("active");
-            if (faqcontent.classList.contains("active")) {
-                faqbox.style.height = "60px";
-            } else {
-                faqbox.style.height = "150px";
-            }
-        });
-    });
+
 
 
     document.addEventListener("DOMContentLoaded", function () {
