@@ -54,7 +54,9 @@
     </script>
 </head>
 <body>
- <header th:replace="/sub/header"></header>
+   <header>
+    	<th:block th:insert="~{/sub/header.html}"></th:block>
+	</header>
 
     <section>
     <div class="container">
@@ -74,7 +76,9 @@
     </div>
     </section>
 
-    <footer th:replace="/sub/footer"></footer>
+   <footer>
+		<th:block th:insert="~{/sub/footer.html}"></th:block>
+	</footer>
 </body>
 </html>
 

@@ -35,19 +35,19 @@
             justify-content: space-around;
             margin-top: 20px;
         }
-        .button {
-            padding: 10px 20px;
-            background-color: #FF006F;
-            color: white;
+         .button {
+            padding: 8px 16px; /* 버튼 크기 줄이기 */
+            background-color: #FF006F; /* 더 진한 핑크색 */
+            color: white; /* 글자색 검은색으로 변경 */
             border: none;
             border-radius: 5px;
             text-align: center;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 14px; /* 폰트 크기 줄이기 */
             cursor: pointer;
         }
         .button:hover {
-            background-color: #cc0059;
+            background-color: #D32F2F; /* 호버 시 더 진한 색상으로 변경 */
         }
     </style>
     <script>
@@ -179,8 +179,9 @@
     </script>
 </head>
 <body>
-    <header th:replace="/sub/header"></header>
-
+    <header>
+    	<th:block th:insert="~{/sub/header.html}"></th:block>
+	</header>
     <section>
     <div class="container">
         <h1>관리자 대시보드</h1>
@@ -205,7 +206,8 @@
        
     </div>
     </section>
-
-    <footer th:replace="/sub/footer"></footer>
+    <footer>
+    	<th:block th:insert="~{/sub/footer.html}"></th:block>
+	</footer>
 </body>
 </html>
