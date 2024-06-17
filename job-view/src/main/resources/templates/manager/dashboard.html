@@ -30,6 +30,25 @@
             padding: 15px;
             border-radius: 10px;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #FF006F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #cc0059;
+        }
     </style>
     <script>
         async function fetchData() {
@@ -144,7 +163,6 @@
                 }
             });
 
-          
             const prompt = `다음은 관리자 대시보드의 데이터야.
             - 일일 방문자 수: ${JSON.stringify(dailyVisitors)}
             - 지난 7일간 회원가입 수: ${JSON.stringify(last7DaysMembers)}
@@ -161,11 +179,16 @@
     </script>
 </head>
 <body>
- <header th:replace="/sub/header"></header>
+    <header th:replace="/sub/header"></header>
 
     <section>
     <div class="container">
         <h1>관리자 대시보드</h1>
+         <div class="button-container">
+            <a href="/manager/member-all" class="button">알림 발송</a>
+            <a href="/manager/admin-csList" class="button">신고/문의</a>
+            <a href="/manager/mypage" class="button">보낸 알림</a>
+        </div>
         <div class="chart-container">
             <canvas id="visitorsChart"></canvas>
         </div>
@@ -179,6 +202,7 @@
             <h2>ChatGPT 분석 리포트</h2>
             <p id="openaiOutput">Loading...</p>
         </div>
+       
     </div>
     </section>
 

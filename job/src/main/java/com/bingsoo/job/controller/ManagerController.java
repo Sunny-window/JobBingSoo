@@ -124,7 +124,7 @@ public class ManagerController {
 
 	@PostMapping("/send-notice")
 	public Notice sendNotice(@RequestBody NoticeDto noticeDto) {
-		Member sender = memberRepository.findById("admin")
+		Member sender = memberRepository.findById("manager")
 				.orElseThrow(() -> new RuntimeException("발신자 계정을 찾을 수 없습니다."));
 		String[] receiverUsernames = noticeDto.getReceivers().split(", ");
 		Notice notice = new Notice();
@@ -146,35 +146,35 @@ public class ManagerController {
 		return noticeRepository.findAll();
 	}
 
-	 @GetMapping("/dashboard-data")
-	    public Map<String, Object> getDashboardData() {
-	        Map<String, Object> data = new HashMap<>();
+	@GetMapping("/dashboard-data")
+	public Map<String, Object> getDashboardData() {
+	    Map<String, Object> data = new HashMap<>();
 
-	        // 최근 7일간의 가입자 수
-	        LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
-	        Map<String, Long> last7DaysMembers = memberRepository.findAll().stream()
-	                .filter(member -> member.getJoinDate().isAfter(sevenDaysAgo))
-	                .collect(Collectors.groupingBy(member -> member.getJoinDate().toString(), Collectors.counting()));
-	        data.put("last7DaysMembers", last7DaysMembers);
+	    // 최근 7일간의 가입자 수
+	    LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
+	    Map<String, Long> last7DaysMembers = memberRepository.findAll().stream()
+	            .filter(member -> member.getJoinDate() != null && member.getJoinDate().isAfter(sevenDaysAgo))
+	            .collect(Collectors.groupingBy(member -> member.getJoinDate().toString(), Collectors.counting()));
+	    data.put("last7DaysMembers", last7DaysMembers);
 
-	        // 최근 한 달간의 채용 공고 수
-	        LocalDate oneMonthAgo = LocalDate.now().minusMonths(1);
-	        Map<String, Long> lastMonthPostings = postingRepository.findAll().stream()
-	                .filter(posting -> posting.getPostedDate().isAfter(oneMonthAgo))
-	                .collect(Collectors.groupingBy(posting -> posting.getPostedDate().toString(), Collectors.counting()));
-	        data.put("lastMonthPostings", lastMonthPostings);
+	    // 최근 한 달간의 채용 공고 수
+	    LocalDate oneMonthAgo = LocalDate.now().minusMonths(1);
+	    Map<String, Long> lastMonthPostings = postingRepository.findAll().stream()
+	            .filter(posting -> posting.getPostedDate() != null && posting.getPostedDate().isAfter(oneMonthAgo))
+	            .collect(Collectors.groupingBy(posting -> posting.getPostedDate().toString(), Collectors.counting()));
+	    data.put("lastMonthPostings", lastMonthPostings);
 
-	        // 하루 방문자 수 데이터 (임의 생성)
-	        Map<String, Integer> dailyVisitors = new HashMap<>();
-	        LocalDate today = LocalDate.now();
-	        Random random = new Random();
-	        for (int i = 0; i < 30; i++) {
-	            dailyVisitors.put(today.minusDays(i).toString(), random.nextInt(100));
-	        }
-	        data.put("dailyVisitors", dailyVisitors);
-
-	        return data;
+	    // 하루 방문자 수 데이터 (임의 생성)
+	    Map<String, Integer> dailyVisitors = new HashMap<>();
+	    LocalDate today = LocalDate.now();
+	    Random random = new Random();
+	    for (int i = 0; i < 30; i++) {
+	        dailyVisitors.put(today.minusDays(i).toString(), random.nextInt(100));
 	    }
+	    data.put("dailyVisitors", dailyVisitors);
+
+	    return data;
+	}
 	 
 	 @GetMapping("/download/excel")
 	    public void downloadExcel(@RequestParam(name = "type") String type, HttpServletResponse response) throws IOException {
