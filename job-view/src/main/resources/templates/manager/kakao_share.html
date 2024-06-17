@@ -38,6 +38,9 @@
 </script>
 </head>
 <body>
+ <header th:replace="/sub/header"></header>
+
+    <section>
     <div class="container">
         <h1>카카오 메시지 전송</h1>
         <button id="shareBtn" class="button">메세지 전송</button>
@@ -80,5 +83,8 @@
             });
         });
     </script>
+    </section>
+
+    <footer th:replace="/sub/footer"></footer>
 </body>
 </html>
