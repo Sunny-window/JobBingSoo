@@ -40,13 +40,18 @@ public class IceController {
         return "ice/employ_notice_form";
     }
 
+    @RequestMapping("employ_notice_updateForm")
+    public String employ_notice_updateForm(){
+
+        return "ice/employ_notice_updateForm";
+    }
+
     @RequestMapping("infomation")
     public String infomation(){
 
         return "ice/infomation";
     }
 
-    
 
 
 }

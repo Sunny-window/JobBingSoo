@@ -15,10 +15,10 @@ import com.bingsoo.job.entity.Posting;
 
 public interface PostingRepository extends JpaRepository<Posting, Long>{
 	
-	
+
 	List<Posting> findByPostedDateBetween(LocalDate startDate, LocalDate endDate);
 	
-    void deleteById(Long postCode);
+    void deleteById(long postCode);
 
     @Query(value = "SELECT  p.title, p.deadline, c.address, c.company_name, p.post_code " +
         "FROM Posting p " +

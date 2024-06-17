@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +44,7 @@ public class IceController {
     @Autowired
     private SubCategoryRepository subCategoryRepository;
 
+
     // @GetMapping("/redbean-per-mypost/{postCode}")
     // public List<Application> redBeanApplication(@PathVariable("postCode") Long postCode) {
     //     Posting posting = new Posting();
@@ -69,14 +71,6 @@ public class IceController {
 
     @DeleteMapping("/posting/{post_code}")
     public void deletePostingById(@PathVariable("post_code") Long postCode) {
-        
-        System.out.println(postCode);
-        System.out.println(postCode);
-        System.out.println(postCode);
-        System.out.println(postCode);
-        System.out.println(postCode);
-        System.out.println(postCode);
-        System.out.println(postCode);
 
         postingRepository.deleteById(postCode);
     }
@@ -85,6 +79,29 @@ public class IceController {
     public Posting posting(@RequestBody Posting posting) {
 
         return postingRepository.save(posting);
+    }
+
+    @GetMapping("/posting/{post_code}")
+    public Posting getPostingsByPostCode(@PathVariable("post_code") Long postCode) {
+        return postingRepository.findById(postCode).orElse(null);
+    }
+
+    @PutMapping("/posting/{post_code}")
+    public Posting updatePosting(@PathVariable("post_code") Long postCode, @RequestBody Posting posting) {
+        Posting posting2 = postingRepository.findById(postCode).get();
+
+        posting2.setTitle(posting.getTitle());
+        posting2.setHead_count(posting.getHead_count());
+        posting2.setEdu_type(posting.getEdu_type());
+        posting2.setEmployment_type(posting.getEmployment_type());
+        posting2.setCareer(posting.getCareer());
+        posting2.setPay(posting.getPay());
+        posting2.setArea(posting.getArea());
+        posting2.setDeadline(posting.getDeadline());
+        posting2.setManager_tel(posting.getManager_tel());
+        posting2.setMain_content(posting.getMain_content());
+
+        return postingRepository.save(posting2);
     }
 
     @GetMapping("/categories")
