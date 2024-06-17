@@ -1,68 +1,65 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>CS 리스트</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .search-box {
-            margin-bottom: 10px;
-        }
-        .button {
-            padding: 10px 20px;
-            margin: 10px 0;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-         .button1 {
-            padding: 10px 20px;
-            margin: 10px 0;
-            background-color: #FF1493;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .button:hover, .button1:hover {
-            background-color: #45a049;
-        }
-        .status-unanswered {
-            color: red;
-        }
-        .status-answered {
-            color: blue;
-        }
-    </style>
-    <script>
+<title>CS 리스트</title>
+<style>
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+table, th, td {
+	border: 1px solid #ddd;
+}
+
+th, td {
+	padding: 10px;
+	text-align: center;
+}
+
+th {
+	background-color: #FF006F;
+	color: white;
+}
+
+.search-box {
+	margin-bottom: 10px;
+}
+
+.button {
+	padding: 10px 20px;
+	margin: 10px 0;
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.button1 {
+	padding: 10px 20px;
+	margin: 10px 0;
+	background-color: #FF1493;
+	color: white;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.button:hover, .button1:hover {
+	background-color: #45a049;
+}
+
+.status-unanswered {
+	color: red;
+}
+
+.status-answered {
+	color: blue;
+}
+</style>
+<script>
         function loadCsList(type) {
             fetch(`http://localhost:9001/manager/admin-csList?type=${type}`)
                 .then(response => response.json())
@@ -71,8 +68,8 @@
                     tableBody.innerHTML = "";
                     data.forEach(cs => {
                         let statusClass = cs.result === "미답변" ? "status-unanswered" : "status-answered";
-                        let actionButton = cs.result === "미답변" ? `<button onclick="location.href='/manager/admin-cs_detailAndReply?cs_code=${cs.cs_code}&type=${type}'" class="button">답변하기</button>` 
-                        : `<button onclick="location.href='/manager/admin-cs_detailAndReply?cs_code=${cs.cs_code}&type=${type}'" class="button1">수정</button>`;
+                        let actionButton = cs.result === "미답변" ? `<button onclick="location.href='/manager/admin-cs_detailAndReply?cs_code=${cs.cs_code}'" class="button">답변하기</button>` 
+                        : `<button onclick="location.href='/manager/admin-cs_detailAndReply?cs_code=${cs.cs_code}'" class="button1">수정</button>`;
                         let row = `<tr>
                             <td>${cs.cs_code}</td>
                             <td>${cs.rid.username}</td>
@@ -100,39 +97,38 @@
     </script>
 </head>
 <body>
- <header th:replace="/sub/header"></header>
-
-    <section>
-    <div class="container">
-        <h1>CS 리스트</h1>
-        <div class="search-box">
-            <label for="csTypeSelect">유형 선택:</label>
-            <select id="csTypeSelect">
-                <option value="신고">신고</option>
-                <option value="문의">문의</option>
-            </select>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>코드</th>
-                    <th>작성자</th>
-                    <th>제목</th>
-                    <th>유형</th>
-                    <th>날짜</th>
-                    <th>결과</th>
-                    <th>공개 유형</th>
-                    <th>액션</th>
-                </tr>
-            </thead>
-            <tbody id="csTableBody">
-                <!-- 데이터가 여기에 로드됩니다 -->
-            </tbody>
-        </table>
-    </div>
-    </section>
-
-    <footer th:replace="/sub/footer"></footer>
+	<header>
+		<th:block th:insert="~{/sub/header.html}"></th:block>
+	</header>
+	<section>
+		<h1>CS 리스트</h1>
+		<div class="search-box">
+			<label for="csTypeSelect">유형 선택:</label> <select id="csTypeSelect">
+				<option value="신고">신고</option>
+				<option value="문의">문의</option>
+			</select>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th>코드</th>
+					<th>작성자</th>
+					<th>제목</th>
+					<th>유형</th>
+					<th>날짜</th>
+					<th>결과</th>
+					<th>공개 유형</th>
+					<th>액션</th>
+				</tr>
+			</thead>
+			<tbody id="csTableBody">
+				<!-- 데이터가 여기에 로드됩니다 -->
+			</tbody>
+		</table>
+	</section>
+	<footer>
+		<th:block th:insert="~{/sub/footer.html}"></th:block>
+	</footer>
 </body>
 </html>
 
