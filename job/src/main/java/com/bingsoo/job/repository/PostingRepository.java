@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.bingsoo.job.dto.PostingDto;
+import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Posting;
 
 
@@ -47,4 +48,6 @@ public interface PostingRepository extends JpaRepository<Posting, Long>{
         
         return dtos;
     }
+    
+    List<Posting> findByCid(Member cid);
 }

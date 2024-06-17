@@ -26,4 +26,5 @@ public class CompanyService {
     public Optional<Company> getCompanyByCno2(String cno) {
         return companyRepository.findById(cno);
     }
+    
 }
