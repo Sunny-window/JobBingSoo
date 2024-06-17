@@ -13,41 +13,39 @@ import com.bingsoo.job.dto.PostingDto;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Posting;
 
+public interface PostingRepository extends JpaRepository<Posting, Long> {
 
-public interface PostingRepository extends JpaRepository<Posting, Long>{
-	
+	@Query("SELECT p FROM Posting p WHERE p.area = :area AND p.industry = :industry")
+	List<Posting> findByAreaAndIndustry(@Param("area") String area, @Param("industry") String industry);
 
 	List<Posting> findByPostedDateBetween(LocalDate startDate, LocalDate endDate);
-	
-    void deleteById(long postCode);
 
-    @Query(value = "SELECT  p.title, p.deadline, c.address, c.company_name, p.post_code " +
-        "FROM Posting p " +
-        "JOIN Company c " +
-        "ON p.cid = c.cid " +
-        "WHERE c.cid = :username", nativeQuery = true)
-    List<Object[]> postingListDtosByCid(@Param("username") String username);
+	void deleteById(long postCode);
 
-    default List<PostingDto> findPostingListDtosByCid(String hid){
+	@Query(value = "SELECT  p.title, p.deadline, c.address, c.company_name, p.post_code " + "FROM Posting p "
+			+ "JOIN Company c " + "ON p.cid = c.cid " + "WHERE c.cid = :username", nativeQuery = true)
+	List<Object[]> postingListDtosByCid(@Param("username") String username);
 
-        List<Object[]> db_result_list = postingListDtosByCid(hid);
-        List<PostingDto> dtos = new ArrayList<>();
+	default List<PostingDto> findPostingListDtosByCid(String hid) {
 
-        for(Object[] db_result : db_result_list){
+		List<Object[]> db_result_list = postingListDtosByCid(hid);
+		List<PostingDto> dtos = new ArrayList<>();
 
-            PostingDto dto = new PostingDto();
+		for (Object[] db_result : db_result_list) {
 
-            dto.setTitle((String) db_result[0]);
-            dto.setDeadline((Date) db_result[1]);
-            dto.setAddress((String) db_result[2]);
-            dto.setCompany_name((String) db_result[3]);
-            dto.setPost_code((Long) db_result[4]);
+			PostingDto dto = new PostingDto();
 
-            dtos.add(dto);
-        }
-        
-        return dtos;
-    }
-    
-    List<Posting> findByCid(Member cid);
+			dto.setTitle((String) db_result[0]);
+			dto.setDeadline((Date) db_result[1]);
+			dto.setAddress((String) db_result[2]);
+			dto.setCompany_name((String) db_result[3]);
+			dto.setPost_code((Long) db_result[4]);
+
+			dtos.add(dto);
+		}
+
+		return dtos;
+	}
+
+	List<Posting> findByCid(Member cid);
 }
