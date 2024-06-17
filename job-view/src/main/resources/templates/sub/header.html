@@ -37,6 +37,7 @@
             border-bottom: 1px solid #eee;
             box-shadow: 0px 2px 10px #eee;
             background: #fff;
+            box-sizing: border-box;
         }
 
         .head {
@@ -57,9 +58,11 @@
         }
 
         .logo img,
-        .logo2 img {
+        .logo2 img,
+        img#youtube{
             width: 55px;
-            height: 50px;
+            padding: 0 4px;
+            margin-right: 16px;
         }
 
         .search_bar {
@@ -119,10 +122,6 @@
             cursor: pointer;
         }
 
-        #search_glass_label input[type="submit"] {
-            display: none;
-        }
-
         .head_bottom {
             display: flex;
             justify-content: space-between;
@@ -174,10 +173,6 @@
 
         #head_menu_slide ul {
             padding: 0px 25px;
-        }
-
-        #head_menu_slide ul:nth-child(2) {
-            padding-left: 27px;
         }
 
         #head_menu_slide ul li {
@@ -246,25 +241,20 @@
         <div class="logo">
             <a href="/main/index"><img src="/images/logo.png"></a>
         </div>
-        <form action="" method="get">
-            <div class="search_bar">
-                <label for="search_input" class="search_label">
-                    <input type="text" id="header_search_input" name="search">
-                    <div class="header_search_bar_select">
-                        <select>
-                            <option value="기업">기업</option>
-                            <option value="공고">공고</option>
-                        </select>
-                    </div>
-                    <label id="search_glass_label">
-                        <input type="submit" value="">
-                        <img src="/images/search.png" class="search_glasses">
-                    </label>
-                </label>
-            </div>
-        </form>
+        <div class="search_bar">
+            <label for="search_input" class="search_label">
+                <input type="text" id="header_search_input" name="search">
+                <div class="header_search_bar_select">
+                    <select>
+                        <option value="기업">기업</option>
+                        <option value="공고">공고</option>
+                    </select>
+                </div>
+                <img src="/images/search.png" class="search_glasses" onclick="search()">
+        </div>
         <div class="logo2">
-            <a href="/manager/youtubeplayer"><img src="/images/manager_icon.png"></a>
+            <a href="/manager/youtubeplayer"><img id="youtube" src="/images/youtube-icon.png"></a>
+            <a href="/manager/managerLogin"><img src="/images/manager_icon.png"></a>
         </div>
     </div>
     <div class="head_bottom">
@@ -277,7 +267,7 @@
         </div>
 
         <div class="user_log_list">
-            <ul>
+            <ul id="log-info-list">
                 <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
                 <li><a href="/main/loginForm">로그인</a></li>
                 <li><a href="/main/regForm">회원가입</a></li>
@@ -347,7 +337,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         bell.addEventListener('click', f);
         bell.addEventListener('click', reloadnotice);
-        setInterval(reloadnotice, 55000);
+        setInterval(reloadnotice, 30000);
     });
 
 
@@ -362,6 +352,11 @@
             cnt = 0;
         }
     }
+
+    function search(){
+        alert('Search!');
+    }
+
 </script>
 </body>
 
