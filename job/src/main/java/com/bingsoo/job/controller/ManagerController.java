@@ -130,7 +130,7 @@ public class ManagerController {
 		Notice notice = new Notice();
 		notice.setSender(sender);
 		notice.setMessage(noticeDto.getTitle() + ": " + noticeDto.getContent());
-		notice.setType("알림");
+		notice.setType("관리자");
 
 		for (String receiverUsername : receiverUsernames) {
 			Member receiver = memberRepository.findById(receiverUsername)
