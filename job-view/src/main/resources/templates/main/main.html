@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>회원 맞춤 추천 공고</title>
     <!-- 폰트 첨부 -->
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
@@ -28,105 +28,149 @@
         section {
             padding: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 1200px;
             box-sizing: border-box;
         }
 
-        h1, h2 {
+        h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .weather-button {
+            background-color: #FF006F;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .branding {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
         }
 
         .branding .card-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             background-color: #fff;
             padding: 15px;
-            margin: 10px 0;
+            margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            text-decoration: none;
-            color: #333;
-            width: 100%;
-            max-width: 600px;
+            text-align: center;
             box-sizing: border-box;
+            width: calc(25% - 20px); /* 4개씩 배치 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
 
         .branding .card-wrap .company {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
 
         .branding .card-wrap .company .name {
-            margin-left: 10px;
-            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
         .branding .card-wrap .description {
             margin-top: 10px;
-            text-align: center;
         }
 
-        .branding .card-wrap .addition .summary {
-            margin-top: 10px;
+        .modal, .weather-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+
+        .weather-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: auto;
+            max-width: 400px; /* 모달 창의 최대 가로 크기를 설정 */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
             font-weight: bold;
-            text-align: center;
         }
 
-        .branding .card-wrap img {
-            max-width: 100%;
-            height: auto;
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            background-color: #FF006F;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
         }
 
         /* 미디어 쿼리 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
+        @media (max-width: 1024px) {
             .branding .card-wrap {
-                padding: 10px;
-                margin: 5px 0;
+                width: calc(33.33% - 20px); /* 3개씩 배치 */
             }
+        }
 
-            .branding .card-wrap .company .name {
-                margin-left: 5px;
-            }
-
-            .branding .card-wrap .description,
-            .branding .card-wrap .addition .summary {
-                margin-top: 5px;
+        @media (max-width: 768px) {
+            .branding .card-wrap {
+                width: calc(50% - 20px); /* 2개씩 배치 */
             }
         }
 
         @media (max-width: 480px) {
-            h1, h2 {
-                font-size: 1.5em;
-            }
-
             .branding .card-wrap {
-                padding: 5px;
+                width: calc(100% - 20px); /* 1개씩 배치 */
             }
 
-            .branding .card-wrap .company .name {
-                margin-left: 2px;
-            }
-
-            .branding .card-wrap .description,
-            .branding .card-wrap .addition .summary {
-                margin-top: 2px;
-                font-size: 0.9em;
+            h1 {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -136,29 +180,215 @@
     <th:block th:insert="~{/sub/header.html}"></th:block>
 </header>
 <section>
-    <h1>메인 페이지</h1>
+    <h1>회원 맞춤 추천 공고
+        <button class="weather-button" onclick="openWeatherModal()">⛅오늘의 날씨</button>
+    </h1>
+    
+    <ul class="branding" id="postingsList"></ul>
 
-    <h2>추천 공고</h2>
-    <ul class="branding">
-        <li data-match="{&quot;gno&quot;:44857485,&quot;jobTypes&quot;:&quot;,1000016,1000187,1000192,1000194,1000217,1000218,1000219,1000220,1000222,1000224,1000250,1000251,1000257,1000277,1000279,1000284,1000285,1000286,1000287,1000311,1000313,&quot;,&quot;workLocal&quot;:&quot;,B000,E000,F000,G000,H000,I000,J000,K000,&quot;,&quot;careerTypeCode&quot;:3}" class="branding expand">
-            <a href="/Recruit/GI_Read/44857485?Oem_Code=C1&amp;productType=FirstVVIP&amp;logpath=0" class="card-wrap" target="_blank" data-gno="44857485" data-spacecode="42">
-                <div class="company">
-                    <span class="name">
-                        <div class="image">
-                            <img src="//file1.jobkorea.co.kr/BoothBanner/2024/02/Banner_k99EUNV24020710015068.jpg" alt="" onerror="this.src='//file1.jobkorea.co.kr/Mailing/2023/img_600_464_05.png';">
-                            <span class="logo"><img src="//imgs.jobkorea.co.kr/Images/Logo/180/l/v/2615h00hebokhwg2_3720g8cgirdkhijhg.gif?p=y&amp;hash=c&amp;upddt=20240612173002" width="180" height="72" alt="" onerror="this.src='//img.jobkorea.co.kr/Images/Logo/180/l/o/logo_none_180.png';"></span>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <p id="modalHeadCount"></p>
+        <p id="modalEduType"></p>
+        <p id="modalCareer"></p>
+        <p id="modalEmploymentType"></p>
+        <p id="modalPay"></p>
+        <p id="modalArea"></p>
+        <p id="modalIndustry"></p>
+        <p id="modalJob"></p>
+        <p id="modalPostedDate"></p>
+        <p id="modalDeadline"></p>
+        <p id="modalManagerTel"></p>
+        <p id="modalMainContent"></p>
+        <div class="button-container">
+            <button onclick="event.preventDefault()">지원하기</button>
+            <button onclick="event.preventDefault()">스크랩하기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weather Modal -->
+    <div id="weatherModal" class="weather-modal">
+        <div class="weather-modal-content">
+            <span class="close" onclick="closeWeatherModal()">&times;</span>
+            <div class="weather-container" id="weather">
+                <p>Loading weather information...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function findPostings() {
+            try {
+                const response = await fetch('http://localhost:9001/manager/find-postings');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const postings = await response.json();
+
+                const postingsList = document.getElementById('postingsList');
+                postingsList.innerHTML = '';
+
+                postings.forEach(posting => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'card-wrap';
+                    
+                    listItem.innerHTML = `
+                        <div class="company">
+                            <div class="name">${posting.title}</div>
                         </div>
-                    </span> 
-                </div>
-                <div class="description">채용공고명</div>
-                <div class="addition">
-                    <div class="summary">
-                        회사명
-                    </div>
-                </div>
-            </a>
-        </li>
-    </ul>
+                        <div class="description">${posting.area} - ${posting.industry}</div>
+                    `;
+
+                    listItem.onclick = () => {
+                        showModal(posting);
+                    };
+
+                    postingsList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Failed to fetch postings:', error);
+            }
+        }
+
+        function showModal(posting) {
+            const modal = document.getElementById("myModal");
+            document.getElementById("modalTitle").innerText = posting.title;
+            document.getElementById("modalDescription").innerText = `${posting.area} - ${posting.industry}`;
+            document.getElementById("modalHeadCount").innerText = `Head Count: ${posting.head_count}`;
+            document.getElementById("modalEduType").innerText = `Education Type: ${posting.edu_type}`;
+            document.getElementById("modalCareer").innerText = `Career: ${posting.career}`;
+            document.getElementById("modalEmploymentType").innerText = `Employment Type: ${posting.employment_type}`;
+            document.getElementById("modalPay").innerText = `Pay: ${posting.pay}`;
+            document.getElementById("modalArea").innerText = `Area: ${posting.area}`;
+            document.getElementById("modalIndustry").innerText = `Industry: ${posting.industry}`;
+            document.getElementById("modalJob").innerText = `Job: ${posting.job}`;
+            document.getElementById("modalPostedDate").innerText = `Posted Date: ${posting.postedDate}`;
+            document.getElementById("modalDeadline").innerText = `Deadline: ${posting.deadline}`;
+            document.getElementById("modalManagerTel").innerText = `Manager Tel: ${posting.manager_tel}`;
+            document.getElementById("modalMainContent").innerText = `Main Content: ${posting.main_content}`;
+
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        function openWeatherModal() {
+            fetchWeather(); // 날씨 정보 불러오기
+            const weatherModal = document.getElementById("weatherModal");
+            weatherModal.style.display = "block";
+        }
+
+        function closeWeatherModal() {
+            const weatherModal = document.getElementById("weatherModal");
+            weatherModal.style.display = "none";
+        }
+
+        async function fetchWeather() {
+            const corsProxy = 'https://api.allorigins.win/get?url=';
+
+            // 현재 날짜와 시간 가져오기
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            let hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // base_date와 base_time 설정
+            const baseDate = `${year}${month}${date}`;
+            
+            // 기상청 초단기 실황 API는 매 시간 정각에서 10분 후에 데이터를 제공합니다.
+            // 따라서, 현재 시간이 40분 이전이면 한 시간 전의 데이터를 요청해야 합니다.
+            if (minutes < 40) {
+                hours = hours - 1;
+            }
+            if (hours < 0) {
+                hours = 23; // 자정 이전이면 한 시간 전이 23시
+            }
+
+            const baseTime = String(hours).padStart(2, '0') + '00';
+
+            // 기상청 초단기 실황 조회 API URL 설정
+            const apiUrl = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=1000&dataType=XML&base_date=${baseDate}&base_time=${baseTime}&nx=55&ny=127&authKey=R3NvICONTXizbyAjjT146g`;
+
+            console.log(`Requesting weather data for base date: ${baseDate}, base time: ${baseTime}`);
+
+            try {
+                const response = await fetch(`${corsProxy}${encodeURIComponent(apiUrl)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const jsonResponse = await response.json();
+                const textData = jsonResponse.contents;
+
+                console.log("XML Data as text:", textData); // 추가된 로그
+
+                // XML 응답을 파싱
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(textData, "application/xml");
+
+                console.log("Parsed XML Data:", xmlDoc);
+
+                // 필요한 데이터를 추출
+                const items = xmlDoc.getElementsByTagName('item');
+                let temperature, humidity, windSpeed;
+
+                for (let i = 0; i < items.length; i++) {
+                    const category = items[i].getElementsByTagName('category')[0].textContent;
+                    const value = items[i].getElementsByTagName('obsrValue')[0].textContent;
+
+                    if (category === 'T1H') {
+                        temperature = value;
+                    } else if (category === 'REH') {
+                        humidity = value;
+                    } else if (category === 'WSD') {
+                        windSpeed = value;
+                    }
+                }
+
+                console.log(`Temperature: ${temperature}, Humidity: ${humidity}, Wind Speed: ${windSpeed}`);
+
+                const weatherElement = document.getElementById('weather');
+                let message = '';
+                let messageClass = '';
+                if (temperature !== undefined) {
+                    const temp = parseFloat(temperature);
+                    if (temp >= 15 && temp <= 22.9) {
+                        message = '채용공고 넣기 좋은 날씨 입니다.';
+                        messageClass = 'good-weather';
+                    } else if (temp >= 23 && temp <= 29.9) {
+                        message = '면접가기 좋은 날씨네요 구직자분들 화이팅!.';
+                        messageClass = 'hydration-weather';
+                    } else if (temp >= 30) {
+                        message = '면접가기 전에 물을 충분히 섭취해 주세요.';
+                        messageClass = 'caution-weather';
+                    }
+                }
+
+                weatherElement.innerHTML = `
+                    <h2>현재 날씨</h2>
+                    <p>기온: ${temperature !== undefined ? temperature : '데이터 없음'} °C</p>
+                    <p>습도: ${humidity !== undefined ? humidity : '데이터 없음'}%</p>
+                    <p>바람 속도: ${windSpeed !== undefined ? windSpeed : '데이터 없음'} m/s</p>
+                    <p class="${messageClass}">${message}</p>
+                `;
+                weatherElement.className = messageClass;
+            } catch (error) {
+                console.error('API 호출 중 오류가 발생했습니다:', error);
+                document.getElementById('weather').innerHTML = '<p>Failed to load weather information.</p>';
+            }
+        }
+
+        window.onload = findPostings;
+    </script>
 </section>
 <footer>
     <th:block th:insert="~{/sub/footer.html}"></th:block>
