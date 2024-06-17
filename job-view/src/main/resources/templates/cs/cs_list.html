@@ -27,6 +27,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            padding: 0;
         }
 
         .tab-link {
@@ -47,12 +48,13 @@
 
         .faq_box {
             width: 800px;
-            height: 80px;
+            min-height: 60px;
             border: 1px solid #ccc;
             padding: 15px;
             box-sizing: border-box;
             cursor: pointer;
             margin: 7px 0;
+            background-color: white;
         }
 
         .title_Q {
@@ -122,7 +124,7 @@
         .my_result,
         .my_result2,
         .cs_num,
-        .cs_num2  {
+        .cs_num2 {
             width: 5%
         }
 
@@ -170,7 +172,6 @@
             font-weight: bold;
             display: flex;
             align-items: center;
-
         }
 
         .my_box:hover {
@@ -215,22 +216,22 @@
                 <li class="tab-link current" data-tab="tab-1">FAQ</li>
                 <li class="tab-link" data-tab="tab-2">문의 게시판</li>
                 <li class="tab-link" data-tab="tab-3">나의 문의</li>
-            </ul><br><br>
+            </ul><br>
             <div id="tab-1">
-                    <div class="faq_box">
-                        <div class="title_area">
-                            <span class="title_Q"> Q. </span>
-                            <span id="faq-title">
-                                <!-- faq 타이틀 -->
-                            </span>
-                        </div>
-                        <div class="faq_content active">
-                            <span class="title_A"> A. </span>
-                            <span id="faq-content">
-                                <!-- faq 내용 -->
-                            </span>
-                        </div>
+                <div class="faq_box">
+                    <div class="title_area">
+                        <span class="title_Q"> Q. </span>
+                        <span id="faq-title">
+                            FAQ 타이틀
+                        </span>
                     </div>
+                    <div class="faq_content active">
+                        <span class="title_A"> A. </span>
+                        <span id="faq-content">
+                            FAQ 내용
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div id="tab-2">
@@ -242,14 +243,14 @@
                     <p class="cs_result">상태</p>
                     <p class="cs_date">날짜</p>
                 </div>
-                    <div class="cs_box" onclick="location.href='/cs/forumDetail?cscode=${cs.cscode}'">
-                        <input type="hidden" name="cscode" value="${cs.cscode}">
-                        <p class="cs_num2">${stat.count}</p>
-                        <p class="cs_title2">${cs.title}</p>
-                        <p class="cs_user2">${cs.getHid().getMemberid()}</p>
-                        <p class="cs_result2"><span class="cs_result_ex" id="resultSpan">${cs.getResult()}</span></p>
-                        <p class="cs_date2">${cs.getCsdate()}</p>
-                    </div>
+                <div class="cs_box" onclick="location.href='/cs/admin-cs_detailAndReply?cs_code=1'">
+                    <input type="hidden" name="cscode" value="${cs.cscode}">
+                    <p class="cs_num2">0번</p>
+                    <p class="cs_title2">CS 제목</p>
+                    <p class="cs_user2">cs 작성자</p>
+                    <p class="cs_result2"><span class="cs_result_ex" id="resultSpan">cs 답변 결과</span></p>
+                    <p class="cs_date2">cs 등록일</p>
+                </div>
             </div>
             <div id="tab-3">
                 <div class="my_box_name">
@@ -260,15 +261,14 @@
                     <p class="my_public">공개여부</p>
                     <p class="my_date">날짜</p>
                 </div>
-                    <div class="my_box" onclick="location.href='/cs/forumDetail?cscode=${cs.cscode}'">
-                        <p class="my_num2">${stat.count}</p>
-                        <p class="my_type2"><span class="my_type_ex" id="typeSpan">${cs.getType()}<span></p>
-                        <p class="my_title2">${cs.getTitle()}</p>
-                        <p class="my_result2"><span class="my_result_ex" id="resultSpan">${cs.getResult()}<span></p>
-                        <p class="my_public2"><span class="my_publictype_ex"
-                                id="publictypeSpan">${cs.getPublictype()}</span></p>
-                        <p class="my_date2">${cs.getCsdate()}</p>
-                    </div>
+                <div class="my_box" onclick="location.href='/cs/forumDetail?cscode=${cs.cscode}'">
+                    <p class="my_num2"> 번호 </p>
+                    <p class="my_type2"><span class="my_type_ex" id="typeSpan"> cs type <span></p>
+                    <p class="my_title2"> cs 타이틀 </p>
+                    <p class="my_result2"><span class="my_result_ex" id="resultSpan"> cs 결과 <span></p>
+                    <p class="my_public2"><span class="my_publictype_ex" id="publictypeSpan"> cs 공개여부 </span></p>
+                    <p class="my_date2">cs 등록일</p>
+                </div>
             </div>
         </div>
     </section>
@@ -278,21 +278,75 @@
     </footer>
 
 </body>
-<script type="text/javascript">
+<script>
+
+    const btn1 = document.querySelector("[data-tab='tab-1']");
+    const btn2 = document.querySelector("[data-tab='tab-2']");
+    const btn3 = document.querySelector("[data-tab='tab-3']");
+    const tabContent1 = document.getElementById("tab-1");
+    const tabContent2 = document.getElementById("tab-2");
+    const tabContent3 = document.getElementById("tab-3");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    var tap_menu_selection = urlParams.get("menu_select");
+
+    function choose_tab1() {
+        btn1.classList.add("current");
+        btn2.classList.remove("current");
+        btn3.classList.remove("current");
+        tabContent1.style.display = "block";
+        tabContent2.style.display = "none";
+        tabContent3.style.display = "none";
+    }
+
+    function choose_tab2() {
+        btn2.classList.add("current");
+        btn1.classList.remove("current");
+        btn3.classList.remove("current");
+        tabContent2.style.display = "block";
+        tabContent1.style.display = "none";
+        tabContent3.style.display = "none";
+    }
+
+    function choose_tab3() {
+        btn3.classList.add("current");
+        btn1.classList.remove("current");
+        btn2.classList.remove("current");
+        tabContent3.style.display = "block";
+        tabContent1.style.display = "none";
+        tabContent2.style.display = "none";
+    }
+
+
+
     document.addEventListener("DOMContentLoaded", () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        var tap_menu_selection = urlParams.get("menu_select");
+
+        btn1.addEventListener("click", () => {
+            location.href = '/cs/list?menu_select=1';
+        });
+
+        btn2.addEventListener("click", () => {
+            location.href = '/cs/list?menu_select=2';
+        });
+
+        btn3.addEventListener("click", () => {
+            location.href = '/cs/list?menu_select=3';
+        });
+
         if (tap_menu_selection == null || tap_menu_selection == 1) {
             console.log('FAQ 탭');
+            choose_tab1();
         } else if (tap_menu_selection == 2) {
             console.log('문의 게시판 탭');
+            choose_tab2();
         } else if (tap_menu_selection == 3) {
             console.log('나의 문의 탭');
+            choose_tab3();
         }
     });
 
     document.getElementById("writeButton").addEventListener("click", function () {
-        window.location.href = "/cs/forumWriteForm";
+        window.location.href = "/cs/regForm";
     });
 
     document.querySelectorAll(".faq_box").forEach(faqbox => {
@@ -300,56 +354,18 @@
             const faqcontent = faqbox.querySelector(".faq_content");
             faqcontent.classList.toggle("active");
             if (faqcontent.classList.contains("active")) {
-                faqbox.style.height = "80px";
+                faqbox.style.height = "60px";
             } else {
                 faqbox.style.height = "150px";
             }
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const btn1 = document.querySelector("[data-tab='tab-1']");
-        const btn2 = document.querySelector("[data-tab='tab-2']");
-        const btn3 = document.querySelector("[data-tab='tab-3']");
-        const tabContent1 = document.getElementById("tab-1");
-        const tabContent2 = document.getElementById("tab-2");
-        const tabContent3 = document.getElementById("tab-3");
-
-        btn1.classList.add("current");
-        tabContent1.style.display = "block";
-        tabContent2.style.display = "none";
-        tabContent3.style.display = "none";
-
-        btn1.addEventListener("click", function () {
-            btn1.classList.add("current");
-            btn2.classList.remove("current");
-            btn3.classList.remove("current");
-            tabContent1.style.display = "block";
-            tabContent2.style.display = "none";
-            tabContent3.style.display = "none";
-        });
-
-        btn2.addEventListener("click", function () {
-            btn2.classList.add("current");
-            btn1.classList.remove("current");
-            btn3.classList.remove("current");
-            tabContent2.style.display = "block";
-            tabContent1.style.display = "none";
-            tabContent3.style.display = "none";
-        });
-
-        btn3.addEventListener("click", function () {
-            btn3.classList.add("current");
-            btn1.classList.remove("current");
-            btn2.classList.remove("current");
-            tabContent3.style.display = "block";
-            tabContent1.style.display = "none";
-            tabContent2.style.display = "none";
-        });
-    });
 
     document.addEventListener("DOMContentLoaded", function () {
         const typeSpan = document.querySelectorAll(".my_type_ex");
+        // 현재 데이터와 뷰가 같이 로드될 때 기준으로 코드가 작성되어 있음
+        // 해당 부분은 ajax 요청을 통해 데이터를 응답받고 나서 innerHTML할 때 style을 주는 방식으로 해야됨.
 
         typeSpan.forEach((typeSpan, index) => {
             const type = typeSpan.innerText.trim();

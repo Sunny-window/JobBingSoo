@@ -12,6 +12,7 @@
             background-color: whitesmoke;
             margin: 0;
             padding: 0;
+            min-width:1240px;
         }
 
         section {
@@ -30,7 +31,7 @@
         }
 
         header {
-            min-width: 1240px;
+            /* min-width: 1240px; */
             margin: 0 auto;
             height: 150px;
             border-bottom: 1px solid #eee;
@@ -55,7 +56,8 @@
             padding-left: 25px;
         }
 
-        .logo img {
+        .logo img,
+        .logo2 img {
             width: 55px;
             height: 50px;
         }
@@ -261,6 +263,9 @@
                 </label>
             </div>
         </form>
+        <div class="logo2">
+            <a href="/manager/youtubeplayer"><img src="/images/manager_icon.png"></a>
+        </div>
     </div>
     <div class="head_bottom">
         <div class="menu_list">
@@ -324,11 +329,11 @@
                 list.forEach((data, i) => {
                     // console.log(data.type + data.message);
                     var link = '<a href="#">';
-                    if (data.type == '채용공고') {
+                    if (data.type.trim() == '채용공고') {
                         link = '<a href="/red_bean/mypage">';
-                    }else if(data.type == '기업알림'){
+                    }else if(data.type.trim() == '기업알림'){
                         link = '<a href="/main/comList">';
-                    }else if(data.type == '공지사항' || data.type =='고객센터'){
+                    }else if(data.type.trim() == '공지사항' || data.type.trim() =='고객센터'){
                         link = '<a href="/cs/list">';
                     }
                     document.getElementById('notice-bell-container').innerHTML
