@@ -161,6 +161,9 @@
     </script>
 </head>
 <body>
+ <header th:replace="/sub/header"></header>
+
+    <section>
     <div class="container">
         <h1>관리자 대시보드</h1>
         <div class="chart-container">
@@ -177,5 +180,8 @@
             <p id="openaiOutput">Loading...</p>
         </div>
     </div>
+    </section>
+
+    <footer th:replace="/sub/footer"></footer>
 </body>
 </html>
