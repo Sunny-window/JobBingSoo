@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bingsoo.job.dto.ApplyRequest;
 import com.bingsoo.job.dto.NoticeDto;
 import com.bingsoo.job.dto.SubscribeRequest;
-import com.bingsoo.job.entity.Company;
+import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Cs;
 import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.Desired_area;
@@ -33,7 +34,9 @@ import com.bingsoo.job.entity.Desired_industry;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
+import com.bingsoo.job.entity.Resume;
 import com.bingsoo.job.entity.Subscribe;
+import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.CsRepository;
 import com.bingsoo.job.repository.Cs_replyRepository;
@@ -42,6 +45,7 @@ import com.bingsoo.job.repository.Desired_industryRepository;
 import com.bingsoo.job.repository.MemberRepository;
 import com.bingsoo.job.repository.NoticeRepository;
 import com.bingsoo.job.repository.PostingRepository;
+import com.bingsoo.job.repository.ResumeRepository;
 import com.bingsoo.job.repository.SubscribeRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -77,6 +81,12 @@ public class ManagerController {
 	
 	@Autowired
     SubscribeRepository subscribeRepository;
+	
+	@Autowired
+    ApplicationRepository applicationRepository;
+	
+	 @Autowired
+	 ResumeRepository resumeRepository;
 
 	@GetMapping("/member-all")
 	public Map<String, List<Member>> getData() {
@@ -267,4 +277,32 @@ public class ManagerController {
 	     subscribeRepository.save(subscribe);
 	     return "success";
 	 }
+	 
+	    @GetMapping("/resumes")
+	    public List<Resume> getResumes(@RequestParam("username") String username) {
+	        Member member = memberRepository.findById(username).orElse(null);
+	        if (member != null) {
+	            return resumeRepository.findByRid(member);
+	        }
+	        return null;
+	    }
+
+	    @PostMapping("/apply")
+	    public String apply(@RequestBody ApplyRequest request) {
+	        Posting post = postingRepository.findById(request.getPostCode()).orElse(null);
+	        Member member = memberRepository.findById(request.getRid()).orElse(null);
+	        Resume resume = resumeRepository.findById(request.getResumeCode()).orElse(null);
+
+	        if (post == null || member == null || resume == null) {
+	            return "fail";
+	        }
+
+	        Application application = new Application();
+	        application.setPostCode(post);
+	        application.setRid(member);
+	        application.setResult("지원 완료");
+
+	        applicationRepository.save(application);
+	        return "success";
+	    }
 }

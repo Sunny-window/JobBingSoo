@@ -59,4 +59,8 @@ public class ManagerController {
 		return "manager/managerLogin";
 	}
 	
+    @RequestMapping("/apply")
+    public String apply() {
+    	return "manager/apply";
+    }
 }

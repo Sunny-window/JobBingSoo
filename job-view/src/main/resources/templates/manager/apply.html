@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>지원하기</title>
+    <style>
+       
+        
+       
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .resume-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .resume-item {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button-container button {
+            background-color: #FF006F;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>지원하기</h1>
+</header>
+<section>
+    <ul class="resume-list" id="resumeList"></ul>
+    <div class="button-container">
+        <button onclick="apply()">지원하기</button>
+    </div>
+</section>
+<footer>
+    <p>Copyright © 2023</p>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchResumes();
+    });
+
+    async function fetchResumes() {
+        try {
+            const response = await fetch('http://localhost:9001/manager/resumes?username=user01');
+            const resumes = await response.json();
+            const resumeList = document.getElementById('resumeList');
+            resumeList.innerHTML = '';
+
+            resumes.forEach(resume => {
+                const listItem = document.createElement('li');
+                listItem.className = 'resume-item';
+                listItem.innerHTML = `
+                    <input type="radio" name="resume" value="${resume.resume_code}">
+                    <span>${resume.title}</span>
+                `;
+                resumeList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error('Error fetching resumes:', error);
+        }
+    }
+
+    async function apply() {
+        const selectedResume = document.querySelector('input[name="resume"]:checked');
+        if (!selectedResume) {
+            alert("이력서를 선택해주세요.");
+            return;
+        }
+
+        const postCode = new URLSearchParams(window.location.search).get('postCode');
+        const applyRequest = {
+            postCode: postCode,
+            rid: 'user01',
+            resumeCode: selectedResume.value
+        };
+
+        try {
+            const response = await fetch('http://localhost:9001/manager/apply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(applyRequest)
+            });
+            const result = await response.text();
+            if (result === 'success') {
+                alert("지원이 완료되었습니다.");
+            } else {
+                alert("지원에 실패하였습니다.");
+            }
+        } catch (error) {
+            console.error('Error applying:', error);
+        }
+    }
+</script>
+</body>
+</html>
+
