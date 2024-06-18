@@ -1,6 +1,7 @@
 package com.bingsoo.job.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -156,12 +157,17 @@ public class RedbeanController {
 	public ResumeDto showResumeUpdateForm(@RequestParam("resume_code") long resume_code) {
 		ResumeDto resumeDto = new ResumeDto();
 		Resume resume = resumeRepository.findRdCode(resume_code);
+		System.out.println("==========================================resume: "+resume);
 		resumeDto.setTitle(resume.getTitle());
+	
 		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
-		//Desired_area desired_area= desired_areaRepository.findByRid(redbean.getRid().getUsername());
-		//desired_industryRepository.findByRid(redbean.getRid().getUsername());
-		//Company company= companyRepository.findByCid(redbean.getRid().getUsername());
+		List<Certificate> cerStackList = certificateRepository.findByRid(resume.getRid());
+		System.out.println("==========================================cerStackList: "+cerStackList);
 		
+		
+		Optional<Desired_area>  opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+		Desired_area desired_area = opdesired_area.get();
+		System.out.println("==========================================desired_area: "+desired_area);
 		Career career =  careerRepository.findByRid(redbean.getRid());
 		resumeDto.setName(redbean.getName());
 		resumeDto.setName(redbean.getAddress());
@@ -171,14 +177,17 @@ public class RedbeanController {
 		resumeDto.setEdu_type(resume.getEdu_type());
 		resumeDto.setEdu_major(resume.getEdu_major());
 		resumeDto.setEdu_state(resume.getEdu_state());
-		//resumeDto.setArea_main(desired_area.getArea_main());
-		//resumeDto.setArea_main(desired_area.getArea_sub());
-		//resumeDto.setCompanyname(company.getCompany_name());
+		resumeDto.setArea_main(desired_area.getArea_main());
+		resumeDto.setArea_main(desired_area.getArea_sub());
+		resumeDto.setCompanyname(career.getCompanyName());
 		resumeDto.setCardate(career.getCarDate());
 		resumeDto.setEnddate(career.getEndDate());
 		resumeDto.setPosition(career.getPosition());
+		resumeDto.setCer_stack(cerStackList);
+		resumeDto.setSkill_stack(cerStackList);
+		resumeDto.setIssuer(cerStackList.get(0).getIssuer());
 		
-		System.out.println("================================resume: "+resume);
+		System.out.println("==========================================resumeDto: "+resumeDto);
 		return resumeDto;
 	}
 	
