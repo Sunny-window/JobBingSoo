@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bingsoo.job.dto.ResumeDto;
+import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Career;
 import com.bingsoo.job.entity.Certificate;
+import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.Cover_letter;
 import com.bingsoo.job.entity.Desired_area;
 import com.bingsoo.job.entity.Desired_industry;
@@ -19,8 +22,10 @@ import com.bingsoo.job.entity.Favorite;
 import com.bingsoo.job.entity.RedBean;
 import com.bingsoo.job.entity.Resume;
 import com.bingsoo.job.entity.Subscribe;
+import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.CareerRepository;
 import com.bingsoo.job.repository.CertificateRepository;
+import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.Cover_letterRepository;
 import com.bingsoo.job.repository.Desired_areaRepository;
 import com.bingsoo.job.repository.Desired_industryRepository;
@@ -48,14 +53,22 @@ public class RedbeanController {
 	
 	@Autowired
 	Desired_areaRepository desired_areaRepository;
+
+	@Autowired
+	ApplicationRepository applicationRepository;
 	
 	
 	@Autowired
 	Desired_industryRepository desired_industryRepository;
+	
 	@Autowired
 	CareerRepository careerRepository;
 	@Autowired
 	CertificateRepository certificateRepository;
+	
+	@Autowired
+	CompanyRepository companyRepository;
+
 	
 	
 	@GetMapping("/showInfoForm")
@@ -120,8 +133,52 @@ public class RedbeanController {
 		List<Favorite> list =favoriteRepository.findAll();
 		return list;
 	}
+	@GetMapping("/showApplicationList")
+	public List<Application> showApplicationList() {
+		System.out.println("==============================redBean : ");
+		List<Application> list = applicationRepository.findAll();
+		
+		return list;
+	}
+
+//	@GetMapping("/showResumeUpdateForm")
+//	public Resume showResumeUpdateForm(@RequestParam("resume_code") long resume_code) {
+//		System.out.println("==============================redBean : ");
+//		Resume resume = resumeRepository.findRdCode(resume_code);
+//		List<RedBean> redbean = redBeanRepository.findByRid(resume.getRid());
+//		System.out.println("================================resume: "+resume);
+//		return resume;
+//	}
 	
 	
-	
+	@GetMapping("/showResumeUpdateForm")
+	public ResumeDto showResumeUpdateForm(@RequestParam("resume_code") long resume_code) {
+		ResumeDto resumeDto = new ResumeDto();
+		Resume resume = resumeRepository.findRdCode(resume_code);
+		resumeDto.setTitle(resume.getTitle());
+		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
+		Desired_area desired_area= desired_areaRepository.findByRid(redbean.getRid().getUsername());
+		desired_industryRepository.findByRid(redbean.getRid().getUsername());
+		Company company= companyRepository.findByCid(redbean.getRid().getUsername());
+		
+		Career career =  careerRepository.findByRid(redbean.getRid().getUsername());
+		resumeDto.setName(redbean.getName());
+		resumeDto.setName(redbean.getAddress());
+		resumeDto.setName(redbean.getTel());
+		resumeDto.setName(redbean.getEmail());
+		resumeDto.setEdu_name(resume.getEdu_name());
+		resumeDto.setEdu_type(resume.getEdu_type());
+		resumeDto.setEdu_major(resume.getEdu_major());
+		resumeDto.setEdu_state(resume.getEdu_state());
+		resumeDto.setArea_main(desired_area.getArea_main());
+		resumeDto.setArea_main(desired_area.getArea_sub());
+		resumeDto.setCompanyname(company.getCompany_name());
+		resumeDto.setCardate(career.getCarDate());
+		resumeDto.setEnddate(career.getEndDate());
+		resumeDto.setPosition(career.getPosition());
+		
+		System.out.println("================================resume: "+resume);
+		return resumeDto;
+	}
 	
 }

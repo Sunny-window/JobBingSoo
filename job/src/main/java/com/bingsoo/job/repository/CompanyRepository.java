@@ -13,5 +13,8 @@ public interface CompanyRepository extends JpaRepository<Company, String> {
 
 	Optional<Company> findByCno(String cno);
 
+
+
 	Optional<Company> findByCid(Member member);
+
 }

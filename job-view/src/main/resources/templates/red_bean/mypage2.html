@@ -268,65 +268,31 @@ function showResumeUpdateForm(event,resume_code) {
 			var htmlContent = `
 				이력서제목<input type="text" id="title" name="title" value=${data.title} ><br>
 				<hr>
+						`;
+			$("#totalResult").append(htmlContent);
+		})
+		.catch(error => {
+			document.getElementById("totalResult").innerHTML = error;
+		});
+	
+	fetch("http://localhost:9001/showResumeUpdateForm?resume_code="+resume_code, { // 서버에 요청을 보냅니다.
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json" // 요청의 헤더 설정
+		},
+	})
+		.then(response => response.json())
+		.then(data => {
+			var htmlContent = `
 				인적사항
 				<hr>
-				성명<input type="text" id="name" name="name" value=${data}><br>
-				주소<input type="text" id="address" name="address" value=${data} ><br>
+				성명<input type="text" id="name" name="name" value=${data.rid.username}><br>
+				주소<input type="text" id="address" name="address" value=${data.rid.address} ><br>
 				휴대전화<input type="text" id="tel" name="tel" ><br>
 				이메일<input type="text" id="email" name="email" ><br>
 				<hr>
-				학력사항
-				<hr>
-				학력<input type="text" id="edu_name" name="edu_name" ><br>
-				학력구분<input type="text" id="edu_type" name="edu_type" ><br>
-				전공<input type="text" id="edu_major" name="edu_major" ><br>
-				학력상태<input type="text" id="edu_state" name="edu_state" ><br>
-				<hr>
-				자소서
-				<hr>
-				<textarea></textarea>
-				<hr>
-				희망근무지역
-				<hr>
-				1지망<input type="text" id="area_main" name="area_main" ><br>
-				2지망<input type="text" id="area_sub" name="area_sub" ><br>
-				희망직무산업
-				<hr>
-				산업<input type="text" id="industry" name="industry" ><br>
-				직무<input type="text" id="job" name="job" ><br>
-				<hr>
-				경력사항
-				<hr>
-				사명<input type="text" id="companyname" name="companyname" ><br>
-				입사일<input type="text" id="cardate" name="cardate" ><br>
-				퇴사일<input type="text" id="enddate" name="enddate" ><br>
-				산업군<input type="text" id="industry" name="industry" ><br>
-				직책<input type="text" id="position" name="position" ><br>
-				직무<input type="text" id="job" name="job" ><br>
-				<hr>
-				이력서 기술스택
-				<hr>
-				<br>
-				<hr>
-				보유 자격증
-				<hr> 
-				자격증명 <input type="text" id="stack" name="stack" ><br>
-				취득일 <input type="text" id="optain_date" name="optain_date" ><br>
-				발급기관 <input type="text" id="issuer" name="issuer" ><br>
-				<button>자격증 추가</button>
-				<br>
-				
-				<button id = resumeUpdateInfo onclick="resumeUpdateInfo(event)" >수정하기</button>
-				
-
-				</div>
-
-
-				<div id = "subscribeListDiv"></div>
-				<div id = "showFavoriteListDiv"></div>
-				<div id = totalResult></div>
-			`;
-			$("#totalResult").html(htmlContent);
+						`;
+			$("#totalResult").append(htmlContent);
 		})
 		.catch(error => {
 			document.getElementById("totalResult").innerHTML = error;
