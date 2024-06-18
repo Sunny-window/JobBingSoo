@@ -64,8 +64,8 @@ public class RedbeanController {
 	@Autowired
 	CareerRepository careerRepository;
 	
-	//@Autowired
-	//CertificateRepository certificateRepository;
+	@Autowired
+	CertificateRepository certificateRepository;
 	
 	@Autowired
 	CompanyRepository companyRepository;
@@ -162,7 +162,7 @@ public class RedbeanController {
 		//desired_industryRepository.findByRid(redbean.getRid().getUsername());
 		//Company company= companyRepository.findByCid(redbean.getRid().getUsername());
 		
-		Career career =  careerRepository.findByRid(redbean.getRid().getUsername());
+		Career career =  careerRepository.findByRid(redbean.getRid());
 		resumeDto.setName(redbean.getName());
 		resumeDto.setName(redbean.getAddress());
 		resumeDto.setName(redbean.getTel());
