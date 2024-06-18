@@ -13,9 +13,41 @@
     <section>
         <h1>기업정보수정 페이지</h1>
         <hr>
+        <input type="text" id="company_name">
+        <input type="text" id="ceo">
     </section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            populateForm();
+        });
+        function populateForm() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cno = urlParams.get('cno');
+
+            if (!cno) {
+                alert('잘못된 접근입니다.');
+                window.location.href = "/ice/mypage";
+                return;
+            }
+
+            fetch(`http://localhost:9001/ice/infomation/${cno}`, {
+                method: "GET"
+            })
+            .then(response => response.json())
+            .then(company => {
+                console.log('Fetched company:', company);
+                document.getElementById('company_name').value = company.company_name;
+                document.getElementById('ceo').value = company.ceo;
+            })
+            .catch(error => {
+                console.error('Error fetching posting:', error);
+                alert('기업 정보를 불러오는 중 오류가 발생했습니다.');
+                window.location.href = "/ice/mypage";
+            });
+        }
+    </script>
 </body>
 </html>

@@ -53,4 +53,10 @@ public class ManagerController {
     public String youtubeplayer() {
         return "manager/youtubeplayer";
     }
+    
+    @RequestMapping("/managerLogin")
+	public String managerLogin() {
+		return "manager/managerLogin";
+	}
+	
 }

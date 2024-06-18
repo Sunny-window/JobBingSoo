@@ -7,15 +7,94 @@
     <title>기업 상세 정보</title>
     <style>
         /* CSS styles */
+        .section-container {
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .posting-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px; /* 각 공고 사이의 간격을 넓힘 */
+        }
+        
+        .posting-container {
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            width: calc(100% - 40px); /* 좌우 너비를 줄임 */
+        }
+        
+        .posting-container h3 {
+            margin-top: 0;
+            font-size: 1.5em; /* 제목 크기를 키움 */
+        }
+
+        .d-day {
+            font-weight: bold;
+            color: #FF006F;
+            font-size: 1.2em; /* 글자의 크기를 키워 강조 */
+        }
+
+        .d-day.expired {
+            color: gray;
+        }
+
+        .job-info {
+            color: gray;
+        }
+
+        .company-info-container {
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .company-info h2 {
+            margin-top: 0;
+        }
+
+        .table-info {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-info th, .table-info td {
+            padding: 10px;
+            border: none; /* 테이블 선 제거 */
+        }
+
+        .table-info th {
+            background-color: #f2f2f2;
+        }
+
+        .company-name {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .no-postings {
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <header th:replace="/sub/header"></header>
 
-    <section>
-        <div class="company-info">	
+    <section class="section-container">
+        <div class="company-info">
             <h2>기업정보</h2>
             <div class="company-info-container">
+                <div id="companyName" class="company-name"></div> <!-- 회사명 출력 -->
                 <table class="table-info">
                     <colgroup>
                         <col class="col-label">
@@ -53,7 +132,8 @@
 
         <div class="com-posting">
             <h2>채용</h2>
-            <!-- 채용 정보 추가 -->
+            <ul id="posting-list" class="posting-list"></ul>
+            <p id="no-postings" class="no-postings" style="display: none;">채용공고가 존재하지 않습니다.</p>
         </div>
     </section>
 
@@ -65,23 +145,90 @@
         const urlParams = new URLSearchParams(window.location.search);
         const cno = urlParams.get('cno');
 
+        function calculateDday(deadline) {
+            const today = new Date();
+            const endDate = new Date(deadline);
+            const timeDiff = endDate.getTime() - today.getTime();
+            const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            return dayDiff > 0 ? `D-${dayDiff}` : '마감';
+        }
+
+        function determineCompanyType(size) {
+            if (size >= 300) {
+                return '대기업';
+            } else if (size >= 100 && size <= 299) {
+                return '중견기업';
+            } else {
+                return '중소기업';
+            }
+        }
+
         if (cno) {
             $.ajax({
                 url: `http://localhost:9001/main/company-detail/company-info/${cno}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    $('#mainCategory').text(data.mainCategory);
-                    $('#size').text(data.size);
-                    $('#type').text(data.type);
-                    $('#sales').text(data.sales);
-                    $('#ceo').text(data.ceo);
-                    $('#tel').text(data.tel);
-                    $('#address').text(data.address);
+                    if (data) {
+                        $('#companyName').text(data.companyName || 'N/A');
+                        $('#mainCategory').text(data.subCategoryName || 'N/A');
+                        $('#size').text(data.size || 'N/A');
+                        $('#type').text(determineCompanyType(parseInt(data.size)) || 'N/A');
+                        $('#sales').text(data.sales || 'N/A');
+                        $('#ceo').text(data.ceo || 'N/A');
+                        $('#tel').text(data.tel || 'N/A');
+                        $('#address').text(data.address || 'N/A');
+
+                        console.log(`Fetching postings for cid: ${data.cid}`); // 디버깅용 로그 추가
+
+                        // Get postings by cid
+                        $.ajax({
+                            url: `http://localhost:9001/main/company-detail/postings/${data.cid}`,
+                            method: 'GET',
+                            dataType: 'json',
+                            success: function(postings) {
+                                console.log(postings); // 디버깅용 로그 추가
+                                const postingList = $('#posting-list');
+
+                                if (postings.length === 0) {
+                                    $('#no-postings').show();
+                                } else {
+                                    $('#no-postings').hide();
+                                    postings.forEach(posting => {
+                                        posting.dDay = calculateDday(posting.deadline);
+                                    });
+
+                                    postings.sort((a, b) => {
+                                        if (a.dDay === '마감' && b.dDay !== '마감') return 1;
+                                        if (a.dDay !== '마감' && b.dDay === '마감') return -1;
+                                        if (a.dDay === '마감' && b.dDay === '마감') return 0;
+                                        return parseInt(a.dDay.split('-')[1]) - parseInt(b.dDay.split('-')[1]);
+                                    });
+
+                                    postings.forEach(posting => {
+                                        const dDayClass = posting.dDay === '마감' ? 'd-day expired' : 'd-day';
+                                        const listItem = `<li class="posting-container">
+                                            <p class="${dDayClass}">${posting.dDay}</p>
+                                            <h3><a href="http://localhost:8080/main/postDetail?postCode=${posting.postCode}">${posting.title}</a></h3>
+                                            <p>${posting.employmentType} | ${posting.area} | ${posting.eduType}</p>
+                                            <p class="job-info">${posting.job}</p>
+                                        </li>`;
+                                        postingList.append(listItem);
+                                    });
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('채용 공고를 불러오는 데 실패했습니다:', textStatus, errorThrown);
+                                alert('채용 공고를 불러오는 데 실패했습니다.');
+                            }
+                        });
+                    } else {
+                        console.error('데이터가 존재하지 않습니다.');
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('기업 정보를 불러오는 데 실패했습니다:', textStatus, errorThrown);
-                    console.error('응답 메시지:', jqXHR.responseText);
                     alert('기업 정보를 불러오는 데 실패했습니다.');
                 }
             });
@@ -89,6 +236,9 @@
             alert('유효한 기업 번호가 아닙니다.');
         }
     });
+
+
+
     </script>
 </body>
 </html>
