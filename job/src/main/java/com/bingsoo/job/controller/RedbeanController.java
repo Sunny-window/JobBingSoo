@@ -1,6 +1,7 @@
 package com.bingsoo.job.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -157,11 +158,11 @@ public class RedbeanController {
 		ResumeDto resumeDto = new ResumeDto();
 		Resume resume = resumeRepository.findRdCode(resume_code);
 		resumeDto.setTitle(resume.getTitle());
+	
 		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
-		//Desired_area desired_area= desired_areaRepository.findByRid(redbean.getRid().getUsername());
-		//desired_industryRepository.findByRid(redbean.getRid().getUsername());
-		//Company company= companyRepository.findByCid(redbean.getRid().getUsername());
-		
+		Optional<Company> opcompany = companyRepository.findByCid()
+		Optional<Desired_area>  opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+		Desired_area desired_area = opdesired_area.get();
 		Career career =  careerRepository.findByRid(redbean.getRid());
 		resumeDto.setName(redbean.getName());
 		resumeDto.setName(redbean.getAddress());
@@ -171,9 +172,9 @@ public class RedbeanController {
 		resumeDto.setEdu_type(resume.getEdu_type());
 		resumeDto.setEdu_major(resume.getEdu_major());
 		resumeDto.setEdu_state(resume.getEdu_state());
-		//resumeDto.setArea_main(desired_area.getArea_main());
-		//resumeDto.setArea_main(desired_area.getArea_sub());
-		//resumeDto.setCompanyname(company.getCompany_name());
+		resumeDto.setArea_main(desired_area.getArea_main());
+		resumeDto.setArea_main(desired_area.getArea_sub());
+		resumeDto.setCompanyname(career.getCompanyName());
 		resumeDto.setCardate(career.getCarDate());
 		resumeDto.setEnddate(career.getEndDate());
 		resumeDto.setPosition(career.getPosition());
