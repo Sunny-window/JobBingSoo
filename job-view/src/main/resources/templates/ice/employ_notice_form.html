@@ -41,7 +41,6 @@
             <select id="sub_category" name="sub_category">
                 <option value="">서브 카테고리 선택</option>
             </select>
-
             <input type="datetime-local" id="deadline" placeholder="마감일">
             <input type="text" id="manager_tel" placeholder="담당자 번호">
             <textarea id="main_content" placeholder="공고 내용"></textarea>
@@ -133,6 +132,7 @@
                 deadline: document.getElementById('deadline').value,
                 manager_tel: document.getElementById('manager_tel').value,
                 main_content: document.getElementById('main_content').value
+
             };
 
             fetch('http://localhost:9001/ice/posting', {
