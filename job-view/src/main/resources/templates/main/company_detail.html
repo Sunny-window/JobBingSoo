@@ -78,6 +78,19 @@
             font-size: 2em;
             font-weight: bold;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .favorite-btn {
+            margin-left: 20px; /* 공백을 널널하게 조정 */
+            font-size: 0.5em; /* 글자 크기 줄임 */
+            padding: 4px 24px; /* 버튼 높이 줄임, 좌우 너비 유지 */
+            border-radius: 5px;
+            background-color: #fff;
+            color: black;
+            border: 1px solid #FF006F; /* 테두리 색상 변경 */
+            cursor: pointer;
         }
 
         .no-postings {
@@ -89,14 +102,18 @@
 </head>
 <body>
     <header>
-    	<th:block th:insert="~{/sub/header.html}"></th:block>
-	</header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
 
     <section class="section-container">
         <div class="company-info">
             <h2>기업정보</h2>
             <div class="company-info-container">
-                <div id="companyName" class="company-name"></div> <!-- 회사명 출력 -->
+                <div id="companyName" class="company-name">
+                    <!-- 회사명 출력 -->
+                    <span>회사명</span>
+                    <button id="favoritebtn" class="favorite-btn">관심</button>
+                </div>
                 <table class="table-info">
                     <colgroup>
                         <col class="col-label">
@@ -173,7 +190,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if (data) {
-                        $('#companyName').text(data.companyName || 'N/A');
+                        $('#companyName span').text(data.companyName || 'N/A');
                         $('#mainCategory').text(data.subCategoryName || 'N/A');
                         $('#size').text(data.size || 'N/A');
                         $('#type').text(determineCompanyType(parseInt(data.size)) || 'N/A');
@@ -238,9 +255,6 @@
             alert('유효한 기업 번호가 아닙니다.');
         }
     });
-
-
-
     </script>
 </body>
 </html>
