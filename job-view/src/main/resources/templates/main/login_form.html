@@ -4,150 +4,150 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
 
-        #header2 {
-            width: 680px;
-            margin: 50px auto 0;
-            background-color: #ff006f;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-bottom: 5px solid #ff006f;
-        }
+    #header2 {
+        width: 680px;
+        margin: 50px auto 0;
+        background-color: #ff006f;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 5px solid #ff006f;
+    }
 
-        #header2 .sub {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+    #header2 .sub {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
 
-        #header2 .sub li {
-            margin: 0;
-            padding: 0;
-            flex-grow: 1;
-        }
+    #header2 .sub li {
+        margin: 0;
+        padding: 0;
+        flex-grow: 1;
+    }
 
-        #header2 .sub li button {
-            height: 70px;
-            border: none;
-            border-radius: 0;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 0;
-        }
+    #header2 .sub li button {
+        height: 70px;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0;
+    }
 
-        #red {
-            background-color: #ff006f;
-            color: #fff;
-            flex-grow: 3;
-            font-weight: bold;
-        }
+    #red {
+        background-color: #ff006f;
+        color: #fff;
+        flex-grow: 3;
+        font-weight: bold;
+    }
 
-        #com {
-            background-color: #ffffff;
-            color: #000000;
-            flex-grow: 2;
-        }
+    #com {
+        background-color: #ffffff;
+        color: #000000;
+        flex-grow: 2;
+    }
 
-        .selected {
-            background-color: #ff006f !important; /* 선택된 버튼 배경색 */
-            color: #fff !important; /* 선택된 버튼 텍스트 색 */
-        }
+    .selected {
+        background-color: #ff006f !important; /* 선택된 버튼 배경색 */
+        color: #fff !important; /* 선택된 버튼 텍스트 색 */
+    }
 
-        #container {
-            width: 620px;
-            margin: 0 auto 30px;
-            background-color: #fff;
-            padding: 20px 40px 20px 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    #container {
+        width: 620px;
+        margin: 0 auto 30px;
+        background-color: #fff;
+        padding: 20px 40px 20px 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
+    fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
 
-        .row_group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+    .row_group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 
-        .col_2 {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            position: relative;
-            margin-right: 10px; /* input 필드 간격 추가 */
-        }
+    .col_2 {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-right: 10px; /* input 필드 간격 추가 */
+    }
 
-        .row_group:last-child .col_2 {
-            margin-right: 0; /* 마지막 row_group의 margin-right를 0으로 설정 */
-        }
+    .row_group:last-child .col_2 {
+        margin-right: 0; /* 마지막 row_group의 margin-right를 0으로 설정 */
+    }
 
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            position: relative;
-            height: 30px;
-        }
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        position: relative;
+        height: 30px;
+    }
 
-        .input-label {
-            position: absolute;
-            left: 10px;
-            top: 8px;
-            pointer-events: none;
-            transition: all 0.2s ease;
-            font-size: 0.9em;
-        }
+    .input-label {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        pointer-events: none;
+        transition: all 0.2s ease;
+        font-size: 0.9em;
+    }
 
-        input:focus + .input-label, 
-        input:not(:placeholder-shown) + .input-label {
-            visibility: hidden;
-            opacity: 0;
-        }
+    input:focus + .input-label, 
+    input:not(:placeholder-shown) + .input-label {
+        visibility: hidden;
+        opacity: 0;
+    }
 
-        .input-label span {
-            color: gray;
-        }
+    .input-label span {
+        color: gray;
+    }
 
-        .mbrBtnRegist {
-            width: 200px; /* 로그인 버튼 크기 조정 */
-            background-color: #ff006f;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            padding: 15px;
-            font-size: 16px;
-            text-align: center;
-            height: 80px; /* 버튼 높이 조정 */
-        }
+    .mbrBtnRegist {
+        width: 200px; /* 로그인 버튼 크기 조정 */
+        background-color: #ff006f;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 15px;
+        font-size: 16px;
+        text-align: center;
+        height: 80px; /* 버튼 높이 조정 */
+    }
 
-        .mbrBtnRegist:hover {
-            background-color: #e5005e;
-        }
+    .mbrBtnRegist:hover {
+        background-color: #e5005e;
+    }
 </style>
 </head>
 <body>
@@ -170,7 +170,7 @@
     <div id="personalMember" style="display:block;">
         <div id="container" class="memLogin">
         <fieldset>
-            <form id="redbeanLoginForm" method="" action="">
+            <form id="redbeanLoginForm" method="POST" action="/api/login" onsubmit="return login(event, 'BEAN')">
                 <div class="row_group">
                     <div class="col_2">
                         <input type="text" id="red_username" name="username" placeholder=" ">
@@ -192,7 +192,7 @@
     <div id="corporateMember" style="display:none;">
     <div id="container" class="iceLogin">
     <fieldset>
-        <form id="iceLoginForm" method="" action="">
+        <form id="iceLoginForm" method="POST" action="/api/login" onsubmit="return login(event, 'COM')">
             <div class="row_group">
                 <div class="col_2">
                     <input type="text" id="ice_username" name="username" placeholder=" ">
@@ -206,8 +206,6 @@
                     <label class="input-label" for="ice_pwd"><span>비밀번호</span></label>
                 </div>
             </div>
-            
-            
         </form>
         </fieldset>
     </div>
@@ -237,41 +235,60 @@ document.addEventListener('DOMContentLoaded', function() {
     var personalBtn = document.getElementById('red');
     var corporateBtn = document.getElementById('com');
 
-    // 개인회원과 기업회원 멤버 요소 가져오기
     var personalMember = document.getElementById('personalMember');
     var corporateMember = document.getElementById('corporateMember');
 
-    // 초기 상태: 개인회원 버튼이 선택된 상태로 설정
     personalBtn.classList.add('selected');
 
-    // 개인회원 버튼 클릭 시
     personalBtn.addEventListener('click', function() {
-        if (!personalBtn.classList.contains('selected')) {
-            personalBtn.classList.add('selected');
-            corporateBtn.classList.remove('selected');
-            personalBtn.style.backgroundColor = '#fff';
-            personalBtn.style.color = '#000';
-            corporateBtn.style.backgroundColor = '#fff';
-            corporateBtn.style.color = '#000';
-            personalMember.style.display = 'block';
-            corporateMember.style.display = 'none';
-        }
+        personalBtn.classList.add('selected');
+        corporateBtn.classList.remove('selected');
+        personalBtn.style.backgroundColor = '#ff006f';
+        personalBtn.style.color = '#fff';
+        corporateBtn.style.backgroundColor = '#fff';
+        corporateBtn.style.color = '#000';
+        personalMember.style.display = 'block';
+        corporateMember.style.display = 'none';
     });
 
-    // 기업회원 버튼 클릭 시
     corporateBtn.addEventListener('click', function() {
-        if (!corporateBtn.classList.contains('selected')) {
-            corporateBtn.classList.add('selected');
-            personalBtn.classList.remove('selected');
-            corporateBtn.style.backgroundColor = '#ff006f';
-            corporateBtn.style.color = '#fff';
-            personalBtn.style.backgroundColor = '#fff';
-            personalBtn.style.color = '#000';
-            personalMember.style.display = 'none';
-            corporateMember.style.display = 'block';
-        }
+        corporateBtn.classList.add('selected');
+        personalBtn.classList.remove('selected');
+        corporateBtn.style.backgroundColor = '#ff006f';
+        corporateBtn.style.color = '#fff';
+        personalBtn.style.backgroundColor = '#fff';
+        personalBtn.style.color = '#000';
+        personalMember.style.display = 'none';
+        corporateMember.style.display = 'block';
     });
 });
+
+function login(event, role) {
+    event.preventDefault();
+    var form = event.target;
+    var formData = new FormData(form);
+    formData.append('role', role);
+
+    fetch('http://localhost:9001/auth/login', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.setItem('token', data.token); // JWT 토큰을 로컬 스토리지에 저장
+            window.location.href = data.redirectUrl;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('로그인 중 오류가 발생했습니다.');
+    });
+
+    return false;
+}
 </script>
 </body>
 </html>
