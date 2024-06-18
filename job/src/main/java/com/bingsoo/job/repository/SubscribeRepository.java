@@ -8,6 +8,6 @@ import com.bingsoo.job.entity.Subscribe;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long>{
 
-	boolean existsByCidAndPostCode(Member member, Posting posting);
+	
 
 }
