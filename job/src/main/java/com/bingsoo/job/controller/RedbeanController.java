@@ -63,8 +63,9 @@ public class RedbeanController {
 	
 	@Autowired
 	CareerRepository careerRepository;
-	@Autowired
-	CertificateRepository certificateRepository;
+	
+	//@Autowired
+	//CertificateRepository certificateRepository;
 	
 	@Autowired
 	CompanyRepository companyRepository;
@@ -157,9 +158,9 @@ public class RedbeanController {
 		Resume resume = resumeRepository.findRdCode(resume_code);
 		resumeDto.setTitle(resume.getTitle());
 		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
-		Desired_area desired_area= desired_areaRepository.findByRid(redbean.getRid().getUsername());
-		desired_industryRepository.findByRid(redbean.getRid().getUsername());
-		Company company= companyRepository.findByCid(redbean.getRid().getUsername());
+		//Desired_area desired_area= desired_areaRepository.findByRid(redbean.getRid().getUsername());
+		//desired_industryRepository.findByRid(redbean.getRid().getUsername());
+		//Company company= companyRepository.findByCid(redbean.getRid().getUsername());
 		
 		Career career =  careerRepository.findByRid(redbean.getRid().getUsername());
 		resumeDto.setName(redbean.getName());
@@ -170,9 +171,9 @@ public class RedbeanController {
 		resumeDto.setEdu_type(resume.getEdu_type());
 		resumeDto.setEdu_major(resume.getEdu_major());
 		resumeDto.setEdu_state(resume.getEdu_state());
-		resumeDto.setArea_main(desired_area.getArea_main());
-		resumeDto.setArea_main(desired_area.getArea_sub());
-		resumeDto.setCompanyname(company.getCompany_name());
+		//resumeDto.setArea_main(desired_area.getArea_main());
+		//resumeDto.setArea_main(desired_area.getArea_sub());
+		//resumeDto.setCompanyname(company.getCompany_name());
 		resumeDto.setCardate(career.getCarDate());
 		resumeDto.setEnddate(career.getEndDate());
 		resumeDto.setPosition(career.getPosition());
