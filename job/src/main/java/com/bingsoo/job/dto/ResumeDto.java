@@ -3,6 +3,8 @@ package com.bingsoo.job.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.bingsoo.job.entity.Certificate;
+
 import lombok.Data;
 @Data
 public class ResumeDto {
@@ -23,8 +25,8 @@ public class ResumeDto {
 	private LocalDate cardate;
 	private LocalDate enddate;
 	private String position;
-	private List<String> cer_stack;
-	private List<String> skill_stack;
+	private List<Certificate> cer_stack;
+	private List<Certificate> skill_stack;
 	private LocalDate optain_date;
 	private String issuer;
 	

@@ -157,12 +157,17 @@ public class RedbeanController {
 	public ResumeDto showResumeUpdateForm(@RequestParam("resume_code") long resume_code) {
 		ResumeDto resumeDto = new ResumeDto();
 		Resume resume = resumeRepository.findRdCode(resume_code);
+		System.out.println("==========================================resume: "+resume);
 		resumeDto.setTitle(resume.getTitle());
 	
 		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
-		Optional<Company> opcompany = companyRepository.findByCid()
+		List<Certificate> cerStackList = certificateRepository.findByRid(resume.getRid());
+		System.out.println("==========================================cerStackList: "+cerStackList);
+		
+		
 		Optional<Desired_area>  opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
 		Desired_area desired_area = opdesired_area.get();
+		System.out.println("==========================================desired_area: "+desired_area);
 		Career career =  careerRepository.findByRid(redbean.getRid());
 		resumeDto.setName(redbean.getName());
 		resumeDto.setName(redbean.getAddress());
@@ -178,8 +183,11 @@ public class RedbeanController {
 		resumeDto.setCardate(career.getCarDate());
 		resumeDto.setEnddate(career.getEndDate());
 		resumeDto.setPosition(career.getPosition());
+		resumeDto.setCer_stack(cerStackList);
+		resumeDto.setSkill_stack(cerStackList);
+		resumeDto.setIssuer(cerStackList.get(0).getIssuer());
 		
-		System.out.println("================================resume: "+resume);
+		System.out.println("==========================================resumeDto: "+resumeDto);
 		return resumeDto;
 	}
 	
