@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bingsoo.job.dto.NoticeDto;
+import com.bingsoo.job.dto.SubscribeRequest;
+import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.Cs;
 import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.Desired_area;
@@ -31,6 +33,7 @@ import com.bingsoo.job.entity.Desired_industry;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
+import com.bingsoo.job.entity.Subscribe;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.CsRepository;
 import com.bingsoo.job.repository.Cs_replyRepository;
@@ -239,4 +242,29 @@ public class ManagerController {
 	        }
 	        return null;
 	    }
+	 
+
+	 @PostMapping("/subscribe")
+	 public String subscribe(@RequestBody SubscribeRequest request) {
+	     Posting postCode = postingRepository.findById(request.getPostCode()).orElse(null);
+	     Member rid = memberRepository.findById(request.getRid()).orElse(null);
+
+	     if (postCode == null || rid == null) {
+	         return "fail";
+	     }
+
+	     if (subscribeRepository.existsByPostCodeAndRid(postCode, rid)) {
+	         return "already subscribed";
+	     }
+
+	     Member cid = postCode.getCid();
+
+	     Subscribe subscribe = new Subscribe();
+	     subscribe.setPostCode(postCode);
+	     subscribe.setRid(rid);
+	     subscribe.setCid(cid);
+
+	     subscribeRepository.save(subscribe);
+	     return "success";
+	 }
 }

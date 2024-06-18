@@ -269,7 +269,7 @@
         <p id="modalMainContent"></p>
         <div class="button-container">
             <button onclick="event.preventDefault()">지원하기</button>
-            <button onclick="event.preventDefault()">스크랩하기</button>
+            <button onclick="scrapJob()">스크랩하기</button>
         </div>
       </div>
     </div>
@@ -348,6 +348,7 @@
         function showModal(posting) {
             const modal = document.getElementById("myModal");
             document.getElementById("modalTitle").innerText = posting.title;
+            document.getElementById("modalTitle").dataset.postCode = posting.post_code;
             document.getElementById("modalDescription").innerText = `${posting.area} - ${posting.industry}`;
             document.getElementById("modalHeadCount").innerText = `Head Count: ${posting.head_count}`;
             document.getElementById("modalEduType").innerText = `Education Type: ${posting.edu_type}`;
@@ -477,51 +478,75 @@
             }
         }
 
+        async function scrapJob() {
+            const postCode = document.getElementById('modalTitle').dataset.postCode;
+            const response = await fetch(`http://localhost:9001/manager/subscribe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    postCode: postCode,
+                    rid: 'user01' // 하드코딩된 사용자 ID
+                })
+            });
+
+            const result = await response.text();
+
+            if (result === 'success') {
+                alert('스크랩 성공!');
+            } else if (result === 'already subscribed') {
+                alert('이미 스크랩되었습니다.');
+            } else {
+                alert('스크랩 실패.');
+            }
+        }
+
         window.onload = findPostings;
         
         // 무한 스크롤
         let page = 0;
-		const size = 10;
-		
-		async function fetchLatestPostings() {
-		    try {
-		        const response = await fetch(`http://localhost:9001/main/main/postings-list?page=${page}&size=${size}`);
-		        if (!response.ok) {
-		            throw new Error('Network response was not ok');
-		        }
-		        const postings = await response.json();
-		        const newPostingsList = document.getElementById('newPostingsList');
-		
-		        postings.forEach(posting => {
-		            const listItem = document.createElement('li');
-		            listItem.className = 'card-wrap';
-		
-		            listItem.innerHTML = `
-		                <div class="company">
-		                    <div class="name">${posting.title}</div>
-		                </div>
-		                <div class="description">${posting.area} - ${posting.industry}</div>
-		            `;
-		
-		            listItem.onclick = () => {
-		                showModal(posting);
-		            };
-		
-		            newPostingsList.appendChild(listItem);
-		        });
-		        page++;
-		    } catch (error) {
-		        console.error('Failed to fetch postings:', error);
-		    }
-		}
-		
-		window.addEventListener('scroll', () => {
-		    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-		        fetchLatestPostings();
-		    }
-		});
-		
-		fetchLatestPostings();  // Initial fetch to populate the list
+        const size = 10;
+
+        async function fetchLatestPostings() {
+            try {
+                const response = await fetch(`http://localhost:9001/main/main/postings-list?page=${page}&size=${size}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const postings = await response.json();
+                const newPostingsList = document.getElementById('newPostingsList');
+
+                postings.forEach(posting => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'card-wrap';
+
+                    listItem.innerHTML = `
+                        <div class="company">
+                            <div class="name">${posting.title}</div>
+                        </div>
+                        <div class="description">${posting.area} - ${posting.industry}</div>
+                    `;
+
+                    listItem.onclick = () => {
+                        showModal(posting);
+                    };
+
+                    newPostingsList.appendChild(listItem);
+                });
+                page++;
+            } catch (error) {
+                console.error('Failed to fetch postings:', error);
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                fetchLatestPostings();
+            }
+        });
+
+        fetchLatestPostings();  // Initial fetch to populate the list
 
     </script>
 </section>
@@ -530,3 +555,4 @@
 </footer>
 </body>
 </html>
+
