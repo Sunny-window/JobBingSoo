@@ -12,9 +12,6 @@ import com.bingsoo.job.entity.Member;
 public interface CompanyRepository extends JpaRepository<Company, String> {
 
 	Optional<Company> findByCno(String cno);
-
-
-
 	Optional<Company> findByCid(Member member);
-
+	Company findByCid(String cid);
 }
