@@ -3,6 +3,7 @@ package com.bingsoo.job.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.bingsoo.job.entity.Member;
@@ -26,4 +27,9 @@ public class PostingService {
 	public List<Posting_skill> getSkillsByPostCode(long post_code) {
 		return postingSkillRepository.findByPostCode(post_code);
 	}
+	
+	public List<Posting> getLatestPostings(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return postingRepository.findAllByOrderByPostedDateDesc(pageRequest).getContent();
+    }
 }
