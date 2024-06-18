@@ -18,15 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bingsoo.job.dto.PostingDto;
 import com.bingsoo.job.dto.RedBeanDto;
 import com.bingsoo.job.entity.MainCategory;
+import com.bingsoo.job.entity.Member;
+import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
+import com.bingsoo.job.entity.RedBean;
 import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.SubCategory;
+import com.bingsoo.job.entity.Subscribe;
 import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.MainCategoryRepository;
+import com.bingsoo.job.repository.NoticeRepository;
 import com.bingsoo.job.repository.PostingRepository;
+import com.bingsoo.job.repository.RedBeanRepository;
 import com.bingsoo.job.repository.SubCategoryRepository;
+import com.bingsoo.job.repository.SubscribeRepository;
 
 @CrossOrigin("*")
 @RestController
@@ -47,6 +54,13 @@ public class IceController {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private NoticeRepository noticeRepository;
+
+    @Autowired
+    private SubscribeRepository subscribeRepository;
+
 
 
     // @GetMapping("/redbean-per-mypost/{postCode}")
@@ -81,9 +95,28 @@ public class IceController {
 
     @PostMapping("/posting")
     public Posting posting(@RequestBody Posting posting) {
+        // 로그인 전 임시 member
+        Member mem = new Member();
+        mem.setUsername("홍길동");        
+        // 공고를 저장하고 반환
+        posting.setCid(mem);
+        postingRepository.save(posting);
+        // 해당 기업을 관심기업으로 설정한 회원들에게 알림 생성 및 저장
+        Company company = companyRepository.findByCid(posting.getCid()).get();
+        List<Subscribe> subscribeList = subscribeRepository.findByCid(posting.getCid());
+
+        for (Subscribe subscribe : subscribeList) {
+            Notice notice = new Notice();
+            notice.setReciever(subscribe.getRid());
+            notice.setSender(posting.getCid());
+            notice.setMessage(company.getCompany_name() + "에서 새로운 공고가 등록되었습니다.");
+            notice.setType("기업알림");
+            noticeRepository.save(notice);
+        }
 
         return postingRepository.save(posting);
     }
+
 
     @GetMapping("/infomation/{cno}")
     public Company infomation(@PathVariable("cno") String cno) {
