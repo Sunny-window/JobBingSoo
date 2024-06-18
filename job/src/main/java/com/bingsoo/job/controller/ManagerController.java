@@ -39,6 +39,7 @@ import com.bingsoo.job.repository.Desired_industryRepository;
 import com.bingsoo.job.repository.MemberRepository;
 import com.bingsoo.job.repository.NoticeRepository;
 import com.bingsoo.job.repository.PostingRepository;
+import com.bingsoo.job.repository.SubscribeRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -66,10 +67,13 @@ public class ManagerController {
 	PostingRepository postingRepository;
 
 	@Autowired
-	private Desired_areaRepository desiredAreaRepository;
+	Desired_areaRepository desiredAreaRepository;
 
 	@Autowired
-	private Desired_industryRepository desiredIndustryRepository;
+	Desired_industryRepository desiredIndustryRepository;
+	
+	@Autowired
+    SubscribeRepository subscribeRepository;
 
 	@GetMapping("/member-all")
 	public Map<String, List<Member>> getData() {
