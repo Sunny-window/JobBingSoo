@@ -254,29 +254,29 @@ public class ManagerController {
 	    }
 	 
 
-	 @PostMapping("/subscribe")
-	 public String subscribe(@RequestBody SubscribeRequest request) {
-	     Posting postCode = postingRepository.findById(request.getPostCode()).orElse(null);
-	     Member rid = memberRepository.findById(request.getRid()).orElse(null);
-
-	     if (postCode == null || rid == null) {
-	         return "fail";
-	     }
-
-	     if (subscribeRepository.existsByPostCodeAndRid(postCode, rid)) {
-	         return "already subscribed";
-	     }
-
-	     Member cid = postCode.getCid();
-
-	     Subscribe subscribe = new Subscribe();
-	     subscribe.setPostCode(postCode);
-	     subscribe.setRid(rid);
-	     subscribe.setCid(cid);
-
-	     subscribeRepository.save(subscribe);
-	     return "success";
-	 }
+//	 @PostMapping("/subscribe")
+//	 public String subscribe(@RequestBody SubscribeRequest request) {
+//	     Posting postCode = postingRepository.findById(request.getPostCode()).orElse(null);
+//	     Member rid = memberRepository.findById(request.getRid()).orElse(null);
+//
+//	     if (postCode == null || rid == null) {
+//	         return "fail";
+//	     }
+//
+//	     if (subscribeRepository.existsByPostCodeAndRid(postCode, rid)) {
+//	         return "already subscribed";
+//	     }
+//
+//	     Member cid = postCode.getCid();
+//
+//	     Subscribe subscribe = new Subscribe();
+//	     subscribe.setPostCode(postCode);
+//	     subscribe.setRid(rid);
+//	     subscribe.setCid(cid);
+//
+//	     subscribeRepository.save(subscribe);
+//	     return "success";
+//	 }
 	 
 	    @GetMapping("/resumes")
 	    public List<Resume> getResumes(@RequestParam("username") String username) {
