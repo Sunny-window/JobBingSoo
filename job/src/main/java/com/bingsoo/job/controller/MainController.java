@@ -164,19 +164,39 @@ public class MainController {
         if (salesFilters.isEmpty()) return true;
         int sales = company.getSales();
         for (String filter : salesFilters) {
-            String[] range = filter.split("-");
-            int min = Integer.parseInt(range[0]);
-            int max = Integer.parseInt(range[1]);
-            if (sales >= min && sales <= max) return true;
+            switch (filter) {
+                case "~3000":
+                    if (sales < 3000) return true;
+                    break;
+                case "3000~5000":
+                    if (sales >= 3000 && sales < 5000) return true;
+                    break;
+                case "5000~7000":
+                    if (sales >= 5000 && sales < 7000) return true;
+                    break;
+                case "7000~":
+                    if (sales >= 7000) return true;
+                    break;
+            }
         }
         return false;
     }
 
     private boolean filterBySize(Company company, List<String> sizeFilters) {
         if (sizeFilters.isEmpty()) return true;
-        String size = company.getSize();
+        int size = Integer.parseInt(company.getSize());
         for (String filter : sizeFilters) {
-            if (size.equals(filter)) return true;
+            switch (filter) {
+                case "대기업":
+                    if (size >= 300) return true;
+                    break;
+                case "중견기업":
+                    if (size >= 100 && size < 300) return true;
+                    break;
+                case "중소기업":
+                    if (size < 100) return true;
+                    break;
+            }
         }
         return false;
     }
@@ -219,7 +239,6 @@ public class MainController {
             this.industry = industry;
         }
     }
-    
     
     @GetMapping("/company-detail/company-info/{cno}")
     public ResponseEntity<CompanyResponse> getCompanyInfo(@PathVariable("cno") String cno) {
