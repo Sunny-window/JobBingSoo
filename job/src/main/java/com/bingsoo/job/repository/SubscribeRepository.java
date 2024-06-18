@@ -10,9 +10,9 @@ import com.bingsoo.job.entity.Subscribe;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long>{
 		
-	 boolean existsByPostCodeAndRid(Posting postCode, Member rid);
+//	 boolean existsByPostCodeAndRid(Posting postCode, Member rid);
 
-	boolean existsByRidAndPostCode(Member rid, Posting post);
+//	boolean existsByRidAndPostCode(Member rid, Posting post);
 	
 
     List<Subscribe> findByCid(Member cid);
