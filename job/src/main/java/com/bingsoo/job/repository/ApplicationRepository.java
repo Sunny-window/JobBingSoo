@@ -3,6 +3,7 @@ package com.bingsoo.job.repository;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -48,6 +49,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 	
 
 	List<Application> findByRid(Member member);
+
+	Optional<Application> findByPostCodeAndRid(Posting post, Member member);
 
 }
 

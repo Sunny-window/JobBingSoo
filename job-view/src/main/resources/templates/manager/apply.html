@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <title>지원하기</title>
     <style>
-       
-        
-       
-        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         h1 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
+
+        .resume-container {
+            width: 30%; /* 넓이 30%로 설정 */
+            margin: 0 auto; /* 가운데로 정렬 */
+        }
+
         .resume-list {
             list-style-type: none;
             padding: 0;
         }
+
         .resume-item {
             background-color: #fff;
             padding: 10px;
@@ -25,11 +34,13 @@
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .button-container {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
         .button-container button {
             background-color: #FF006F;
             color: white;
@@ -42,78 +53,92 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>지원하기</h1>
-</header>
-<section>
-    <ul class="resume-list" id="resumeList"></ul>
-    <div class="button-container">
-        <button onclick="apply()">지원하기</button>
-    </div>
-</section>
-<footer>
-    <p>Copyright © 2023</p>
-</footer>
+    <header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
+    <section class="resume-container">
+        <h3>이력서 리스트</h3>
+        <ul class="resume-list" id="resumeList"></ul>
+        <div class="button-container">
+            <button onclick="apply()">지원하기</button>
+        </div>
+    </section>
+    <footer>
+       
+        <th:block th:insert="~{/sub/footer.html}"></th:block>
+    </footer>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetchResumes();
-    });
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchResumes();
+        });
 
-    async function fetchResumes() {
-        try {
-            const response = await fetch('http://localhost:9001/manager/resumes?username=user01');
-            const resumes = await response.json();
-            const resumeList = document.getElementById('resumeList');
-            resumeList.innerHTML = '';
+        async function fetchResumes() {
+            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+            try {
+                const response = await fetch('http://localhost:9001/manager/resumes', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const resumes = await response.json();
+                const resumeList = document.getElementById('resumeList');
+                resumeList.innerHTML = '';
 
-            resumes.forEach(resume => {
-                const listItem = document.createElement('li');
-                listItem.className = 'resume-item';
-                listItem.innerHTML = `
-                    <input type="radio" name="resume" value="${resume.resume_code}">
-                    <span>${resume.title}</span>
-                `;
-                resumeList.appendChild(listItem);
-            });
-        } catch (error) {
-            console.error('Error fetching resumes:', error);
-        }
-    }
-
-    async function apply() {
-        const selectedResume = document.querySelector('input[name="resume"]:checked');
-        if (!selectedResume) {
-            alert("이력서를 선택해주세요.");
-            return;
-        }
-
-        const postCode = new URLSearchParams(window.location.search).get('postCode');
-        const applyRequest = {
-            postCode: postCode,
-            rid: 'user01',
-            resumeCode: selectedResume.value
-        };
-
-        try {
-            const response = await fetch('http://localhost:9001/manager/apply', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(applyRequest)
-            });
-            const result = await response.text();
-            if (result === 'success') {
-                alert("지원이 완료되었습니다.");
-            } else {
-                alert("지원에 실패하였습니다.");
+                resumes.forEach(resume => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'resume-item';
+                    listItem.innerHTML = `
+                        <input type="radio" name="resume" value="${resume.resume_code}">
+                        <span>${resume.title}</span>
+                    `;
+                    resumeList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching resumes:', error);
             }
-        } catch (error) {
-            console.error('Error applying:', error);
         }
-    }
-</script>
+
+        async function apply() {
+            const selectedResume = document.querySelector('input[name="resume"]:checked');
+            if (!selectedResume) {
+                alert("이력서를 선택해주세요.");
+                return;
+            }
+
+            const postCode = new URLSearchParams(window.location.search).get('postCode');
+            const applyRequest = {
+                postCode: postCode,
+                resumeCode: selectedResume.value
+            };
+
+            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+            try {
+                const response = await fetch('http://localhost:9001/manager/apply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(applyRequest)
+                });
+                const result = await response.text();
+                if (result === 'success') {
+                    alert("지원이 완료되었습니다.");
+                } else if (result === 'invalid token') {
+                    alert("유효하지 않은 토큰입니다.");
+                } else if (result === 'already applied') {
+                    alert("이미 지원한 공고입니다.");
+                } else {
+                    alert("지원에 실패하였습니다.");
+                }
+            } catch (error) {
+                console.error('Error applying:', error);
+            }
+        }
+    </script>
 </body>
 </html>
+
 

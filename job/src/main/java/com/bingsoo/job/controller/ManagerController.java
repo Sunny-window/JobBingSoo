@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,23 +32,27 @@ import com.bingsoo.job.entity.Cs;
 import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.Desired_area;
 import com.bingsoo.job.entity.Desired_industry;
+import com.bingsoo.job.entity.Favorite;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
 import com.bingsoo.job.entity.Resume;
 import com.bingsoo.job.entity.Subscribe;
+import com.bingsoo.job.jwtToken.JWTUtil;
 import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.CsRepository;
 import com.bingsoo.job.repository.Cs_replyRepository;
 import com.bingsoo.job.repository.Desired_areaRepository;
 import com.bingsoo.job.repository.Desired_industryRepository;
+import com.bingsoo.job.repository.FavoriteRepository;
 import com.bingsoo.job.repository.MemberRepository;
 import com.bingsoo.job.repository.NoticeRepository;
 import com.bingsoo.job.repository.PostingRepository;
 import com.bingsoo.job.repository.ResumeRepository;
 import com.bingsoo.job.repository.SubscribeRepository;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -78,15 +83,15 @@ public class ManagerController {
 
 	@Autowired
 	Desired_industryRepository desiredIndustryRepository;
-	
+
 	@Autowired
-    SubscribeRepository subscribeRepository;
-	
+	FavoriteRepository favoriteRepository;
+
 	@Autowired
-    ApplicationRepository applicationRepository;
-	
-	 @Autowired
-	 ResumeRepository resumeRepository;
+	ApplicationRepository applicationRepository;
+
+	@Autowired
+	ResumeRepository resumeRepository;
 
 	@GetMapping("/member-all")
 	public Map<String, List<Member>> getData() {
@@ -236,8 +241,19 @@ public class ManagerController {
 	}
 
 	 @GetMapping("/find-postings")
-	    public List<Posting> findPostingsForUser() {
-	        String username = "user01"; // 하드코딩된 사용자명
+	    public List<Posting> findPostingsForUser(@RequestHeader("Authorization") String token) {
+	        // JWT에서 "Bearer " 접두사 제거
+	        if (token.startsWith("Bearer ")) {
+	            token = token.substring(7);
+	        }
+
+	        // JWT 검증 및 사용자 이름 추출
+	        if (!JWTUtil.validateToken(token)) {
+	            return null;
+	        }
+	        Claims claims = JWTUtil.parseToken(token);
+	        String username = claims.getSubject();
+
 	        Optional<Member> memberOptional = memberRepository.findById(username);
 	        if (memberOptional.isPresent()) {
 	            Member member = memberOptional.get();
@@ -247,12 +263,12 @@ public class ManagerController {
 	            if (desiredAreaOptional.isPresent() && desiredIndustryOptional.isPresent()) {
 	                Desired_area desiredArea = desiredAreaOptional.get();
 	                Desired_industry desiredIndustry = desiredIndustryOptional.get();
+
 	                return postingRepository.findByAreaAndIndustry(desiredArea.getArea_main(), desiredIndustry.getIndustry());
 	            }
 	        }
 	        return null;
 	    }
-	 
 
 //	 @PostMapping("/subscribe")
 //	 public String subscribe(@RequestBody SubscribeRequest request) {
@@ -277,9 +293,21 @@ public class ManagerController {
 //	     subscribeRepository.save(subscribe);
 //	     return "success";
 //	 }
-	 
-	    @GetMapping("/resumes")
-	    public List<Resume> getResumes(@RequestParam("username") String username) {
+
+	 @GetMapping("/resumes")
+	    public List<Resume> getResumes(@RequestHeader("Authorization") String token) {
+	        // JWT에서 "Bearer " 접두사 제거
+	        if (token.startsWith("Bearer ")) {
+	            token = token.substring(7);
+	        }
+
+	        // JWT 검증 및 사용자 이름 추출
+	        if (!JWTUtil.validateToken(token)) {
+	            return null;
+	        }
+	        Claims claims = JWTUtil.parseToken(token);
+	        String username = claims.getSubject();
+
 	        Member member = memberRepository.findById(username).orElse(null);
 	        if (member != null) {
 	            return resumeRepository.findByRid(member);
@@ -287,22 +315,76 @@ public class ManagerController {
 	        return null;
 	    }
 
-	    @PostMapping("/apply")
-	    public String apply(@RequestBody ApplyRequest request) {
-	        Posting post = postingRepository.findById(request.getPostCode()).orElse(null);
-	        Member member = memberRepository.findById(request.getRid()).orElse(null);
-	        Resume resume = resumeRepository.findById(request.getResumeCode()).orElse(null);
+	 @PostMapping("/apply")
+	 public String apply(@RequestBody ApplyRequest request, @RequestHeader("Authorization") String token) {
+	     // JWT에서 "Bearer " 접두사 제거
+	     if (token.startsWith("Bearer ")) {
+	         token = token.substring(7);
+	     }
 
-	        if (post == null || member == null || resume == null) {
-	            return "fail";
-	        }
+	     // JWT 검증 및 사용자 이름 추출
+	     if (!JWTUtil.validateToken(token)) {
+	         return "invalid token";
+	     }
+	     Claims claims = JWTUtil.parseToken(token);
+	     String username = claims.getSubject();
 
-	        Application application = new Application();
-	        application.setPostCode(post);
-	        application.setRid(member);
-	        application.setResult("지원 완료");
+	     Posting post = postingRepository.findById(request.getPostCode()).orElse(null);
+	     Member member = memberRepository.findById(username).orElse(null);
+	     Resume resume = resumeRepository.findById(request.getResumeCode()).orElse(null);
 
-	        applicationRepository.save(application);
-	        return "success";
-	    }
+	     if (post == null || member == null || resume == null) {
+	         return "fail";
+	     }
+
+	     // 이미 지원한 공고인지 확인
+	     Optional<Application> existingApplication = applicationRepository.findByPostCodeAndRid(post, member);
+	     if (existingApplication.isPresent()) {
+	         return "already applied";
+	     }
+
+	     Application application = new Application();
+	     application.setPostCode(post);
+	     application.setRid(member);
+	     application.setResult("지원 완료");
+
+	     applicationRepository.save(application);
+	     return "success";
+	 }
+	
+
+    @PostMapping("/favorite")
+    public String addFavorite(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+        String postCode = request.get("postCode");
+
+        // JWT에서 "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // JWT 검증 및 사용자 이름 추출
+        if (!JWTUtil.validateToken(token)) {
+            return "invalid token";
+        }
+        Claims claims = JWTUtil.parseToken(token);
+        String username = claims.getSubject();
+
+        Posting post = postingRepository.findById(Long.parseLong(postCode)).orElse(null);
+        Member user = memberRepository.findById(username).orElse(null);
+
+        if (post == null || user == null) {
+            return "fail";
+        }
+
+        if (favoriteRepository.existsByPostCodeAndUsername(post, user)) { // 수정된 메서드명 사용
+            return "already favorite";
+        }
+
+        Favorite favorite = new Favorite();
+        favorite.setPostCode(post); // 필드명을 정확히 사용
+        favorite.setUsername(user);
+
+        favoriteRepository.save(favorite);
+        return "success";
+    }
 }

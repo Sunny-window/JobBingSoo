@@ -18,9 +18,10 @@ import com.bingsoo.job.entity.Posting;
 public interface PostingRepository extends JpaRepository<Posting, Long> {
 
 	@Query("SELECT p FROM Posting p WHERE p.area = :area AND p.industry = :industry")
-	List<Posting> findByAreaAndIndustry(@Param("area") String area, @Param("industry") String industry);
+    List<Posting> findByAreaAndIndustry(@Param("area") String area, @Param("industry") String industry);
 
-	List<Posting> findByPostedDateBetween(LocalDate startDate, LocalDate endDate);
+
+	    List<Posting> findByPostedDateBetween(LocalDate startDate, LocalDate endDate);
 
 	void deleteById(long postCode);
 
