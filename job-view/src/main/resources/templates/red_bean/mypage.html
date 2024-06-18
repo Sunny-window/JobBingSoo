@@ -207,15 +207,55 @@ function createResumeTable(jsonData) {
 	return html;
 }
 
-function resumeUpdateInfo(event) {
+function resumeUpdateInfo(event,resume_code) {
 	event.preventDefault();
-	var rb_code = document.querySelector('input[id="rb_code"]').value;
 	
-	const member = {
-		rb_code: rb_code,
+	var name = document.querySelector('input[id="name"]').value;
+	var address = document.querySelector('input[id="address"]').value;
+	var tel = document.querySelector('input[id="tel"]').value;
+	var email = document.querySelector('input[id="email"]').value;
+	var edu_name = document.querySelector('input[id="edu_name"]').value;
+	var edu_major = document.querySelector('input[id="edu_major"]').value;
+	var edu_type = document.querySelector('input[id="edu_type"]').value;
+	var edu_state= document.querySelector('input[id="edu_state"]').value;
+	
+	var area_main= document.querySelector('input[id="area_main"]').value;
+	var area_sub= document.querySelector('input[id="area_sub"]').value;
+	var job= document.querySelector('input[id="job"]').value;
+	var companyname= document.querySelector('input[id="companyname"]').value;
+	var cardate= document.querySelector('input[id="cardate"]').value;
+	var industry = document.querySelector('input[id="industry"]').value;
+	var position= document.querySelector('input[id="position"]').value;
+	var job= document.querySelector('input[id="job"]').value;
+	var stack= document.querySelector('input[id="stack"]').value;
+	var optain_date= document.querySelector('input[id="optain_date"]').value;
+	var issuer= document.querySelector('input[id="issuer"]').value;
+	var sungjang= document.querySelector('input[id="sungjang"]').value;
+	var juwondongki= document.querySelector('input[id="juwondongki"]').value;
+	var jangdanzeum= document.querySelector('input[id="jangdanzeum"]').value;
+	
+
+	const ResumeDto = {
+			name: name,
+			address: address,
+			tel: tel,
+			email: email,
+			edu_name: edu_name,
+			edu_type: edu_type,
+			edu_major: edu_major,
+			edu_state: edu_state,
+			area_main: area_main,
+			area_sub: area_sub,
+			job: job,
+			stack: stack,
+			optain_date: optain_date,
+			issuer: issuer,
+			sungjang: sungjang,
+			juwondongki: juwondongki,
+			jangdanzeum: jangdanzeum,
 	}
 	const sendData = JSON.stringify(member);
-	fetch("http://localhost:9001/resumeUpdate", {
+	fetch("http://localhost:9001/resumeUpdate?resume_code="+resume_code, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -230,6 +270,48 @@ function resumeUpdateInfo(event) {
 			document.getElementById("totalResult").innerHTML = error;
 		});
 }
+
+function updateInfo(event){
+	event.preventDefault();
+	var rb_code = document.querySelector('input[id="rb_code"]').value;
+	var name = document.querySelector('input[id="name"]').value;
+	var birth = document.querySelector('input[id="birth"]').value;
+	var tel = document.querySelector('input[id="tel"]').value;
+	var address = document.querySelector('input[id="address"]').value;
+	var email = document.querySelector('input[id="email"]').value;
+	var gender = document.querySelector('input[id="gender"]').value;
+	var military= document.querySelector('input[id="military"]').value;
+	  const member = {
+			  rb_code:rb_code,
+			  name: name,
+			  birth: birth,
+			  tel:tel,
+			  address:address,
+			  email:email,
+			  gender:gender,
+			  military:military,
+		    }
+	console.log("============= member"+member);
+	const sendData = JSON.stringify(member);
+    fetch("http://localhost:9001/updateInfo", { // 서버에 요청을 보냅니다.
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json" // 요청의 헤더 설정
+        },
+        body: sendData // 전송할 데이터
+    })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("totalResult").innerHTML = data;
+            /* approvalBtn.innerHTML = data; // 버튼의 내용을 변경합니다.*/
+        })
+        .catch(error => {
+            document.getElementById("totalResult").innerHTML = error;
+        });
+
+}
+
+
 
 function showResumeDetail(event) {
 	event.preventDefault();
@@ -271,38 +353,44 @@ function showResumeUpdateForm(event,resume_code) {
 				인적사항
 				<hr>
 				성명<input type="text" id="name" name="name" value=${data.name}><br>
-				주소<input type="text" id="address" name="address" value=${data} ><br>
-				휴대전화<input type="text" id="tel" name="tel" ><br>
-				이메일<input type="text" id="email" name="email" ><br>
+				주소<input type="text" id="address" name="address" value=${data.address} ><br>
+				휴대전화<input type="text" id="tel" name="tel" value=${data.tel}><br>
+				이메일<input type="text" id="email" name="email" value=${data.email}><br>
 				<hr>
 				학력사항
 				<hr>
-				학력<input type="text" id="edu_name" name="edu_name" ><br>
-				학력구분<input type="text" id="edu_type" name="edu_type" ><br>
-				전공<input type="text" id="edu_major" name="edu_major" ><br>
-				학력상태<input type="text" id="edu_state" name="edu_state" ><br>
+				학력<input type="text" id="edu_name" name="edu_name" value=${data.edu_name}><br>
+				학력구분<input type="text" id="edu_type" name="edu_type" value=${data.edu_type} ><br>
+				전공<input type="text" id="edu_major" name="edu_major" value=${data.edu_major}><br>
+				학력상태<input type="text" id="edu_state" name="edu_state" value=${data.edu_state}><br>
 				<hr>
-				자소서
+				자소서<br>
+				성장과정<br>
+				<textarea id="sungjang" name="sungjang">${data.sungjang}</textarea><br>
+				지원동기<br>
+				<textarea id="juwondongki" name="juwondongki" >${data.juwondongki}</textarea><br>
+				장단점<br>
+				<textarea id="jangdanzeum" name="jangdanzeum">${data.jangdanzeum}</textarea><br>
 				<hr>
-				<textarea></textarea>
-				<hr>
+				
+				
 				희망근무지역
 				<hr>
-				1지망<input type="text" id="area_main" name="area_main" ><br>
-				2지망<input type="text" id="area_sub" name="area_sub" ><br>
+				1지망<input type="text" id="area_main" name="area_main" value=${data.area_main} ><br>
+				2지망<input type="text" id="area_sub" name="area_sub" value=${data.area_sub} ><br>
 				희망직무산업
 				<hr>
-				산업<input type="text" id="industry" name="industry" ><br>
-				직무<input type="text" id="job" name="job" ><br>
+				산업<input type="text" id="industry" name="industry" value=${data.industry} ><br>
+				직무<input type="text" id="job" name="job" value=${data.job}><br>
 				<hr>
 				경력사항
 				<hr>
-				사명<input type="text" id="companyname" name="companyname" ><br>
-				입사일<input type="text" id="cardate" name="cardate" ><br>
-				퇴사일<input type="text" id="enddate" name="enddate" ><br>
-				산업군<input type="text" id="industry" name="industry" ><br>
-				직책<input type="text" id="position" name="position" ><br>
-				직무<input type="text" id="job" name="job" ><br>
+				사명<input type="text" id="companyname" name="companyname" value=${data.companyname}><br>
+				입사일<input type="text" id="cardate" name="cardate" value=${data.cardate}><br>
+				퇴사일<input type="text" id="enddate" name="enddate" value=${data.enddate}><br>
+				산업군<input type="text" id="industry" name="industry" value=${data.industry}><br>
+				직책<input type="text" id="position" name="position" value=${data.position} ><br>
+				직무<input type="text" id="job" name="job" value=${data.job}><br>
 				<hr>
 				이력서 기술스택
 				<hr>
@@ -310,13 +398,14 @@ function showResumeUpdateForm(event,resume_code) {
 				<hr>
 				보유 자격증
 				<hr> 
-				자격증명 <input type="text" id="stack" name="stack" ><br>
-				취득일 <input type="text" id="optain_date" name="optain_date" ><br>
-				발급기관 <input type="text" id="issuer" name="issuer" ><br>
+				자격증명 <input type="text" id="stack" name="stack"  value=${data.cer_stack[0].stack} ><br>
+		
+				취득일 <input type="text" id="optain_date" name="optain_date" value=${data.cer_stack[0].optain_date} ><br>
+				발급기관 <input type="text" id="issuer" name="issuer" value=${data.cer_stack[0].issuer}><br>
 				<button>자격증 추가</button>
 				<br>
 				
-				<button id = resumeUpdateInfo onclick="resumeUpdateInfo(event)" >수정하기</button>
+				<button id = resumeUpdateInfo onclick="resumeUpdateInfo(event,${resume_code})" >수정하기</button>
 				
 
 				</div>
@@ -331,7 +420,6 @@ function showResumeUpdateForm(event,resume_code) {
 		.catch(error => {
 			document.getElementById("totalResult").innerHTML = error;
 		});
-	
 }
 
 function showFavoriteScrab(event) {
