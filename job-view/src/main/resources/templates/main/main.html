@@ -64,7 +64,7 @@
         .branding {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: flex-start;
             padding: 0;
             margin: 0;
             list-style-type: none;
@@ -76,7 +76,7 @@
             margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            text-align: center;
+            text-align: left;
             box-sizing: border-box;
             width: calc(25% - 20px); /* 4개씩 배치 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -85,7 +85,7 @@
 
         .branding .card-wrap .company {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             flex-direction: column;
         }
@@ -165,10 +165,18 @@
             .branding .card-wrap {
                 width: calc(33.33% - 20px); /* 3개씩 배치 */
             }
+
+            #newPostingsList .card-wrap {
+                width: calc(33.33% - 20px); /* 3개씩 배치 */
+            }
         }
 
         @media (max-width: 768px) {
             .branding .card-wrap {
+                width: calc(50% - 20px); /* 2개씩 배치 */
+            }
+
+            #newPostingsList .card-wrap {
                 width: calc(50% - 20px); /* 2개씩 배치 */
             }
         }
@@ -178,9 +186,49 @@
                 width: calc(100% - 20px); /* 1개씩 배치 */
             }
 
+            #newPostingsList .card-wrap {
+                width: calc(100% - 20px); /* 1개씩 배치 */
+            }
+
             h1 {
                 font-size: 1.5em;
             }
+        }
+
+        /* 새로운 항목 스타일 */
+        #newPostingsList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        #newPostingsList .card-wrap {
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            text-align: left;
+            box-sizing: border-box;
+            width: calc(25% - 20px); /* 4개씩 배치 */
+            height: 200px; /* 높이 설정 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #newPostingsList .card-wrap .company .name {
+            font-weight: bold;
+            font-size: 1.5em; /* 타이틀 크기 설정 */
+        }
+
+        #newPostingsList .card-wrap .description {
+            font-size: 1em; /* 설명 크기 설정 */
         }
     </style>
 </head>
@@ -195,6 +243,11 @@
     </h1>
     
     <ul class="branding" id="postingsList"></ul>
+    
+    <h1>최신 공고 모아보기</h1>
+    <ul id="newPostingsList">
+        <!-- 새로운 리스트 항목 -->
+    </ul>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -425,6 +478,51 @@
         }
 
         window.onload = findPostings;
+        
+        // 무한 스크롤
+        let page = 0;
+		const size = 10;
+		
+		async function fetchLatestPostings() {
+		    try {
+		        const response = await fetch(`http://localhost:9001/main/main/postings-list?page=${page}&size=${size}`);
+		        if (!response.ok) {
+		            throw new Error('Network response was not ok');
+		        }
+		        const postings = await response.json();
+		        const newPostingsList = document.getElementById('newPostingsList');
+		
+		        postings.forEach(posting => {
+		            const listItem = document.createElement('li');
+		            listItem.className = 'card-wrap';
+		
+		            listItem.innerHTML = `
+		                <div class="company">
+		                    <div class="name">${posting.title}</div>
+		                </div>
+		                <div class="description">${posting.area} - ${posting.industry}</div>
+		            `;
+		
+		            listItem.onclick = () => {
+		                showModal(posting);
+		            };
+		
+		            newPostingsList.appendChild(listItem);
+		        });
+		        page++;
+		    } catch (error) {
+		        console.error('Failed to fetch postings:', error);
+		    }
+		}
+		
+		window.addEventListener('scroll', () => {
+		    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+		        fetchLatestPostings();
+		    }
+		});
+		
+		fetchLatestPostings();  // Initial fetch to populate the list
+
     </script>
 </section>
 <footer>
@@ -432,6 +530,3 @@
 </footer>
 </body>
 </html>
-
-
-

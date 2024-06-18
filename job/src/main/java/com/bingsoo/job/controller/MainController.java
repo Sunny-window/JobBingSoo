@@ -595,4 +595,9 @@ public class MainController {
 			this.cid = cid;
 		}
     }
+    
+    @GetMapping("/main/postings-list")
+    public List<Posting> getLatestPostings(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
+        return postingService.getLatestPostings(page, size);
+    }
 }
