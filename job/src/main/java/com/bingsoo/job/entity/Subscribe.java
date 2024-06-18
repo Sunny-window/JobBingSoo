@@ -27,5 +27,10 @@ public class Subscribe {
 
     @ManyToOne
     @JoinColumn(name = "rid")
-    private Member rid; 
+    private Member rid;
+
+	public void setPostCode(Posting posting) {
+		
+		
+	} 
 }
