@@ -12,6 +12,11 @@
     <header>
         <th:block th:insert="~{/sub/header.html}"></th:block>
     </header>
+    <style>
+        .content{
+            cursor: pointer;
+        }
+    </style>
     <section>
         <h1>공고 관리 페이지</h1>
         <hr>
@@ -55,12 +60,14 @@
                         let div = document.createElement('div');
                         // 새로운 div 요소를 생성
 
+                        let button0 = document.createElement('button');
                         let button1 = document.createElement('button');
                         let button2 = document.createElement('button');
                         let button3 = document.createElement('button');
                         // 각각의 버튼 요소를 생성
 
                         // 버튼에 텍스트 내용 설정
+                        button0.textContent = '알림';
                         button1.textContent = '지원자 보기';
                         button2.textContent = '공고 수정';
                         button3.textContent = '공고 삭제';
@@ -68,6 +75,7 @@
                         // div 요소에 텍스트 내용 추가
                         div.textContent = `제목: ${posting.title}, 마감일: ${posting.deadline}, 주소: ${posting.address}, 회사명: ${posting.company_name}`;
                         // div 요소에 버튼 요소들을 자식 요소로 추가
+                        div.appendChild(button0);
                         div.appendChild(button1);
                         div.appendChild(button2);
                         div.appendChild(button3);
@@ -76,13 +84,24 @@
                         contentDiv.appendChild(div);
 
                         // 각 버튼에 클릭 이벤트 리스너 추가
+                        noticeSend(button0, posting.post_code);
                         applicationList(button1, posting.post_code);
                         noticeUpdate(button2, posting.post_code);
                         noticeDelete(button3, posting.post_code);
+
+                        div.addEventListener('click', () => {
+                            window.location.href = posting.post_code;
+                        });
                     });
                 })
                 .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
             // 오류 발생 시 콘솔에 오류 메시지 출력
+        }
+        function noticeSend(button0, postCode) {
+            button1.addEventListener('click', () => {
+                // 클릭 시 실행될 코드
+                Notification();
+            });
         }
 
         function applicationList(button1, postCode) {
