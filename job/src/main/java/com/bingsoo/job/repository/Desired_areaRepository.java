@@ -10,5 +10,4 @@ import com.bingsoo.job.entity.Member;
 public interface Desired_areaRepository extends JpaRepository<Desired_area, Long>{
 
 	Optional<Desired_area> findByRid(Member rid);
-	Desired_area findByRid(String rid);
 }
