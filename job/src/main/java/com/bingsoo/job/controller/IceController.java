@@ -13,18 +13,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bingsoo.job.dto.PostingDto;
 import com.bingsoo.job.dto.RedBeanDto;
 import com.bingsoo.job.entity.MainCategory;
 import com.bingsoo.job.entity.Posting;
+import com.bingsoo.job.entity.Application;
+import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.SubCategory;
 import com.bingsoo.job.repository.ApplicationRepository;
+import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.MainCategoryRepository;
 import com.bingsoo.job.repository.PostingRepository;
-import com.bingsoo.job.repository.RedBeanRepository;
 import com.bingsoo.job.repository.SubCategoryRepository;
 
 @CrossOrigin("*")
@@ -44,6 +45,9 @@ public class IceController {
     @Autowired
     private SubCategoryRepository subCategoryRepository;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
 
     // @GetMapping("/redbean-per-mypost/{postCode}")
     // public List<Application> redBeanApplication(@PathVariable("postCode") Long postCode) {
@@ -56,7 +60,7 @@ public class IceController {
     public List<RedBeanDto> RedBeanList(@RequestParam("postcode") Long postCode) {
         
         List<RedBeanDto> reds = applicationRepository.findRedBeanByRid(postCode);
-
+        
         return reds;
 
     }
@@ -81,8 +85,14 @@ public class IceController {
         return postingRepository.save(posting);
     }
 
+    @GetMapping("/infomation/{cno}")
+    public Company infomation(@PathVariable("cno") String cno) {
+
+        return companyRepository.findById(cno).orElse(null);
+    }
+
     @GetMapping("/posting/{post_code}")
-    public Posting getPostingsByPostCode(@PathVariable("post_code") Long postCode) {
+    public Posting posting(@PathVariable("post_code") Long postCode) {
         return postingRepository.findById(postCode).orElse(null);
     }
 
@@ -116,5 +126,24 @@ public class IceController {
         List<SubCategory> subCategories = subCategoryRepository.findByMccode(mainCategory);
         return ResponseEntity.ok(subCategories);
     }
+
+    @PostMapping("/reject")
+    public Application reject(@RequestParam("app_code") Long appCode) {
+        Application application = applicationRepository.findById(appCode).get();
+
+        application.setResult("불합격");
+
+        return applicationRepository.save(application);
+    }
+
+    @PostMapping("/approve")
+    public Application approve(@RequestParam("app_code") Long appCode) {
+        Application application = applicationRepository.findById(appCode).get();
+
+        application.setResult("합격");
+        
+        return applicationRepository.save(application);
+    }
+
 
 }
