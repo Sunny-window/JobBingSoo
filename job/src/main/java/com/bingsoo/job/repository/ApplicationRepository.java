@@ -16,7 +16,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     List<Application> findByPostCode(Posting postCode);
 
-    @Query(value = "SELECT r.name, r.address, r.birth, r.gender " +
+    @Query(value = "SELECT r.name, r.address, r.birth, r.gender, a.result, a.app_code " +
         "FROM Application a " +
         "JOIN red_bean r ON r.rid = a.rid " +
         "WHERE a.post_code = :postcode", nativeQuery = true)
@@ -35,6 +35,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             dto.setAddress((String) db_result[1]);
             dto.setBirth((Date) db_result[2]);
             dto.setGender((String) db_result[3]);
+            dto.setResult((String) db_result[4]);
+            dto.setApp_code((Long) db_result[5]);
 
             dtos.add(dto);
         }

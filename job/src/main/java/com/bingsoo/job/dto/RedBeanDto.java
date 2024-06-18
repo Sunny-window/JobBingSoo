@@ -14,5 +14,7 @@ public class RedBeanDto {
     private String address;
     private Date birth;
     private String gender;
+    private Long app_code;
+    private String result;
 
 }
