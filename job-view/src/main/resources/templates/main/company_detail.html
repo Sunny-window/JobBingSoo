@@ -88,7 +88,9 @@
     </style>
 </head>
 <body>
-    <header th:replace="/sub/header"></header>
+    <header>
+    	<th:block th:insert="~{/sub/header.html}"></th:block>
+	</header>
 
     <section class="section-container">
         <div class="company-info">
