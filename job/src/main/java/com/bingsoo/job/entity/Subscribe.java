@@ -17,20 +17,23 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 public class Subscribe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long subs_code;
+	   @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private long subs_code;
 
-    @ManyToOne
-    @JoinColumn(name = "cid")
-    private Member cid; 
+	    @ManyToOne
+	    @JoinColumn(name = "cid")
+	    private Member cid;
 
-    @ManyToOne
-    @JoinColumn(name = "rid")
-    private Member rid;
+	    @ManyToOne
+	    @JoinColumn(name = "rid")
+	    private Member rid;
 
-	public void setPostCode(Posting posting) {
-		
-		
-	} 
-}
+	    @ManyToOne
+	    @JoinColumn(name = "post_code")
+	    private Posting postCode;
+
+	    @ManyToOne
+	    @JoinColumn(name = "company_id")
+	    private Company company;
+	}
