@@ -29,5 +29,8 @@ public class ResumeDto {
 	private List<Certificate> skill_stack;
 	private LocalDate optain_date;
 	private String issuer;
+	private String sungjang;
+	private String juwondongki;
+	private String jangdanzeum;
 	
 }
