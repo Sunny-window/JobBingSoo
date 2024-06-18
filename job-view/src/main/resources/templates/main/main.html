@@ -6,6 +6,7 @@
     <!-- 폰트 첨부 -->
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/typeit/7.0.4/typeit.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Gowun Dodum', sans-serif;
@@ -30,6 +31,14 @@
             width: 100%;
             max-width: 1200px;
             box-sizing: border-box;
+        }
+
+        .typeit-container {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -180,6 +189,7 @@
     <th:block th:insert="~{/sub/header.html}"></th:block>
 </header>
 <section>
+    <div class="typeit-container" id="typeit-container"></div>
     <h1>회원 맞춤 추천 공고
         <button class="weather-button" onclick="openWeatherModal()">⛅오늘의 날씨</button>
     </h1>
@@ -221,7 +231,34 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/7.0.4/typeit.min.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            new TypeIt('#typeit-container', {
+                strings: ["FIND YOUR BOY or GIRL FRIEND."],
+                speed: 50,
+                waitUntilVisible: true,
+                afterComplete: function(instance) {
+                    setTimeout(function() {
+                        new TypeIt('#typeit-container', {
+                            speed: 50,
+                            lifeLike: true,
+                            cursor: true,
+                            deleteSpeed: 50,
+                            startDelete: 10,
+                            afterComplete: function(newInstance) {
+                                newInstance.destroy();
+                            }
+                        })
+                        .move(-14) // Move cursor to the beginning of "BOY or GIRL FRIEND."
+                        .delete(14) // Delete "BOY or GIRL FRIEND."
+                        .type('FIND YOUR JOB!')
+                        .go();
+                    }, 2000); // 2초 후에 시작
+                }
+            }).go();
+        });
+
         async function findPostings() {
             try {
                 const response = await fetch('http://localhost:9001/manager/find-postings');
@@ -395,3 +432,6 @@
 </footer>
 </body>
 </html>
+
+
+
