@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.bingsoo.job.dto.RedBeanDto;
 import com.bingsoo.job.entity.Application;
+import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Posting;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
@@ -43,6 +44,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         
         return dtos;
     }
+
+	
+
+	List<Application> findByRid(Member member);
 
 }
 

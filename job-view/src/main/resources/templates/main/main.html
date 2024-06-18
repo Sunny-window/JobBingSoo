@@ -8,24 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/typeit/7.0.4/typeit.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Gowun Dodum', sans-serif;
-            background-color: #f8f8f8;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header, footer {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            width: 100%;
-        }
-
+        /* 스타일 생략 */
         section {
             padding: 20px;
             width: 100%;
@@ -268,7 +251,7 @@
         <p id="modalManagerTel"></p>
         <p id="modalMainContent"></p>
         <div class="button-container">
-            <button onclick="event.preventDefault()">지원하기</button>
+            <button onclick="goToApplyPage()">지원하기</button>
             <button onclick="scrapJob()">스크랩하기</button>
         </div>
       </div>
@@ -502,6 +485,11 @@
             }
         }
 
+        function goToApplyPage() {
+            const postCode = document.getElementById('modalTitle').dataset.postCode;
+            window.location.href = `/manager/apply?postCode=${postCode}`;
+        }
+
         window.onload = findPostings;
         
         // 무한 스크롤
@@ -555,4 +543,5 @@
 </footer>
 </body>
 </html>
+
 
