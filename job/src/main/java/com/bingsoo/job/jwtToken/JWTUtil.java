@@ -40,4 +40,14 @@ public class JWTUtil {
             return false;
         }
     }
+
+    public static String getRole(String token) {
+        Claims claims = parseToken(token);
+        return claims.get("role", String.class);
+    }
+
+    public static String getUsername(String token) {
+        Claims claims = parseToken(token);
+        return claims.getSubject();
+    }
 }

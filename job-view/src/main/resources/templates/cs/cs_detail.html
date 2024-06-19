@@ -103,9 +103,14 @@
         <script>
             function deletecs() {
                 const csCode = document.getElementById('cs_code_input').value;
+                const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옴
 
                 fetch('http://localhost:9001/cs/cs?csCode=' + csCode, {
                     method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
+                        'Content-Type': 'application/json'
+                    }
                 })
                     .then(() => {
                         window.location.href = `/cs/list?menu_select=3`;
