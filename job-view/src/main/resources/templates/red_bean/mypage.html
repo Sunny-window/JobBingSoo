@@ -130,7 +130,6 @@ th {
 		<br>
 		<button id="" onclick="showApplicationList(event)" >입사지원현황</button>
 		<br>
-		
 
 		<div id="totalResult"></div>
 	</section>
@@ -166,11 +165,39 @@ $(document).ready(function() {
 	});
 });
 
+
+$(document).ready(function() {
+    // 자격증 추가 버튼 클릭 시 동작
+    $("#addCertiBtn").click(function() {
+        var certiDiv = $("<div>").addClass("certi-container"); // 새로운 div 요소 생성 및 클래스 추가
+        var inputField = $("<input>").attr({
+            type: "text",
+            placeholder: "자격증명",
+            name: "stack"
+        });
+        var dateField = $("<input>").attr({
+            type: "text",
+            placeholder: "취득일",
+            name: "optain_date"
+        });
+        var issuerField = $("<input>").attr({
+            type: "text",
+            placeholder: "발급기관",
+            name: "issuer"
+        });
+        certiDiv.append(inputField, dateField, issuerField); // 각 입력 필드를 새로운 div에 추가
+        $("#certiContainer").append(certiDiv); // 생성된 div를 기존의 div에 추가
+    });
+});
+
+
+
+
 function showResumeList(event) {
 	event.preventDefault();
 	
 	console.log("=============");
-	fetch("http://localhost:9001/showResumeList", { // 서버에 요청을 보냅니다.
+	fetch("http://localhost:9001/redbean/showResumeList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -198,7 +225,7 @@ function createResumeTable(jsonData) {
 		html += `<input id="resume_code_${item.resume_code}" type="hidden" value="${item.resume_code}">`;
 		html += `<td id="resumeDetailTd" onclick="showResumeDetail(event)">${item.title}</td>`;
 		html += `<td id="resumeUpdateBtn" onclick="showResumeUpdateForm(event, '${item.resume_code}')">수정</td>`;
-		html += '<td>삭제</td>';
+		html += `<td id="resumeDeleteBtn" onclick="deleteResume(event, '${item.resume_code}')">삭제</td>`;
 		html += '</tr>';
 	});
 
@@ -253,7 +280,7 @@ function resumeUpdateInfo(event, resume_code) {
         jangdanzeum: jangdanzeum,
     }
     const sendData = JSON.stringify(ResumeDto);
-    fetch("http://localhost:9001/resumeUpdate?resume_code=" + resume_code, {
+    fetch("http://localhost:9001/redbean/resumeUpdate?resume_code=" + resume_code, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
@@ -268,6 +295,27 @@ function resumeUpdateInfo(event, resume_code) {
         document.getElementById("totalResult").innerHTML = error;
     });
 }
+
+
+
+function deleteResume(event){
+	event.preventDefault();
+	fetch("http://localhost:9001/readbean/deleteResume", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json" // 요청의 헤더 설정
+		},
+		body: sendData
+	})
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("totalResult").innerHTML = data;
+		})
+		.catch(error => {
+			document.getElementById("totalResult").innerHTML = error;
+		});
+}
+
 function showResumeDetail(event) {
 	event.preventDefault();
 	var rb_code = document.querySelector('input[id="rb_code"]').value;
@@ -276,7 +324,7 @@ function showResumeDetail(event) {
 		rb_code: rb_code,
 	}
 	const sendData = JSON.stringify(member);
-	fetch("http://localhost:9001/resumeUpdate", {
+	fetch("http://localhost:9001/redbean/resumeUpdate", {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -296,7 +344,7 @@ function showResumeUpdateForm(event, resume_code) {
     event.preventDefault();
     var resume_code = parseInt(resume_code, 10);
     console.log("=======================resume_code:" + resume_code);
-    fetch("http://localhost:9001/showResumeUpdateForm?resume_code=" + resume_code, { // 서버에 요청을 보냅니다.
+    fetch("http://localhost:9001/redbean/showResumeUpdateForm?resume_code=" + resume_code, { // 서버에 요청을 보냅니다.
         method: "GET",
         headers: {
             "Content-Type": "application/json" // 요청의 헤더 설정
@@ -351,13 +399,16 @@ function showResumeUpdateForm(event, resume_code) {
             <hr>
             <br>
             <hr>
-            보유 자격증
-            <hr> 
-            자격증명 <input type="text" id="stack" name="stack"  value="${data.cer_stack[0].stack}"><br>
-            취득일 <input type="text" id="optain_date" name="optain_date" value="${data.cer_stack[0].optain_date}"><br>
-            발급기관 <input type="text" id="issuer" name="issuer" value="${data.cer_stack[0].issuer}"><br>
-            <button>자격증 추가</button>
-            <br>
+			보유 자격증
+			<hr>
+			<div id="certiContainer">
+				<div class="certi-container">
+					자격증명 <input type="text" id="stack" name="stack" value="${data.cer_stack[0].stack}"><br>
+					취득일 <input type="text" id="optain_date" name="optain_date" value="${data.cer_stack[0].optain_date}"><br>
+					발급기관 <input type="text" id="issuer" name="issuer" value="${data.cer_stack[0].issuer}"><br>
+				</div>
+			</div>
+			<button id="addCertiBtn">자격증 추가</button>
             <button onclick="resumeUpdateInfo(event, ${resume_code})">수정하기</button>
             <form action="review" method="post" enctype="multipart/form-data">
             <input type="file" name="imageFile">
@@ -379,9 +430,9 @@ function showFavoriteScrab(event) {
 	event.preventDefault();
 	var htmlContent = `
 		<ul class="tabs">
-			<li class="tab-link current" data-tab="tab-1">관심기업</li>
+			<li class="tab-link current" data-tab="tab-1">관심기업(scrab)</li>
 			<li class="line">|</li>
-			<li class="tab-link" data-tab="tab-2">스크랩한 기업</li>
+			<li class="tab-link" data-tab="tab-2">스크랩한 기업(favorite)</li>
 		</ul>
 		<div id="tab-1" class="tab-content current">
 			<div id="favoriteList"></div>
@@ -402,6 +453,7 @@ function showFavoriteScrab(event) {
 		btn2.classList.remove("current");
 		tabContent1.classList.add("current");
 		tabContent2.classList.remove("current");
+		showSubscribeList();
 		showFavoriteList();
 	});
 
@@ -417,7 +469,7 @@ function showFavoriteScrab(event) {
 }
 
 function showFavoriteList() {
-	fetch("http://localhost:9001/showFavoriteList", { // 서버에 요청을 보냅니다.
+	fetch("http://localhost:9001/redbean/showFavoriteList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -433,35 +485,13 @@ function showFavoriteList() {
 }
 
 
-function createFavoriteTable(jsonData) {
-	var html = '<table border="1">';
-	html += '<tr>';
-	html += '<th>공고번호</th>';
-	html += '<th>지역</th>';
-	html += '<th>경력</th>';
-	html += '<th>산업</th>';
-	html += '<th>직무</th>';
-	html += '</tr>';
-	
-	jsonData.forEach(item => {
-		html += '<tr>';
-		html += '<td>' + item.post_code.post_code + '</td>';
-		html += '<td>' + item.post_code.area + '</td>';
-		html += '<td>' + item.post_code.area + '</td>';
-		html += '<td>' + item.username.username + '</td>';
-		html += '</tr>';
-	});
 
-	html += '</table>';
-	
-	return html;
-}
 
 
 
 
 function showSubscribeList(event) {
-	fetch("http://localhost:9001/showSubscribeList", { // 서버에 요청을 보냅니다.
+	fetch("http://localhost:9001/redbean/showSubscribeList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -478,7 +508,7 @@ function showSubscribeList(event) {
 }
 
 function showApplicationList(event) {
-	fetch("http://localhost:9001/showApplicationList", { // 서버에 요청을 보냅니다.
+	fetch("http://localhost:9001/redbean/showApplicationList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
@@ -494,7 +524,8 @@ function showApplicationList(event) {
 		});
 }
 
-function createSubscribeTable(jsonData) {
+function createFavoriteTable(jsonData) {
+	
 	var html = '<table border="1">';
 	html += '<tr>';
 	html += '<th>cid</th>';
@@ -505,6 +536,27 @@ function createSubscribeTable(jsonData) {
 		html += '<tr>';
 		html += '<td>' + item.cid.username + '</td>';
 		html += '<td>' + item.rid.username + '</td>';
+		html += '</tr>';
+	});
+
+	html += '</table>';
+	
+	return html;
+}
+
+function createSubscribeTable(jsonData) {
+	var html = '<table border="1">';
+	html += '<tr>';
+	html += '<th>favor_code</th>';
+	html += '<th>post_code</th>';
+	html += '<th>사명(username)</th>';
+	html += '</tr>';
+	
+	jsonData.forEach(item => {
+		html += '<tr>';
+		html += '<td>' + item.username.username + '</td>';
+		html += '<td>' + item.username.username + '</td>';
+		html += '<td>' + item.username.username + '</td>';
 		html += '</tr>';
 	});
 
@@ -535,7 +587,27 @@ function createApplicationTable(jsonData) {
 	
 	return html;
 }
-
+$(document).on('click', '#addCertiBtn', function() {
+	var certiDiv = $("<div>").addClass("certi-container");
+	var inputField = $("<input>").attr({
+		type: "text",
+		placeholder: "자격증명",
+		name: "stack"
+	});
+	var dateField = $("<input>").attr({
+		type: "text",
+		placeholder: "취득일",
+		name: "optain_date"
+	});
+	var issuerField = $("<input>").attr({
+		type: "text",
+		placeholder: "발급기관",
+		name: "issuer"
+	});
+	var hr =  $("<hr>")
+	certiDiv.append(hr,inputField, dateField, issuerField,hr);
+	$("#certiContainer").append(certiDiv);
+});
 
 
 
