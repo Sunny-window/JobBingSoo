@@ -10,13 +10,6 @@
 
 <body>
     <style>
-        body {
-            line-height: 1.6;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-        }
-
         section {
             width: 960px;
             margin: 20px auto;
@@ -55,6 +48,15 @@
             justify-content: space-between;
             position: relative;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .posting:hover {
+            background-color: #e9e8e8;
+            border-left: none;
+            border-right: none;
+            border-top: 1px solid #9b9b9b;
+            border-bottom: 1px solid #9b9b9b;
         }
 
         .text-container{

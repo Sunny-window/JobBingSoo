@@ -120,8 +120,8 @@ public class IceController {
 
     @GetMapping("/infomation/{cno}")
     public Company infomation(@PathVariable("cno") String cno) {
-
-        return companyRepository.findById(cno).orElse(null);
+        
+        return companyRepository.findById(cno).get();
     }
 
     @GetMapping("/posting/{post_code}")
