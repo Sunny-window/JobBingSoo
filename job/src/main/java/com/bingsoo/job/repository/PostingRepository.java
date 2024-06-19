@@ -53,4 +53,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 	List<Posting> findByCid(Member cid);
 	
 	Page<Posting> findAllByOrderByPostedDateDesc(Pageable pageable);
+
+
+	
 }
