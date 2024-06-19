@@ -199,11 +199,12 @@
             let receivers = document.getElementById('receivers').value;
             let title = document.getElementById('title').value;
             let content = document.getElementById('content').value;
-
+            const token = localStorage.getItem('token');
             fetch('http://localhost:9001/manager/send-notice', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                	'Authorization': 'Bearer ' + token,
+                	'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     receivers: receivers,

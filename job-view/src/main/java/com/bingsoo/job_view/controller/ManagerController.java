@@ -72,4 +72,9 @@ public class ManagerController {
     public String ai() {
     	return "manager/ai";
     }
+    
+    @RequestMapping("/recommand")
+    public String recommand() {
+    	return "manager/recommand";
+    }
 }

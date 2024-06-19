@@ -107,10 +107,11 @@
             const comment = document.getElementById('comment').value;
             const type = document.getElementById('type_input').value;
             const replyId = document.getElementById('reply_id_input').value;  // Get reply ID
-
+            const token = localStorage.getItem('token');
             fetch('http://localhost:9001/manager/reply', {
                 method: 'POST',
                 headers: {
+                	'Authorization': 'Bearer ' + token,
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
