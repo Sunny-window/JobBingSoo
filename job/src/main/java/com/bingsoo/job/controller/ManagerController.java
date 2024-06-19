@@ -95,8 +95,8 @@ public class ManagerController {
 
 	@GetMapping("/member-all")
 	public Map<String, List<Member>> getData() {
-		List<Member> members = memberRepository.findByRole("ROLE_RED_BEAN");
-		List<Member> companies = memberRepository.findByRole("ROLE_ICE");
+		List<Member> members = memberRepository.findByRole("BEAN");
+		List<Member> companies = memberRepository.findByRole("ICE");
 		Map<String, List<Member>> data = new HashMap<>();
 		data.put("members", members);
 		data.put("companies", companies);

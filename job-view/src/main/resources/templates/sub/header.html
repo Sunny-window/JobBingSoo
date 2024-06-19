@@ -12,7 +12,7 @@
             background-color: whitesmoke;
             margin: 0;
             padding: 0;
-            min-width:1240px;
+            min-width: 1240px;
         }
 
         section {
@@ -59,7 +59,7 @@
 
         .logo img,
         .logo2 img,
-        img#youtube{
+        img#youtube {
             width: 55px;
             padding: 0 4px;
             margin-right: 16px;
@@ -236,6 +236,7 @@
     </style>
 </head>
 
+<body>
 <div class="head">
     <div class="head_top">
         <div class="logo">
@@ -251,6 +252,7 @@
                     </select>
                 </div>
                 <img src="/images/search.png" class="search_glasses" onclick="search()">
+            </label>
         </div>
         <div class="logo2">
             <a href="#"><img id="youtube" src="/images/youtube-icon.png"></a>
@@ -269,8 +271,10 @@
         <div class="user_log_list">
             <ul id="log-info-list">
                 <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
-                <li><a href="/main/loginForm">로그인</a></li>
-                <li><a href="/main/regForm">회원가입</a></li>
+                <li id="login-li"><a href="/main/loginForm">로그인</a></li>
+                <li id="signup-li"><a href="/main/regForm">회원가입</a></li>
+                <li id="mypage-li" style="display: none;"><a href="/red_bean/mypage">마이페이지</a></li>
+                <li id="logout-li" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></li>
             </ul>
         </div>
     </div>
@@ -283,7 +287,6 @@
         <ul>
             <li><a href="/main/comList">기업전체</a></li>
             <li><a href="#">인재정보</a></li>
-        </ul>
         </ul>
         <ul>
             <li><a href="/cs/list?menu_select=1">FAQ</a></li>
@@ -340,7 +343,6 @@
         setInterval(reloadnotice, 30000);
     });
 
-
     function f() {
         const noticecontainer = document.getElementById('notice-bell-container');
         if (cnt === 0) {
@@ -353,9 +355,37 @@
         }
     }
 
-    function search(){
+    function search() {
         alert('Search!');
     }
+
+    // 로그인 상태 확인 및 UI 업데이트
+    function updateLoginUI() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            document.getElementById('login-li').style.display = 'none';
+            document.getElementById('signup-li').style.display = 'none';
+            document.getElementById('mypage-li').style.display = 'block';
+            document.getElementById('logout-li').style.display = 'block';
+        } else {
+            document.getElementById('login-li').style.display = 'block';
+            document.getElementById('signup-li').style.display = 'block';
+            document.getElementById('mypage-li').style.display = 'none';
+            document.getElementById('logout-li').style.display = 'none';
+        }
+    }
+
+    // 로그아웃 함수
+    function logout() {
+        localStorage.removeItem('token');
+        updateLoginUI();
+        window.location.href = '/main/index';
+    }
+
+    // 페이지 로드 시 로그인 상태 확인
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLoginUI();
+    });
 
 </script>
 </body>

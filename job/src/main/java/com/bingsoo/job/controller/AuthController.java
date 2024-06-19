@@ -59,6 +59,8 @@ public class AuthController {
             result.put("redirectUrl", "http://localhost:8080/main/index");
         } else if ("BEAN".equals(member.getRole())) {
             result.put("redirectUrl", "http://localhost:8080/main/index");
+        } else if ("ADMIN".equals(member.getRole())) {
+            result.put("redirectUrl", "http://localhost:8080/manager/youtubeplayer");
         }
 
         return ResponseEntity.ok(result);
