@@ -9,14 +9,90 @@
 </head>
 
 <body>
+    <style>
+        body {
+            line-height: 1.6;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        section {
+            width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        hr {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            cursor: pointer;
+        }
+
+        .posting {
+            height: 180px;
+            padding: 15px;
+            border: 1px solid #9b9b9b;
+            border-left: none;
+            border-right: none;
+            align-items: center;
+            position: relative;
+        }
+
+        .posting .company {
+            font-size: 12px;
+        }
+
+        .posting .address {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .posting .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .posting .deadline {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
     <header>
         <th:block th:insert="~{/sub/header.html}"></th:block>
     </header>
-    <style>
-        .content{
-            cursor: pointer;
-        }
-    </style>
     <section>
         <h1>공고 관리 페이지</h1>
         <hr>
@@ -32,102 +108,102 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            // 페이지가 로드될 때 실행되는 함수
             noticeList();
         });
 
         function noticeList() {
             fetch("http://localhost:9001/ice/my-postings?cid=홍길동", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-                // 서버에서 데이터를 가져오는 fetch 요청
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
                 .then(response => response.json())
-                // 응답을 JSON 형식으로 변환
                 .then(data => {
-                    // JSON 데이터를 받아와서 처리하는 코드
-                    console.log('Received data:', data);
-                    // 데이터를 콘솔에 출력
-
                     let contentDiv = document.querySelector('.content');
-                    // HTML에서 클래스가 'content'인 요소를 찾음
-                    contentDiv.innerHTML = ''; // 내용을 초기화 (기존에 있던 내용 삭제)
+                    contentDiv.innerHTML = '';
 
                     data.forEach(posting => {
-                        // 받아온 데이터 각각에 대해 반복문 실행
                         let div = document.createElement('div');
-                        // 새로운 div 요소를 생성
+                        div.classList.add('posting');
 
-                        let button0 = document.createElement('button');
-                        let button1 = document.createElement('button');
-                        let button2 = document.createElement('button');
-                        let button3 = document.createElement('button');
-                        // 각각의 버튼 요소를 생성
+                        let company = document.createElement('div');
+                        company.classList.add('company');
+                        company.textContent = posting.company_name;
 
-                        // 버튼에 텍스트 내용 설정
-                        button1.textContent = '지원자 보기';
-                        button2.textContent = '공고 수정';
-                        button3.textContent = '공고 삭제';
+                        let address = document.createElement('div');
+                        address.classList.add('area');
+                        address.textContent = posting.area;
 
-                        // div 요소에 텍스트 내용 추가
-                        div.textContent = `제목: ${posting.title}, 마감일: ${posting.deadline}, 주소: ${posting.address}, 회사명: ${posting.company_name}`;
-                        // div 요소에 버튼 요소들을 자식 요소로 추가
-                        div.appendChild(button1);
-                        div.appendChild(button2);
-                        div.appendChild(button3);
+                        let title = document.createElement('div');
+                        title.classList.add('title');
+                        title.textContent = posting.title;
 
-                        // contentDiv에 div 요소를 추가
-                        contentDiv.appendChild(div);
+                        let deadline = document.createElement('div');
+                        deadline.classList.add('deadline');
+                        deadline.textContent = `마감일: ${posting.deadline}`;
 
-                        // 각 버튼에 클릭 이벤트 리스너 추가
-                        applicationList(button1, posting.post_code);
-                        noticeUpdate(button2, posting.post_code);
-                        noticeDelete(button3, posting.post_code);
+                        let buttonContainer = document.createElement('div');
+                        buttonContainer.classList.add('button-container');
 
-                        div.addEventListener('click', () => {
-                            window.location.href = posting.post_code;
+                        let button1 = createButton('지원자 보기');
+                        button1.addEventListener('click', () => {
+                            window.location.href = `/ice/red_bean_list?postCode=${posting.post_code}`;
                         });
+
+                        let button2 = createButton('공고 수정');
+                        button2.addEventListener('click', () => {
+                            window.location.href = `/ice/employ_notice_updateForm?postCode=${posting.post_code}`;
+                        });
+
+                        let button3 = createButton('공고 삭제');
+                        button3.addEventListener('click', () => {
+                            let result = confirm('공고를 삭제하시겠습니까?');
+                            if (result) {
+                                realDelete(posting.post_code);
+                            } else {
+                                alert('삭제가 취소되었습니다.');
+                            }
+                        });
+
+                        buttonContainer.appendChild(button1);
+                        buttonContainer.appendChild(button2);
+                        buttonContainer.appendChild(button3);
+
+                        div.appendChild(company);
+                        div.appendChild(address);
+                        div.appendChild(title);
+                        div.appendChild(deadline);
+                        div.appendChild(buttonContainer);
+
+                        contentDiv.appendChild(div);
                     });
                 })
                 .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
-            // 오류 발생 시 콘솔에 오류 메시지 출력
-        }
-                
-
-        function applicationList(button1, postCode) {
-            button1.addEventListener('click', (event) => {
-                window.location.href = '/ice/red_bean_list?postCode=' + postCode;
-                event.stopPropagation();
-            });
         }
 
-        function noticeUpdate(button2, postCode) {
-            button2.addEventListener('click', (event) => {
-                window.location.href = "/ice/employ_notice_updateForm?postCode=" + postCode;
-                event.stopPropagation();
-            });
+        function createButton(text) {
+            let button = document.createElement('button');
+            button.textContent = text;
+            return button;
         }
 
-        function noticeDelete(button3, postCode) {
-            button3.addEventListener('click', (event) => {
-                event.stopPropagation();
-                fetch(`http://localhost:9001/ice/posting/${postCode}`, {
+        function realDelete(postCode) {
+            fetch(`http://localhost:9001/ice/posting/${postCode}`, {
                     method: "DELETE"
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            noticeList();
-                            alert('공고가 성공적으로 삭제되었습니다.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error deleting posting:', error)
+                .then(response => {
+                    if (response.ok) {
+                        noticeList();
+                        alert('공고가 삭제되었습니다.');
+                    } else {
                         alert('공고 삭제 중 오류가 발생했습니다.');
-                    });
-            });
-
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting posting:', error);
+                    alert('공고 삭제 중 오류가 발생했습니다.');
+                });
         }
     </script>
 </body>

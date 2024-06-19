@@ -24,7 +24,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 
 	void deleteById(long postCode);
 
-	@Query(value = "SELECT  p.title, p.deadline, c.address, c.company_name, p.post_code " + "FROM Posting p "
+	@Query(value = "SELECT  p.title, p.deadline, p.area, c.company_name, p.post_code " + "FROM Posting p "
 			+ "JOIN Company c " + "ON p.cid = c.cid " + "WHERE c.cid = :username", nativeQuery = true)
 	List<Object[]> postingListDtosByCid(@Param("username") String username);
 
@@ -39,7 +39,7 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 
 			dto.setTitle((String) db_result[0]);
 			dto.setDeadline((Date) db_result[1]);
-			dto.setAddress((String) db_result[2]);
+			dto.setArea((String) db_result[2]);
 			dto.setCompany_name((String) db_result[3]);
 			dto.setPost_code((Long) db_result[4]);
 

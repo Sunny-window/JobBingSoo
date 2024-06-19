@@ -1,11 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"> <!--타임리프-->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"><!--한국어-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--반응형-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공고 수정 페이지</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!--jquery 의존성 주입-->
 </head>
+    <style>
+        section {
+            max-width: 800px;
+            margin: 100px auto 20px auto;
+            width: 740px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 10px #eee;
+        }
+        h1 {
+            color: #333;
+        }
+        hr {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .content > div {
+            flex: 1;
+        }
+        input[type="text"], input[type="number"], select, textarea, input[type="datetime-local"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        textarea {
+            height: 150px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background-color: #ff006f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        button:hover {
+            background-color: #d6006c;
+        }
+        footer a {
+            text-decoration: none;
+            color: #ff006f;
+            margin-left: 10px;
+        }
+    </style>
 <body>
     <header>
         <th:block th:insert="~{/sub/header.html}"></th:block>
@@ -33,13 +91,15 @@
             <input type="text" id="career" placeholder="경력 ex)3년이상...">
             <input type="text" id="pay" placeholder="연봉">
             <input type="text" id="area" placeholder="근무지역">
-            <select id="main_category" name="main_category">
-                <option value="">메인 카테고리 선택</option>
-            </select>
-            <select id="sub_category" name="sub_category">
-                <option value="">서브 카테고리 선택</option>
-            </select>
-            <input type="datetime-local" id="deadline" placeholder="마감일">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <select id="main_category" name="main_category" style="flex: 1;">
+                    <option value="">메인 카테고리 선택</option>
+                </select>
+                <select id="sub_category" name="sub_category" style="flex: 1;">
+                    <option value="">서브 카테고리 선택</option>
+                </select>
+                <input type="datetime-local" id="deadline" placeholder="마감일" style="flex: 1;">
+            </div>
             <input type="text" id="manager_tel" placeholder="담당자 번호">
             <textarea id="main_content" placeholder="공고 내용"></textarea>
             <button onclick="updatePosting()">수정</button>
