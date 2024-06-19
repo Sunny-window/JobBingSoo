@@ -2,8 +2,6 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <!-- 폰트 첨부 -->
     <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <style>
@@ -14,24 +12,19 @@
             padding: 0;
             min-width: 1240px;
         }
-
         section {
             min-height: calc(96vh - 210px);
             max-width: 1240px;
             margin: 8px auto;
         }
-
         ul {
             list-style: none;
         }
-
         a {
             text-decoration: none;
             color: #333;
         }
-
         header {
-            /* min-width: 1240px; */
             margin: 0 auto;
             height: 150px;
             border-bottom: 1px solid #eee;
@@ -39,24 +32,20 @@
             background: #fff;
             box-sizing: border-box;
         }
-
         .head {
             width: 1240px;
             height: 100%;
             margin: 0 auto;
         }
-
         .head_top {
             padding-top: 20px;
             display: flex;
             justify-content: space-between;
             position: relative;
         }
-
         .head_top .logo {
             padding-left: 25px;
         }
-
         .logo img,
         .logo2 img,
         img#youtube {
@@ -64,13 +53,11 @@
             padding: 0 4px;
             margin-right: 16px;
         }
-
         .search_bar {
             position: absolute;
             top: 20px;
             left: calc(50% - 206.5px);
         }
-
         #header_search_input {
             width: 413px;
             height: 47px;
@@ -82,16 +69,13 @@
             margin-right: 0;
             cursor: pointer;
         }
-
         #header_search_input:focus {
             border-color: #ff006f;
             outline: none;
         }
-
         .search_label {
             position: relative;
         }
-
         .header_search_bar_select {
             width: 65px;
             height: 25px;
@@ -101,7 +85,6 @@
             border-right: 1px solid #ff006f;
             box-sizing: border-box;
         }
-
         .header_search_bar_select select {
             height: 22px;
             border: none;
@@ -110,49 +93,41 @@
             padding-right: 10px;
             cursor: pointer;
         }
-
         .header_search_bar_select select:focus {
             outline: none;
         }
-
         .search_glasses {
             position: absolute;
             right: 10px;
             top: 5px;
             cursor: pointer;
         }
-
         .head_bottom {
             display: flex;
             justify-content: space-between;
         }
-
         .head_bottom .menu_list #menu_list_item {
             display: flex;
             padding-left: 0;
         }
-
         .head_bottom .menu_list #menu_list_item li a {
             padding: 0px 25px;
             font-size: 18px;
             font-weight: 600;
         }
-
         .head_bottom .menu_list #menu_list_item li a:hover {
             color: #ff006f;
         }
-
         .user_log_list ul {
             display: flex;
+            align-items: center; /* 중앙 정렬 추가 */
         }
-
         .user_log_list ul li a {
             padding: 0px 5px;
             margin: 0px 4px;
             font-size: 16px;
             font-weight: 600;
         }
-
         #head_menu_slide_container {
             width: 100%;
             background: #fff;
@@ -160,41 +135,33 @@
             position: relative;
             z-index: 9999;
         }
-
         .active {
             display: none;
         }
-
         #head_menu_slide {
             width: 1240px;
             margin: 0 auto;
             display: flex;
         }
-
         #head_menu_slide ul {
             padding: 0px 25px;
         }
-
         #head_menu_slide ul li {
             text-align: center;
         }
-
         #head_menu_slide ul li a {
             display: inline-block;
             font-size: 18px;
             padding-bottom: 15px;
             color: #666;
         }
-
         #head_menu_slide ul li a:hover {
             color: #ff006f;
         }
-
         #notice-bell {
             width: 30px;
             margin-right: 10px;
         }
-
         #notice-bell-container {
             flex-direction: column;
             position: absolute;
@@ -209,13 +176,11 @@
             padding-top: 2px;
             display: none;
         }
-
         #notice-bell-container a {
             margin: 10px 20px;
             display: flex;
             align-items: center;
         }
-
         #notice-bell-container a span#notice-type {
             border-radius: 8px;
             background-color: #ddd;
@@ -225,11 +190,9 @@
             margin-right: 15px;
             text-align: center;
         }
-
         #notice-bell-container a span {
             display: inline-block;
         }
-
         #notice-bell-container a span#notice-message {
             width: 250px;
         }
@@ -270,6 +233,7 @@
 
         <div class="user_log_list">
             <ul id="log-info-list">
+                <li id="user-name" style="font-size: 16px; font-weight: 600;">GUEST</li> <!-- 사용자 이름 표시 -->
                 <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
                 <li id="login-li"><a href="/main/loginForm">로그인</a></li>
                 <li id="signup-li"><a href="/main/regForm">회원가입</a></li>
@@ -283,6 +247,7 @@
     <div id="head_menu_slide">
         <ul>
             <li><a href="/">추천공고</a></li>
+            <li><a href="/manager/ai">AI추천공고</a></li>
         </ul>
         <ul>
             <li><a href="/main/comList">기업전체</a></li>
@@ -314,24 +279,22 @@
     let cnt = 1;
 
     function reloadnotice() {
-        // console.log('reloading notice');
         fetch('http://localhost:9001/sub/notice/1')
             .then(r => r.json())
             .then(list => {
                 document.getElementById('notice-bell-container').innerHTML = "";
                 list.forEach((data, i) => {
-                    // console.log(data.type + data.message);
                     var link = '<a href="#">';
                     if (data.type.trim() == '채용공고') {
                         link = '<a href="/red_bean/mypage">';
-                    }else if(data.type.trim() == '기업알림'){
+                    } else if (data.type.trim() == '기업알림') {
                         link = '<a href="/main/comList">';
-                    }else if(data.type.trim() == '공지사항' || data.type.trim() =='고객센터'){
+                    } else if (data.type.trim() == '공지사항' || data.type.trim() == '고객센터') {
                         link = '<a href="/cs/list">';
                     }
                     document.getElementById('notice-bell-container').innerHTML
-                        +=link
-                        +'<span id="notice-type">' + data.type
+                        += link
+                        + '<span id="notice-type">' + data.type
                         + '</span><span id="notice-message">' + data.message + '</span></a>';
                 });
             })
@@ -348,8 +311,7 @@
         if (cnt === 0) {
             noticecontainer.style.display = "none";
             cnt = 1;
-        }
-        else {
+        } else {
             noticecontainer.style.display = 'flex';
             cnt = 0;
         }
@@ -359,15 +321,40 @@
         alert('Search!');
     }
 
+    // JWT 토큰에서 페이로드를 디코드하는 함수
+    function parseJwt(token) {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        } catch (error) {
+            console.error('Error parsing JWT:', error);
+            return null;
+        }
+    }
+
     // 로그인 상태 확인 및 UI 업데이트
     function updateLoginUI() {
         const token = localStorage.getItem('token');
+        const userNameElement = document.getElementById('user-name');
+        
         if (token) {
+            const decodedToken = parseJwt(token);
+            if (decodedToken && decodedToken.sub) {
+                userNameElement.textContent = decodedToken.sub; // JWT의 'sub' 클레임을 사용자 이름으로 사용
+            } else {
+                userNameElement.textContent = 'GUEST';
+            }
             document.getElementById('login-li').style.display = 'none';
             document.getElementById('signup-li').style.display = 'none';
             document.getElementById('mypage-li').style.display = 'block';
             document.getElementById('logout-li').style.display = 'block';
         } else {
+            userNameElement.textContent = 'GUEST';
             document.getElementById('login-li').style.display = 'block';
             document.getElementById('signup-li').style.display = 'block';
             document.getElementById('mypage-li').style.display = 'none';
@@ -386,7 +373,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         updateLoginUI();
     });
-
 </script>
 </body>
 
