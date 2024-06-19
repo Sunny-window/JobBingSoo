@@ -236,13 +236,15 @@
                     <p class="cs_result">상태</p>
                     <p class="cs_date">날짜</p>
                 </div>
-                <div class="cs_box" onclick="location.href='/cs/admin-cs_detailAndReply?cs_code=1'">
-                    <input type="hidden" name="cscode" value="${cs.cscode}">
-                    <p class="cs_num2">0번</p>
-                    <p class="cs_title2">CS 제목</p>
-                    <p class="cs_user2">cs 작성자</p>
-                    <p class="cs_result2"><span class="cs_result_ex" id="resultSpan">cs 답변 결과</span></p>
-                    <p class="cs_date2">cs 등록일</p>
+                <div id="public-cs-list">
+                    <div class="cs_box" onclick="location.href='/cs/admin-cs_detailAndReply?cs_code=1'">
+                        <input type="hidden" name="cscode" value="${cs.cscode}">
+                        <p class="cs_num2">0번</p>
+                        <p class="cs_title2">CS 제목</p>
+                        <p class="cs_user2">cs 작성자</p>
+                        <p class="cs_result2"><span class="cs_result_ex" id="resultSpan">cs 답변 결과</span></p>
+                        <p class="cs_date2">cs 등록일</p>
+                    </div>
                 </div>
             </div>
             <div id="tab-3">
@@ -350,6 +352,31 @@
             })
     }
 
+    function getPublicInq() {
+        fetch('http://localhost:9001/cs/cslist')
+            .then(response => response.json())
+            .then(list => {
+                document.getElementById('public-cs-list').innerHTML = '';
+
+                list.forEach(pcs => {
+                    document.getElementById('public-cs-list').innerHTML
+                        += '<div class="cs_box" onclick="gotoDetail(' + pcs.cs_code + ')">'
+                        + '<p class="cs_num2">' + pcs.cs_code + '</p>'
+                        + '<p class="cs_title2">' + pcs.title + '</p>'
+                        + '<p class="cs_user2">' + pcs.rid.username + '</p>'
+                        + '<p class="cs_result2"><span class="cs_result_ex" id="resultSpan">' + pcs.result + '</span></p>'
+                        + '<p class="cs_date2">' + pcs.date + '</p>'
+                        + '</div>'
+                        ;
+                })
+
+            })
+    }
+
+    function gotoDetail(cscode) {
+        location.href = '/cs/detail?cs_code=' + cscode;
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
 
         btn1.addEventListener("click", () => {
@@ -371,6 +398,7 @@
         } else if (tap_menu_selection == 2) {
             console.log('문의 게시판 탭');
             choose_tab2();
+            getPublicInq();
         } else if (tap_menu_selection == 3) {
             console.log('나의 문의 탭');
             choose_tab3();

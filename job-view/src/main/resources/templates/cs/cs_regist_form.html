@@ -1,10 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title></title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+}
+.title{
+	width:100%;
+	margin-top:100px;
+}
+.title h1{
+	text-align:center;
+	margin-bottom:75px;
+}
+
+.write-container{
+	width:700px;
+	margin:0 auto;
+	background: white;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+	padding:20px;
+    font-size:18px;
+    padding-bottom:10px;
+}
+.type_text{
+    margin-bottom:10px;
+    font-family: Arial, sans-serif;
+}
+.title_text{
+    margin-bottom:10px;
+    font-family: Arial, sans-serif;
+}
+.content_text{
+    margin-bottom:10px;
+    font-family: Arial, sans-serif;
+}
+#type {
+    width: 120px;
+    height: 45px;
+    text-align:center;
+    margin-bottom: 40px;
+}
+input[type="text"]{
+    width: 700px;
+    height: 45px;
+    box-sizing:border-box;
+    margin-bottom: 40px;
+}
+textarea{
+    width:700px;
+    height:350px;
+    padding:5px;
+    box-sizing:border-box; 
+}
+.btn_box{
+	text-align:center;
+	margin-top:50px;
+	margin-bottom:50px;
+}
+.btn_submit{
+    display:inline-block;
+	width:140px;
+	height:auto;
+	border:1px solid #ff006f;
+	text-align:center;
+	font-size:20px;
+	padding:10px 0;
+	cursor:pointer;
+	font-weight:600;
+    background:#ff006f;
+	color:#fff;
+}
+.btn_cancel{
+    display:inline-block;
+	width:140px;
+	height:auto;
+	border:1px solid #ff006f;
+	text-align:center;
+	font-size:20px;
+	padding:10px 0;
+	cursor:pointer;
+	font-weight:600;
+    background:#fff;
+	color:#ff006f;
+}
+.btn_submit:hover, .btn_cancel:hover {
+    background-color: #A6303E;
+    color: #fff;
+}
+
+</style>
 </head>
 <body>
+<header>
+    <th:block th:insert="~{/sub/header.html}"></th:block>
+</header>
+<section>
+    <div class="title">
+        <h1> 문의 / 작성 </h1>
+    </div>
+    <div class="write-container">
+        <form action="/cs/write" method="post">
+            <p class="type_text">문의 종류</p>
+            <select name="type" id="type">
+                <option id="aa" value="A">문의</option>
+                <option id="bb" value="B">신고</option>
+            </select>
+            <input type="radio" id="public" name="public_type" value="Y" checked>
+            <label for="public">공개</label>
+            <input type="radio" id="private" name="public_type" value="N">
+            <label for="private">비공개</label><br>
+            <p class="title_text">제목</p>
+            <input type="text" name="title" placeholder="제목을 입력하세요...">
+            <p class="content_text">내용</p>
+            <textarea id="content" name="content" placeholder="내용을 입력하세요..." rows="4" cols="50"></textarea>
+            <div class="btn_box">
+                <input type="submit" value="작성" class="btn_submit">
+                <input type="button" class="btn_cancel" onclick="goCsList()" value="취소">
+            </div>
+        </form>
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{/sub/footer.html}"></th:block>
+</footer>
+<script>
+    document.getElementById("type").addEventListener("change", function() {
+        const type = document.getElementById("type").value;
+        const publicRadio = document.getElementById("public");
+        const privateRadio = document.getElementById("private");
 
+        if (type === "B") {
+            publicRadio.checked = false;
+            publicRadio.disabled = true;
+            privateRadio.checked = true;
+        } else {
+            publicRadio.checked = true;
+            publicRadio.disabled = false; 
+        }
+    });
+
+    function goCsList() {
+        if (confirm("문의 게시판으로 돌아가시겠습니까?")) {
+            window.location.href = "/cs/list";
+        }
+    }
+</script>
 </body>
 </html>
