@@ -5,9 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +39,7 @@ import com.bingsoo.job.repository.SubscribeRepository;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/redbean")
 public class RedbeanController {
 	@Autowired
 	RedBeanRepository redBeanRepository;
@@ -112,16 +115,22 @@ public class RedbeanController {
 		Resume resume = resumeRepository.findRdCode(resume_code);
 		RedBean redbean =  redBeanRepository.findByRid(resume.getRid()).get(0);
 		
-		Optional<Desired_area>  opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+		 Optional<Desired_area> opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+		    if (!opdesired_area.isPresent()) {
+		        return "원하는 지역 정보를 찾을 수 없습니다.";
+		    }
 		Desired_area desired_area = opdesired_area.get();
-		
-		Optional<Desired_industry>  opdesired_industry = desired_industryRepository.findByRid(redbean.getRid());
-		Desired_industry desired_industry = opdesired_industry.get();
-		
+		Optional<Desired_industry> opdesired_industry = desired_industryRepository.findByRid(redbean.getRid());
+	    if (!opdesired_industry.isPresent()) {
+	        return "원하는 산업 정보를 찾을 수 없습니다.";
+	    }
+	    Desired_industry desired_industry = opdesired_industry.get();
+	    System.out.println("==============================redbean.getRid() : "+redbean.getRid());
+	    
+
+	    
 		Career career =  careerRepository.findByRid(redbean.getRid());
 		
-		Optional<Company>  opcompany = companyRepository.findByCid(redbean.getRid());
-		Company company = opcompany.get();
 		
 		redbean.setName(resumedto.getName());
 		redbean.setAddress(resumedto.getAddress());
@@ -149,8 +158,8 @@ public class RedbeanController {
 		
 		
 		
-		company.setCompany_name(resumedto.getCompanyname());
-		companyRepository.save(company);
+		career.setCompanyName(resumedto.getCompanyname());
+		careerRepository.save(career);
 		
 		
 		career.setCarDate(resumedto.getCardate());
@@ -268,6 +277,12 @@ public class RedbeanController {
 		
 		System.out.println("==========================================resumeDto: "+resumeDto);
 		return resumeDto;
+	}
+	@DeleteMapping("/deleteResume") 
+	public String deleteResume(@RequestParam("resume_code") long resume_code) {
+		
+		resumeRepository.deleteByRdCode(resume_code);
+		return resume_code+"번 삭제완료";
 	}
 	
 }
