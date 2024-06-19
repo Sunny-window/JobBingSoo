@@ -13,6 +13,6 @@ public class PostingDto {
     private Long post_code;
     private String title;
     private Date deadline;
-    private String address;
+    private String area;
     private String company_name;
 }
