@@ -215,7 +215,7 @@
 
         <div class="small-button-container">
             <button class="small-button small-apply-now" onclick="goToApplyPage()">즉시 지원</button>
-            <button class="small-button small-save">스크랩</button>
+            <button class="small-button small-save" onclick="scrapJob()">스크랩</button>
         </div>
 
         <h2>상세 요강</h2>
@@ -354,6 +354,35 @@
             window.location.href = `/manager/apply?postCode=${postCode}`;
         } else {
             alert('유효한 채용공고 번호가 아닙니다.');
+        }
+    }
+
+    async function scrapJob() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postCode = urlParams.get('postCode');
+        const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+        const response = await fetch(`http://localhost:9001/manager/favorite`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
+            },
+            body: JSON.stringify({
+                postCode: postCode
+            })
+        });
+
+        const result = await response.text();
+
+        if (result === 'success') {
+            alert('스크랩 성공!');
+        } else if (result === 'already favorite') {
+            alert('이미 스크랩되었습니다.');
+        } else if (result === 'invalid token') {
+            alert('유효하지 않은 토큰입니다.');
+        } else {
+            alert('스크랩 실패.');
         }
     }
 

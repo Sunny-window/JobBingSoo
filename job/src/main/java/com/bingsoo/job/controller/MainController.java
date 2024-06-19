@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,12 +26,17 @@ import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Posting;
 import com.bingsoo.job.entity.Posting_skill;
 import com.bingsoo.job.entity.RedBean;
+import com.bingsoo.job.entity.Subscribe;
+import com.bingsoo.job.jwtToken.JWTUtil;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.MemberRepository;
 import com.bingsoo.job.repository.PostingRepository;
 import com.bingsoo.job.repository.RedBeanRepository;
+import com.bingsoo.job.repository.SubscribeRepository;
 import com.bingsoo.job.service.CompanyService;
 import com.bingsoo.job.service.PostingService;
+
+import io.jsonwebtoken.Claims;
 
 @RestController
 @RequestMapping("/main")
@@ -53,6 +60,9 @@ public class MainController {
     
     @Autowired
     private PostingRepository postingRepository;
+    
+    @Autowired
+    private SubscribeRepository subscribeRepository;
     
     @PostMapping("/join-form/job-seeker")
     public ResponseEntity<String> registerMember(@RequestParam("username") String username,
@@ -599,5 +609,50 @@ public class MainController {
     @GetMapping("/main/postings-list")
     public List<Posting> getLatestPostings(@RequestParam(name = "page") int page, @RequestParam(name = "size") int size) {
         return postingService.getLatestPostings(page, size);
+    }
+    
+    @PostMapping("/subscribe")
+    public ResponseEntity<String> subscribeCompany(@RequestBody Map<String, String> request, @RequestHeader("Authorization") String token) {
+        String cno = request.get("cid"); // 여기서 `cid` 대신 `cno`를 받아야 합니다.
+
+        // JWT에서 "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // JWT 검증 및 사용자 이름 추출
+        if (!JWTUtil.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid token");
+        }
+        Claims claims = JWTUtil.parseToken(token);
+        String username = claims.getSubject();
+
+        // `cno`로 Company를 조회
+        Optional<Company> companyOpt = companyRepository.findById(cno);
+        if (!companyOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("company not found");
+        }
+        
+        // Company에서 `cid`를 추출
+        Member companyMember = companyOpt.get().getCid();
+        Optional<Member> userMemberOpt = memberRepository.findById(username);
+
+        if (!userMemberOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user not found");
+        }
+
+        Member userMember = userMemberOpt.get();
+
+        if (subscribeRepository.existsByCidAndRid(companyMember, userMember)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("already subscribed");
+        }
+
+        Subscribe subscribe = Subscribe.builder()
+                .cid(companyMember)
+                .rid(userMember)
+                .build();
+
+        subscribeRepository.save(subscribe);
+        return ResponseEntity.ok("success");
     }
 }
