@@ -10,37 +10,31 @@
 }
 .title{
 	width:100%;
-	margin-top:100px;
+	margin-top:32px;
 }
 .title h1{
 	text-align:center;
-	margin-bottom:75px;
 }
 
 .write-container{
 	width:700px;
-	margin:0 auto;
+	margin:56px auto;
 	background: white;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 	padding:20px;
     font-size:18px;
     padding-bottom:10px;
+    
 }
-.type_text{
-    margin-bottom:10px;
-    font-family: Arial, sans-serif;
-}
+.content_text,
+.type_text,
 .title_text{
     margin-bottom:10px;
-    font-family: Arial, sans-serif;
 }
-.content_text{
-    margin-bottom:10px;
-    font-family: Arial, sans-serif;
-}
+
 #type {
-    width: 120px;
-    height: 45px;
+    width: 80px;
+    height: 35px;
     text-align:center;
     margin-bottom: 40px;
 }
@@ -87,9 +81,13 @@ textarea{
     background:#fff;
 	color:#ff006f;
 }
-.btn_submit:hover, .btn_cancel:hover {
-    background-color: #A6303E;
-    color: #fff;
+.btn_submit:hover{
+    background-color: white;
+    color: #ff006f;
+}
+.btn_cancel:hover {
+    background-color: #ff006f;
+    color: white;
 }
 
 </style>
@@ -103,7 +101,6 @@ textarea{
         <h1> 문의 / 작성 </h1>
     </div>
     <div class="write-container">
-        <form action="/cs/write" method="post">
             <p class="type_text">문의 종류</p>
             <select name="type" id="type">
                 <option id="aa" value="A">문의</option>
@@ -121,7 +118,6 @@ textarea{
                 <input type="submit" value="작성" class="btn_submit">
                 <input type="button" class="btn_cancel" onclick="goCsList()" value="취소">
             </div>
-        </form>
     </div>
 </section>
 <footer>
