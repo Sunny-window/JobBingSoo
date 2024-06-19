@@ -156,55 +156,73 @@ css
     <th:block th:insert="~{/sub/header.html}"></th:block>
 </header>
 <section>
-    <div class="typeit-container" id="typeit-container"></div>
-    <h1>회원 맞춤I 추천 공고</h1>
-
-<ul class="branding" id="postingsList"></ul>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <p id="modalDescription"></p>
-    <p id="modalHeadCount"></p>
-    <p id="modalEduType"></p>
-    <p id="modalCareer"></p>
-    <p id="modalEmploymentType"></p>
-    <p id="modalPay"></p>
-    <p id="modalArea"></p>
-    <p id="modalIndustry"></p>
-    <p id="modalJob"></p>
-    <p id="modalPostedDate"></p>
-    <p id="modalDeadline"></p>
-    <p id="modalManagerTel"></p>
-    <p id="modalMainContent"></p>
-    <div class="button-container">
-        <button onclick="goToApplyPage()">지원하기</button>
-        <button onclick="scrapJob()">스크랩하기</button>
+  <div class="typeit-container" id="typeit-container"></div>
+    
+    
+    <ul class="branding" id="postingsList"></ul>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/7.0.4/typeit.min.js"></script>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <p id="modalHeadCount"></p>
+        <p id="modalEduType"></p>
+        <p id="modalCareer"></p>
+        <p id="modalEmploymentType"></p>
+        <p id="modalPay"></p>
+        <p id="modalArea"></p>
+        <p id="modalIndustry"></p>
+        <p id="modalJob"></p>
+        <p id="modalPostedDate"></p>
+        <p id="modalDeadline"></p>
+        <p id="modalManagerTel"></p>
+        <p id="modalMainContent"></p>
+        <div class="button-container">
+            <button onclick="goToApplyPage()">지원하기</button>
+            <button onclick="scrapJob()">스크랩하기</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+
+   <script>
+   document.addEventListener("DOMContentLoaded", function() {
+       new TypeIt('#typeit-container', {
+           strings: ["회원 맞춤 추천 공고"],
+           speed:80,
+           waitUntilVisible: true,
+           afterComplete: function(instance) {
+               setTimeout(function() {
+                   new TypeIt('#typeit-container', {
+                       speed: 70,
+                       lifeLike: true,
+                       cursor: true,
+                     
+                   })
+                   
+                   .go();
+               }, 500); // 2초 후에 시작
+           }
+       }).go();
         findPostingsForUser();
+        
     });
 
     async function findPostingsForUser() {
         const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
         try {
-            const response = await fetch('http://localhost:9001/manager/recommendations', {
+            const response = await fetch('http://localhost:9001/manager/find-postings', {
                 method: 'GET',
                 headers: {
-                	 'Authorization': 'Bearer ' + token,
+                    'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
                 }
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            const data = await response.json();
-            const postings = data.recommendedPostings;
+            const postings = await response.json();
             const postingsList = document.getElementById('postingsList');
             postingsList.innerHTML = '';
 
@@ -229,10 +247,10 @@ css
             console.error('Failed to fetch postings:', error);
         }
     }
-
     function showModal(posting) {
         const modal = document.getElementById("myModal");
         document.getElementById("modalTitle").innerText = posting.title;
+        document.getElementById("modalTitle").dataset.postCode = posting.post_code;
         document.getElementById("modalDescription").innerText = `${posting.area} - ${posting.industry}`;
         document.getElementById("modalHeadCount").innerText = `Head Count: ${posting.head_count}`;
         document.getElementById("modalEduType").innerText = `Education Type: ${posting.edu_type}`;
@@ -254,7 +272,6 @@ css
         const modal = document.getElementById("myModal");
         modal.style.display = "none";
     }
-
     async function scrapJob() {
         const postCode = document.getElementById('modalTitle').dataset.postCode;
         const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
@@ -263,7 +280,7 @@ css
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
+                'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
             },
             body: JSON.stringify({
                 postCode: postCode
