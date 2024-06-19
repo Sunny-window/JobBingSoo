@@ -18,4 +18,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long>{
 	
 
     List<Subscribe> findByCid(Member cid);
+    
+    boolean existsByCidAndRid(Member cid, Member rid);
 }
