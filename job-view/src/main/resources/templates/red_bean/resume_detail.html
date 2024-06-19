@@ -5,6 +5,20 @@
 <title>Insert title here</title>
 </head>
 <body>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const rid = urlParams.get('rid');
 
+        if (rid) {
+            const div = document.createElement('div');
+            div.textContent = `rid: ${rid}`;
+            document.body.appendChild(div);
+        } else {
+            const div = document.createElement('div');
+            div.textContent = 'rid 없음';
+            document.body.appendChild(div);
+        }
+    </script>
 </body>
 </html>

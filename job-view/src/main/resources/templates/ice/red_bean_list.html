@@ -6,92 +6,173 @@
     <title>지원자 목록 페이지</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+    section {
+        width: 960px;
+        margin: 100px auto 20px auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 10px #eee;
+    }
+    h1 {
+        color: #333;
+    }
+    hr {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .content > div {
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0px 2px 10px #eee;
+    }
+    .application-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .buttons {
+        display: flex;
+        gap: 10px;
+    }
+    button {
+            padding: 10px 20px;
+            border: 1.5px solid #bbb;
+            background-color: white;
+            cursor: pointer;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover{
+            background-color: #bbb;
+        }
+
+</style>
+</head>
 <body>
-    <header>
-        <th:block th:insert="~{/sub/header.html}"></th:block>
-    </header>
-    <section>
-        <h1>지원자 목록 페이지</h1>
-        <hr>
-        <div class="content" id="application-list"></div>
-        <input type="text" id="postCode" th:value="${postCode}" hidden>
-    </section>
-    <footer>
-        <th:block th:insert="~{/sub/footer.html}"></th:block>
-    </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const pcode = document.getElementById('postCode').value;
-            fetch(`http://localhost:9001/ice/redbean-per-mypost?postcode=` + pcode)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('data:', data);
-                    const contentDiv = document.querySelector('.content');
-                    contentDiv.innerHTML = '';
+<header>
+    <th:block th:insert="~{/sub/header.html}"></th:block>
+</header>
+<section>
+    <h1>지원자 목록 페이지</h1>
+    <hr>
+    <div class="content" id="application-list"></div>
+    <input type="text" id="postCode" th:value="${postCode}" hidden>
+</section>
+<footer>
+    <th:block th:insert="~{/sub/footer.html}"></th:block>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const pcode = document.getElementById('postCode').value;
+        fetch(`http://localhost:9001/ice/redbean-per-mypost?postcode=` + pcode)
+            .then(response => response.json())
+            .then(data => {
+                console.log('data:', data);
+                const contentDiv = document.getElementById('application-list');
+                contentDiv.innerHTML = '';
 
-                    data.forEach(application => {
-                        const div = document.createElement('div');
-                        div.textContent = `${application.name} ${application.gender} ${application.birth} ${application.address} ${application.app_code} ${application.result}`;
+                data.forEach(application => {
+                    const div = document.createElement('div');
+                    div.classList.add('application-info');
+                    div.innerHTML = `
+                        <div>
+                            <strong>이름:</strong> ${application.name} <br>
+                            <strong>성별:</strong> ${application.gender} <br>
+                            <strong>생년월일:</strong> ${application.birth} <br>
+                            <strong>주소:</strong> ${application.address} <br>
+                            <strong>지원코드:</strong> ${application.app_code} <br>
+                            <strong>결과:</strong> ${application.result} <br>
+                        </div>
+                    `;
 
-                        const approveButton = document.createElement('button');
-                        approveButton.textContent = '합격';
-                        approveButton.addEventListener('click', function() {
-                            approve(application.app_code);
-                        });
-
-                        const rejectButton = document.createElement('button');
-                        rejectButton.textContent = '불합격';
-                        rejectButton.addEventListener('click', function() {
-                            reject(application.app_code);
-                        });
-
-                        div.appendChild(approveButton);
-                        div.appendChild(rejectButton);
-                        contentDiv.appendChild(div);
+                    const buttonsDiv = document.createElement('div');
+                    buttonsDiv.classList.add('buttons');
+                    
+                    
+                    const searchResumeButton = document.createElement('button');
+                    searchResumeButton.textContent = '이력서보기';
+                    searchResumeButton.addEventListener('click', function(){
+                        searchResume(application.rid);
                     });
-                })
-                .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
-        });
 
-        function reject(app_code) {
-            fetch(`http://localhost:9001/ice/reject?app_code=` + app_code, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('네트워크 응답이 정상이 아닙니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('불합격 처리 결과:', data);
-                alert('불합격 처리되었습니다.');
-            })
-            .catch(error => console.error('불합격 처리 중 오류 발생:', error));
-        }
+                    const approveButton = document.createElement('button');
+                    approveButton.textContent = '합격';
+                    approveButton.addEventListener('click', function() {
+                        approve(application.app_code);
+                    });
 
-        function approve(app_code) {
-            fetch(`http://localhost:9001/ice/approve?app_code=` + app_code, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                    const rejectButton = document.createElement('button');
+                    rejectButton.textContent = '불합격';
+                    rejectButton.addEventListener('click', function() {
+                        reject(application.app_code);
+                    });
+
+                    buttonsDiv.appendChild(searchResumeButton);
+                    buttonsDiv.appendChild(approveButton);
+                    buttonsDiv.appendChild(rejectButton);
+
+                    div.appendChild(buttonsDiv);
+                    contentDiv.appendChild(div);
+                });
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('네트워크 응답이 정상이 아닙니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('합격 처리 결과:', data);
-                alert('합격 처리되었습니다.');
-            })
-            .catch(error => console.error('합격 처리 중 오류 발생:', error));
-        }
-    </script>
+            .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
+    });
+
+    function searchResume(rid){
+        window.location.href = `/red_bean/resume_detail?rid=` + rid;
+        console.log(rid);
+    }
+
+    function reject(app_code) {
+        fetch(`http://localhost:9001/ice/reject?app_code=` + app_code, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 응답이 정상이 아닙니다.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('불합격 처리 결과:', data);
+            alert('불합격 처리되었습니다.');
+        })
+        .catch(error => console.error('불합격 처리 중 오류 발생:', error));
+    }
+
+    function approve(app_code) {
+        fetch(`http://localhost:9001/ice/approve?app_code=` + app_code, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 응답이 정상이 아닙니다.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('합격 처리 결과:', data);
+            alert('합격 처리되었습니다.');
+        })
+        .catch(error => console.error('합격 처리 중 오류 발생:', error));
+    }
+</script>
 </body>
 </html>
