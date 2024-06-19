@@ -156,10 +156,10 @@
 </header>
 <section>
     <div class="typeit-container" id="typeit-container"></div>
-    <h1>AI 추천 공고</h1>
+   
     
     <ul class="branding" id="postingsList"></ul>
-
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/typeit/7.0.4/typeit.min.js"></script>
     <!-- The Modal -->
     <div id="myModal" class="modal">
       <div class="modal-content">
@@ -186,110 +186,122 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            findPostingsForUser();
+    document.addEventListener("DOMContentLoaded", function() {
+        new TypeIt('#typeit-container', {
+            strings: ["AI 추천 공고"],
+            speed:80,
+            waitUntilVisible: true,
+            afterComplete: function(instance) {
+                setTimeout(function() {
+                    new TypeIt('#typeit-container', {
+                        speed: 70,
+                        lifeLike: true,
+                        cursor: true,
+                      
+                    })
+                    
+                    .go();
+                }, 500); // 2초 후에 시작
+            }
+        }).go();
+        findPostingsForUser();
+        
+    });
+
+    async function findPostingsForUser() {
+        const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+        try {
+            const response = await fetch('http://localhost:9001/manager/find-postings', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const postings = await response.json();
+            const postingsList = document.getElementById('postingsList');
+            postingsList.innerHTML = '';
+
+            postings.forEach(posting => {
+                const listItem = document.createElement('li');
+                listItem.className = 'card-wrap';
+
+                listItem.innerHTML = `
+                    <div class="company">
+                        <div class="name">${posting.title}</div>
+                    </div>
+                    <div class="description">${posting.area} - ${posting.industry}</div>
+                `;
+
+                listItem.onclick = () => {
+                    showModal(posting);
+                };
+
+                postingsList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error('Failed to fetch postings:', error);
+        }
+    }
+    function showModal(posting) {
+        const modal = document.getElementById("myModal");
+        document.getElementById("modalTitle").innerText = posting.title;
+        document.getElementById("modalTitle").dataset.postCode = posting.post_code;
+        document.getElementById("modalDescription").innerText = `${posting.area} - ${posting.industry}`;
+        document.getElementById("modalHeadCount").innerText = `Head Count: ${posting.head_count}`;
+        document.getElementById("modalEduType").innerText = `Education Type: ${posting.edu_type}`;
+        document.getElementById("modalCareer").innerText = `Career: ${posting.career}`;
+        document.getElementById("modalEmploymentType").innerText = `Employment Type: ${posting.employment_type}`;
+        document.getElementById("modalPay").innerText = `Pay: ${posting.pay}`;
+        document.getElementById("modalArea").innerText = `Area: ${posting.area}`;
+        document.getElementById("modalIndustry").innerText = `Industry: ${posting.industry}`;
+        document.getElementById("modalJob").innerText = `Job: ${posting.job}`;
+        document.getElementById("modalPostedDate").innerText = `Posted Date: ${posting.postedDate}`;
+        document.getElementById("modalDeadline").innerText = `Deadline: ${posting.deadline}`;
+        document.getElementById("modalManagerTel").innerText = `Manager Tel: ${posting.manager_tel}`;
+        document.getElementById("modalMainContent").innerText = `Main Content: ${posting.main_content}`;
+
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+    async function scrapJob() {
+        const postCode = document.getElementById('modalTitle').dataset.postCode;
+        const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+        const response = await fetch(`http://localhost:9001/manager/favorite`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
+            },
+            body: JSON.stringify({
+                postCode: postCode
+            })
         });
 
-        async function findPostingsForUser() {
-            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
-            try {
-                const response = await fetch('http://localhost:9001/manager/recommendations', {
-                    method: 'GET',
-                    headers: {
-                    	 'Authorization': 'Bearer ' + token
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                const postings = data.recommendedPostings;
-                const resumes = data.resumes;
-                const postingsList = document.getElementById('postingsList');
-                postingsList.innerHTML = '';
+        const result = await response.text();
 
-                postings.forEach(posting => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'card-wrap';
-
-                    listItem.innerHTML = `
-                        <div class="company">
-                            <div class="name">${posting.title}</div>
-                        </div>
-                        <div class="description">${posting.area} - ${posting.industry}</div>
-                    `;
-
-                    listItem.onclick = () => {
-                        showModal(posting);
-                    };
-
-                    postingsList.appendChild(listItem);
-                });
-
-                analyzeWithOpenAI(resumes, postings);
-
-            } catch (error) {
-                console.error('Failed to fetch postings:', error);
-            }
+        if (result === 'success') {
+            alert('스크랩 성공!');
+        } else if (result === 'already favorite') {
+            alert('이미 스크랩되었습니다.');
+        } else if (result === 'invalid token') {
+            alert('유효하지 않은 토큰입니다.');
+        } else {
+            alert('스크랩 실패.');
         }
+    }
 
-        function showModal(posting) {
-            const modal = document.getElementById("myModal");
-            document.getElementById("modalTitle").innerText = posting.title;
-            document.getElementById("modalDescription").innerText = `${posting.area} - ${posting.industry}`;
-            document.getElementById("modalHeadCount").innerText = `Head Count: ${posting.head_count}`;
-            document.getElementById("modalEduType").innerText = `Education Type: ${posting.edu_type}`;
-            document.getElementById("modalCareer").innerText = `Career: ${posting.career}`;
-            document.getElementById("modalEmploymentType").innerText = `Employment Type: ${posting.employment_type}`;
-            document.getElementById("modalPay").innerText = `Pay: ${posting.pay}`;
-            document.getElementById("modalArea").innerText = `Area: ${posting.area}`;
-            document.getElementById("modalIndustry").innerText = `Industry: ${posting.industry}`;
-            document.getElementById("modalJob").innerText = `Job: ${posting.job}`;
-            document.getElementById("modalPostedDate").innerText = `Posted Date: ${posting.postedDate}`;
-            document.getElementById("modalDeadline").innerText = `Deadline: ${posting.deadline}`;
-            document.getElementById("modalManagerTel").innerText = `Manager Tel: ${posting.manager_tel}`;
-            document.getElementById("modalMainContent").innerText = `Main Content: ${posting.main_content}`;
-
-            modal.style.display = "block";
-        }
-
-        function closeModal() {
-            const modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        }
-
-        async function scrapJob() {
-            const postCode = document.getElementById('modalTitle').dataset.postCode;
-            const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
-
-            const response = await fetch(`http://localhost:9001/manager/favorite`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({
-                    postCode: postCode
-                })
-            });
-
-            const result = await response.text();
-
-            if (result === 'success') {
-                alert('스크랩 성공!');
-            } else if (result === 'already favorite') {
-                alert('이미 스크랩되었습니다.');
-            } else if (result === 'invalid token') {
-                alert('유효하지 않은 토큰입니다.');
-            } else {
-                alert('스크랩 실패.');
-            }
-        }
-
-        function goToApplyPage() {
-            const postCode = document.getElementById('modalTitle').dataset.postCode;
-            window.location.href = `/manager/apply?postCode=${postCode}`;
-        }
+    function goToApplyPage() {
+        const postCode = document.getElementById('modalTitle').dataset.postCode;
+        window.location.href = `/manager/apply?postCode=${postCode}`;
+    }
 
         async function analyzeWithOpenAI(resumes, postings) {
             const apiKey = '';
