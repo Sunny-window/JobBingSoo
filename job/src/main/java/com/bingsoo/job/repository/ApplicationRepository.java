@@ -3,6 +3,7 @@ package com.bingsoo.job.repository;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.bingsoo.job.dto.RedBeanDto;
 import com.bingsoo.job.entity.Application;
+import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Posting;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
@@ -43,6 +45,12 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         
         return dtos;
     }
+
+	
+
+	List<Application> findByRid(Member member);
+
+	Optional<Application> findByPostCodeAndRid(Posting post, Member member);
 
 }
 

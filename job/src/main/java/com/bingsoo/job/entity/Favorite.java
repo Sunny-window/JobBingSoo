@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 public class Favorite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long favor_code;
+	private long favorCode;
 	
 	@ManyToOne
 	@JoinColumn(name="post_code")
-	private Posting post_code;
+	private Posting postCode;
 	@ManyToOne
 	@JoinColumn(name="username")
 	private Member username ;

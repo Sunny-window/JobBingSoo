@@ -59,4 +59,13 @@ public class ManagerController {
 		return "manager/managerLogin";
 	}
 	
+    @RequestMapping("/apply")
+    public String apply() {
+    	return "manager/apply";
+    }
+    
+    @RequestMapping("/writeResume")
+    public String writeResume() {
+    	return "manager/writeResume";
+    }
 }

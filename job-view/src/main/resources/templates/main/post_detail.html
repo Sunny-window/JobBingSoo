@@ -214,7 +214,7 @@
         </div>
 
         <div class="small-button-container">
-            <button class="small-button small-apply-now">즉시 지원</button>
+            <button class="small-button small-apply-now" onclick="goToApplyPage()">즉시 지원</button>
             <button class="small-button small-save">스크랩</button>
         </div>
 
@@ -346,6 +346,17 @@
         document.getElementById('postingButton').classList.add('unselected');
         document.getElementById('postingButton').classList.remove('selected');
     }
+    
+    function goToApplyPage() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postCode = urlParams.get('postCode');
+        if (postCode) {
+            window.location.href = `/manager/apply?postCode=${postCode}`;
+        } else {
+            alert('유효한 채용공고 번호가 아닙니다.');
+        }
+    }
+
     </script>
 </body>
 </html>

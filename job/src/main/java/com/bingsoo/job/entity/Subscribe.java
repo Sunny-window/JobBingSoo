@@ -29,11 +29,8 @@ public class Subscribe {
 	    @JoinColumn(name = "rid")
 	    private Member rid;
 
-	    @ManyToOne
-	    @JoinColumn(name = "post_code")
-	    private Posting postCode;
-
-	    @ManyToOne
-	    @JoinColumn(name = "company_id")
-	    private Company company;
+	    public void setPostCode(Posting posting) {
+	    	
+	    	
+	    }
 	}

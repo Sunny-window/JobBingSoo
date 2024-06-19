@@ -9,5 +9,5 @@ import com.bingsoo.job.entity.Member;
 
 public interface Desired_industryRepository extends JpaRepository<Desired_industry, Long>{
 
-	Optional<Desired_industry> findByRid(Member rid);
+	 Optional<Desired_industry> findByRid(Member rid);
 }

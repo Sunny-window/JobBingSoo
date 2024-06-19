@@ -80,7 +80,7 @@ public class MainController {
         Member member = Member.builder()
                 .username(username)
                 .password(password)
-                .role("ROLE_RED_BEAN")
+                .role("BEAN")
                 .build();
         member = memberRepository.save(member);
 
@@ -118,7 +118,7 @@ public class MainController {
         Member member = Member.builder()
                 .username(username)
                 .password(password)
-                .role("ROLE_ICE")
+                .role("COM")
                 .build();
         member = memberRepository.save(member);
 
