@@ -2,6 +2,7 @@ package com.bingsoo.job_view.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,6 +46,12 @@ public class IceController {
     public String infomation(){
 
         return "ice/infomation";
+    }
+
+    @RequestMapping("postDetail")
+    public String postDetail(@RequestParam("postCode") Long postCode){
+
+        return "main/post_detail" ;
     }
 
 
