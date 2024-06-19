@@ -215,13 +215,12 @@ $(document).ready(function() {
 
 function showResumeList(event) {
 	event.preventDefault();
-	let token = localStorage.getItem("token");
+	
 	console.log("=============");
 	fetch("http://localhost:9001/redbean/showResumeList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer" + token // 요청의 헤더 설정
+			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
 	})
 		.then(response => response.json())
@@ -301,12 +300,10 @@ function resumeUpdateInfo(event, resume_code) {
         jangdanzeum: jangdanzeum,
     }
     const sendData = JSON.stringify(ResumeDto);
-    let token = localStorage.getItem("token");
     fetch("http://localhost:9001/redbean/resumeUpdate?resume_code=" + resume_code, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer" + token // 요청의 헤더 설정
+            "Content-Type": "application/json"
         },
         body: sendData
     })
@@ -323,12 +320,10 @@ function resumeUpdateInfo(event, resume_code) {
 
 function deleteResume(event,resume_code){
 	event.preventDefault();
-	let token = localStorage.getItem("token");
 	fetch("http://localhost:9001/redbean/deleteResume?resume_code=" + resume_code, {
 		method: "DELETE",
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer" + token // 요청의 헤더 설정
+			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
 		
 	})
@@ -346,12 +341,10 @@ function showResumeUpdateForm(event, resume_code) {
     event.preventDefault();
     var resume_code = parseInt(resume_code, 10);
     console.log("=======================resume_code:" + resume_code);
-    let token = localStorage.getItem("token");
     fetch("http://localhost:9001/redbean/showResumeUpdateForm?resume_code=" + resume_code, { // 서버에 요청을 보냅니다.
         method: "GET",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer" + token // 요청의 헤더 설정
+            "Content-Type": "application/json" // 요청의 헤더 설정
         },
     })
     .then(response => response.json())
@@ -474,12 +467,11 @@ function showFavoriteScrab(event) {
 }
 
 function showFavoriteList() {
-	let token = localStorage.getItem("token");
+	
 	fetch("http://localhost:9001/redbean/showFavoriteList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer" + token // 요청의 헤더 설정
+			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
 	})
 		.then(response => response.json())
@@ -495,12 +487,10 @@ function showResumeDetail(event,resume_code){
 	event.preventDefault();	
 	var resume_code = parseInt(resume_code, 10);
 	console.log(resume_code);
-	let token = localStorage.getItem("token");
 	fetch("http://localhost:9001/redbean/showResumeDetail?resume_code="+resume_code, { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer" + token // 요청의 헤더 설정
+			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
 	})
 	.then(response => response.text())
@@ -518,12 +508,10 @@ function showResumeDetail(event,resume_code){
 
 
 function showSubscribeList(event) {
-	let token = localStorage.getItem("token");
 	fetch("http://localhost:9001/redbean/showSubscribeList", { // 서버에 요청을 보냅니다.
 		method: "GET",
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Bearer" + token // 요청의 헤더 설정
+			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
 	})
 		.then(response => response.json())
@@ -542,7 +530,7 @@ function showApplicationList(event) {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json",
-		    "Authorization": "Bearer " + token // 요청의 헤더 설정
+		    "Authorization": "Bearer " + token// 요청의 헤더 설정
 		},
 	})
 		.then(response => response.json())

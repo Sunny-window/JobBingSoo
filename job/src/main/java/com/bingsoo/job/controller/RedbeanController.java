@@ -202,9 +202,11 @@ public class RedbeanController {
 	
 	@GetMapping("/showResumeDetail")
 	public Resume showResumeDetail(@RequestParam("resume_code") long resume_code) {
+		System.out.println("==========================showResumeDetail Start ===============");
 		Resume resume =resumeRepository.findRdCode(resume_code);
 		return resume;
 	}
+	
 	@GetMapping("/showSubscribeList")
 	public List<Subscribe> showSubscribeList() {
 		System.out.println("==============================redBean : ");
@@ -215,6 +217,7 @@ public class RedbeanController {
 	public List<Favorite> showFavoriteList() {
 		System.out.println("==============================redBean : ");
 		List<Favorite> list =favoriteRepository.findAll();
+		System.out.println("==============================showFavoriteList : "+list);
 		return list;
 	}
 	@GetMapping("/showApplicationList")
