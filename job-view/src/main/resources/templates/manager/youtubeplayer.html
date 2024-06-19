@@ -23,16 +23,26 @@
     <script>
         var player;
         var redirected = false;
+        var videoStartTime = 605;
+        var videoEndTime = 610;
 
         function onYouTubeIframeAPIReady() {
+            initializePlayer();
+        }
+
+        function initializePlayer() {
+            if (player && player.destroy) {
+                player.destroy();
+            }
+
             player = new YT.Player('player', {
                 height: '100%',
                 width: '100%',
                 videoId: 'xhwCdqtq1M4',
                 playerVars: {
                     'playsinline': 1,
-                    'start': 605,
-                    'end': 610,
+                    'start': videoStartTime,
+                    'end': videoEndTime,
                     'autoplay': 1,
                     'controls': 0,
                     'mute': 1  // 자동재생을 위해 음소거
@@ -86,9 +96,15 @@
                 redirectToDashboard();
             }
         });
+
+        // 페이지가 로드될 때 플레이어 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            onYouTubeIframeAPIReady();
+        });
     </script>
 </head>
 <body>
     <div id="player"></div>
 </body>
 </html>
+

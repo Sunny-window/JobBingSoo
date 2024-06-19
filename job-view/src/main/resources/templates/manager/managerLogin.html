@@ -161,7 +161,12 @@
             // 페이지 로드 시 로그인 상태 확인
             const token = localStorage.getItem('token');
             if (token) {
-                window.location.href = '/manager/dashboard';
+                const userRole = getUserRoleFromToken(token);
+                if (userRole === 'ADMIN') {
+                    window.location.href = '/manager/dashboard';
+                } else {
+                    localStorage.removeItem('token'); // 역할이 맞지 않으면 토큰 제거
+                }
             }
         });
 
@@ -179,7 +184,13 @@
             .then(data => {
                 if (data.success) {
                     localStorage.setItem('token', data.token); // JWT 토큰을 로컬 스토리지에 저장
-                    window.location.href = data.redirectUrl;
+                    const userRole = getUserRoleFromToken(data.token);
+                    if (userRole === 'ADMIN') {
+                        window.location.href = data.redirectUrl;
+                    } else {
+                        document.getElementById('error-message').textContent = '접근 권한이 없습니다.';
+                        localStorage.removeItem('token'); // 역할이 맞지 않으면 토큰 제거
+                    }
                 } else {
                     document.getElementById('error-message').textContent = data.message;
                 }
@@ -191,6 +202,18 @@
 
             return false;
         }
+
+        function getUserRoleFromToken(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const decodedToken = JSON.parse(jsonPayload);
+            return decodedToken.role;
+        }
     </script>
 </body>
 </html>
+
