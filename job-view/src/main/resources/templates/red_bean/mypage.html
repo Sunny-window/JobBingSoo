@@ -298,14 +298,14 @@ function resumeUpdateInfo(event, resume_code) {
 
 
 
-function deleteResume(event){
+function deleteResume(event,resume_code){
 	event.preventDefault();
-	fetch("http://localhost:9001/readbean/deleteResume", {
-		method: "PUT",
+	fetch("http://localhost:9001/redbean/deleteResume?resume_code=" + resume_code, {
+		method: "DELETE",
 		headers: {
 			"Content-Type": "application/json" // 요청의 헤더 설정
 		},
-		body: sendData
+		
 	})
 		.then(response => response.text())
 		.then(data => {
@@ -525,26 +525,6 @@ function showApplicationList(event) {
 }
 
 function createFavoriteTable(jsonData) {
-	
-	var html = '<table border="1">';
-	html += '<tr>';
-	html += '<th>cid</th>';
-	html += '<th>rid</th>';
-	html += '</tr>';
-	
-	jsonData.forEach(item => {
-		html += '<tr>';
-		html += '<td>' + item.cid.username + '</td>';
-		html += '<td>' + item.rid.username + '</td>';
-		html += '</tr>';
-	});
-
-	html += '</table>';
-	
-	return html;
-}
-
-function createSubscribeTable(jsonData) {
 	var html = '<table border="1">';
 	html += '<tr>';
 	html += '<th>favor_code</th>';
@@ -554,9 +534,29 @@ function createSubscribeTable(jsonData) {
 	
 	jsonData.forEach(item => {
 		html += '<tr>';
-		html += '<td>' + item.username.username + '</td>';
-		html += '<td>' + item.username.username + '</td>';
-		html += '<td>' + item.username.username + '</td>';
+		html += '<td>' + item + '</td>';
+		html += '<td>' + item + '</td>';
+		html += '<td>' + item+ '</td>';
+		html += '</tr>';
+	});
+
+	html += '</table>';
+	
+	
+	return html;
+}
+
+function createSubscribeTable(jsonData) {
+	var html = '<table border="1">';
+	html += '<tr>';
+	html += '<th>cid</th>';
+	html += '<th>rid</th>';
+	html += '</tr>';
+	
+	jsonData.forEach(item => {
+		html += '<tr>';
+		html += '<td>' + item + '</td>';
+		html += '<td>' + item + '</td>';
 		html += '</tr>';
 	});
 

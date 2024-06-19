@@ -13,7 +13,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Long>{
 	@Query(value="SELECT * FROM resume WHERE resume_code = :resume_code", nativeQuery=true)
 	Resume findRdCode(@Param("resume_code") long resume_code);
 
-	@Query(value="DELETE * FROM resume WHERE resume_code = :resume_code", nativeQuery=true)
+	@Query(value="DELETE FROM resume WHERE resume_code = :resume_code", nativeQuery=true)
 	void deleteByRdCode(@Param("resume_code") long resume_code);
 
 	List<Resume> findByRid(Member member);
