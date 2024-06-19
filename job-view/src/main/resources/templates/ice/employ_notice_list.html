@@ -141,9 +141,6 @@
         function noticeList() {
             fetch("http://localhost:9001/ice/my-postings?cid=홍길동", {
                     method: "GET",
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
                 })
                 .then(response => response.json())
                 .then(data => {
