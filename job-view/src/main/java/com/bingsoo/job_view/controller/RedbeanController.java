@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping("/red_bean")
+@RequestMapping("/redbean")
 public class RedbeanController {
     
 	@RequestMapping("/mypage")
