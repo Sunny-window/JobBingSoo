@@ -387,4 +387,46 @@ public class ManagerController {
         favoriteRepository.save(favorite);
         return "success";
     }
+    
+    @GetMapping("/recommendations")
+    public Map<String, Object> getRecommendations(@RequestHeader("Authorization") String token) {
+        Map<String, Object> recommendations = new HashMap<>();
+
+        // JWT에서 "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        // JWT 검증 및 사용자 이름 추출
+        if (!JWTUtil.validateToken(token)) {
+            recommendations.put("error", "Invalid token");
+            return recommendations;
+        }
+        Claims claims = JWTUtil.parseToken(token);
+        String username = claims.getSubject();
+
+        Optional<Member> memberOptional = memberRepository.findById(username);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            // 사용자의 이력서 목록 가져오기
+            List<Resume> resumes = resumeRepository.findByRid(member);
+            recommendations.put("resumes", resumes);
+
+            // 사용자 희망 지역 및 산업 가져오기
+            Optional<Desired_area> desiredAreaOptional = desiredAreaRepository.findByRid(member);
+            Optional<Desired_industry> desiredIndustryOptional = desiredIndustryRepository.findByRid(member);
+
+            // 추천 공고 목록 가져오기
+            if (desiredAreaOptional.isPresent() && desiredIndustryOptional.isPresent()) {
+                Desired_area desiredArea = desiredAreaOptional.get();
+                Desired_industry desiredIndustry = desiredIndustryOptional.get();
+
+                List<Posting> recommendedPostings = postingRepository.findByAreaAndIndustry(desiredArea.getArea_main(), desiredIndustry.getIndustry());
+                recommendations.put("recommendedPostings", recommendedPostings);
+            }
+        }
+
+        return recommendations;
+    }
 }
