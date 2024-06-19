@@ -24,6 +24,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         h1 {
@@ -41,7 +42,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            cursor: pointer;
+            margin-top: 70px;
         }
 
         .posting {
@@ -50,8 +51,15 @@
             border: 1px solid #9b9b9b;
             border-left: none;
             border-right: none;
-            align-items: center;
+            display: flex;
+            justify-content: space-between;
             position: relative;
+            cursor: pointer;
+        }
+
+        .text-container{
+            width: 200px;
+            margin-top: 40px;
         }
 
         .posting .company {
@@ -61,30 +69,47 @@
         .posting .address {
             font-size: 14px;
             font-weight: bold;
-            margin-top: 5px;
         }
 
         .posting .title {
             font-size: 24px;
             font-weight: bold;
-            margin-top: 10px;
         }
 
         .posting .deadline {
             font-size: 12px;
-            margin-top: 5px;
         }
 
         .button-container {
             display: flex;
             gap: 10px;
             justify-content: flex-end;
+            align-items: center;
         }
 
         button {
             padding: 10px 20px;
-            border: none;
+            border: 1.5px solid #bbb;
+            background-color: white;
             cursor: pointer;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover{
+            background-color: #bbb;
+        }
+        .write-botton{
+            top: 120px;
+            right: 20px;
+            position: absolute;
+            background-color: #ff006f;
+            color: white;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-weight: bold;
+        }
+        .write-botton:hover{
+            background-color: #d6006c;
         }
 
     </style>
@@ -97,7 +122,7 @@
         <h1>공고 관리 페이지</h1>
         <hr>
         <div class="content"></div>
-        <button onclick="posting_form()">공고작성</button>
+        <button class="write-botton"onclick="posting_form()">공고작성</button>
     </section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
@@ -126,38 +151,51 @@
                     data.forEach(posting => {
                         let div = document.createElement('div');
                         div.classList.add('posting');
+                        div.addEventListener('click', () => {
+                            postingDetail(posting.post_code);
+                        });
+
+                        let textDiv = document.createElement('div'); 
+                        textDiv.classList.add('text-container');
 
                         let company = document.createElement('div');
                         company.classList.add('company');
                         company.textContent = posting.company_name;
+                        textDiv.appendChild(company);
 
                         let address = document.createElement('div');
                         address.classList.add('area');
                         address.textContent = posting.area;
+                        textDiv.appendChild(address);
 
                         let title = document.createElement('div');
                         title.classList.add('title');
                         title.textContent = posting.title;
+                        textDiv.appendChild(title);
 
                         let deadline = document.createElement('div');
                         deadline.classList.add('deadline');
                         deadline.textContent = `마감일: ${posting.deadline}`;
+                        textDiv.appendChild(deadline);
 
                         let buttonContainer = document.createElement('div');
                         buttonContainer.classList.add('button-container');
 
                         let button1 = createButton('지원자 보기');
-                        button1.addEventListener('click', () => {
+                        button1.addEventListener('click', (event) => {
+                            event.stopPropagation();
                             window.location.href = `/ice/red_bean_list?postCode=${posting.post_code}`;
                         });
 
                         let button2 = createButton('공고 수정');
-                        button2.addEventListener('click', () => {
+                        button2.addEventListener('click', (event) => {
+                            event.stopPropagation();
                             window.location.href = `/ice/employ_notice_updateForm?postCode=${posting.post_code}`;
                         });
 
                         let button3 = createButton('공고 삭제');
-                        button3.addEventListener('click', () => {
+                        button3.addEventListener('click', (event) => {
+                            event.stopPropagation();
                             let result = confirm('공고를 삭제하시겠습니까?');
                             if (result) {
                                 realDelete(posting.post_code);
@@ -170,22 +208,23 @@
                         buttonContainer.appendChild(button2);
                         buttonContainer.appendChild(button3);
 
-                        div.appendChild(company);
-                        div.appendChild(address);
-                        div.appendChild(title);
-                        div.appendChild(deadline);
+                        div.appendChild(textDiv); 
                         div.appendChild(buttonContainer);
 
                         contentDiv.appendChild(div);
-                    });
-                })
-                .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
+                        });
+                    })
+                    .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
         }
 
         function createButton(text) {
             let button = document.createElement('button');
             button.textContent = text;
             return button;
+        }
+
+        function postingDetail(postCode) {
+            window.location.href = `postDetail?postCode=${postCode}`;
         }
 
         function realDelete(postCode) {

@@ -7,43 +7,65 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!--jquery 의존성 주입-->
 </head>
 <style>
-    #myCompany{
-        font-size: 30px;
-        text-align: center;
-        margin-top: 80px;
-    }
-    .button-container {
-        display: flex;
-        justify-content: center;
-    	gap: 127px;
-    	margin-top: 80px; 
-    }
-    button {
-    	width: 230px;
-    	height: 215px;
-    	font-size: 20px;
-        color: #7e7e7e;
-    	background-color: white; 
-    	border: 1px solid #D9D9D9;
-    	cursor: pointer; 
-    }
-    button:hover {
-    	background-color: #FFD6E1; 
-    }
+    section {
+            width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-</style>
+        hr {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+        #myCompany {
+            font-size: 30px;
+            margin-top: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        button {
+            width: 200px;
+            height: 50px;
+            font-size: 18px;
+            color: #333;
+            background-color: #fff;
+            border: 1px solid #bb006b;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d6006c;
+            color: white;
+        }
+    </style>
+</head>
+
 <body>
     <header>
         <th:block th:insert="~{/sub/header.html}"></th:block>
     </header>
     <section>
-        <h1>기업 마이 페이지</h1>
+        <p id="myCompany">우리회사 정보 관리</p>
         <hr>
-            <p id = "myCompany">우리회사 정보 관리</p>
-            <div class="button-container">
-                <button onclick="employ_notice_list()">채용공고관리</button> 
-                <button onclick="infomation()">기업정보관리</button>
-            </div>
+        <div class="button-container">
+            <button onclick="employ_notice_list()">채용공고관리</button>
+            <button onclick="infomation()">기업정보관리</button>
+        </div>
     </section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
