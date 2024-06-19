@@ -33,9 +33,9 @@
         }
 
         textarea {
-            width: 100%;
+            width: calc(100% - 36px);
             height: 100px;
-            margin-top: 10px;
+            margin: 10px 8px;
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
@@ -112,10 +112,21 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                    .then(() => {
-                        window.location.href = `/cs/list?menu_select=3`;
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            return response.text().then(text => { throw new Error(text); });
+                        }
                     })
-                    .catch(error => console.error('Error delete cs. : ', error));
+                    .then(data => {
+                        console.log(data); // 성공 시 서버의 응답 출력
+                        window.location.href = '/cs/list?menu_select=3';
+                    })
+                    .catch(error => {
+                        console.error('Error deleting cs:', error);
+                        alert(error.message); // 에러 메시지를 사용자에게 알림
+                    });
             }
         </script>
     </section>

@@ -256,13 +256,15 @@
                     <p class="my_public">공개여부</p>
                     <p class="my_date">날짜</p>
                 </div>
-                <div class="my_box" onclick="location.href='/cs/forumDetail?cscode=${cs.cscode}'">
-                    <p class="my_num2"> 번호 </p>
-                    <p class="my_type2"><span class="my_type_ex" id="typeSpan"> cs type <span></p>
-                    <p class="my_title2"> cs 타이틀 </p>
-                    <p class="my_result2"><span class="my_result_ex" id="resultSpan"> cs 결과 <span></p>
-                    <p class="my_public2"><span class="my_publictype_ex" id="publictypeSpan"> cs 공개여부 </span></p>
-                    <p class="my_date2">cs 등록일</p>
+                <div id="my-cs-list">
+                    <div class="my_box" onclick="location.href='/cs/forumDetail?cscode=${cs.cscode}'">
+                        <p class="my_num2"> 번호 </p>
+                        <p class="my_type2"><span class="my_type_ex" id="typeSpan"> cs type <span></p>
+                        <p class="my_title2"> cs 타이틀 </p>
+                        <p class="my_result2"><span class="my_result_ex" id="resultSpan"> cs 결과 <span></p>
+                        <p class="my_public2"><span class="my_publictype_ex" id="publictypeSpan"> cs 공개여부 </span></p>
+                        <p class="my_date2">cs 등록일</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -373,6 +375,33 @@
             })
     }
 
+    function getMyCs() {
+        var token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옴
+
+        fetch('http://localhost:9001/cs/my-list', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+        })
+            .then(response => response.json())
+            .then(list => {
+                document.getElementById('my-cs-list').innerHTML = '';
+
+                list.forEach(cs => {
+                    document.getElementById('my-cs-list').innerHTML
+                        += '<div class="my_box" onclick="gotoDetail(' + cs.cs_code + ')">'
+                            + '<p class="cs_num2">' + cs.cs_code + '</p>'
+                            + '<p class="cs_title2">' + cs.title + '</p>'
+                            + '<p class="cs_user2">' + cs.rid.username + '</p>'
+                            + '<p class="cs_result2"><span class="cs_result_ex" id="resultSpan">' + cs.result + '</span></p>'
+                            + '<p class="cs_date2">' + cs.date + '</p>'
+                            + '</div>'
+                        ;
+
+                })
+            })
+    }
+
     function gotoDetail(cscode) {
         location.href = '/cs/detail?cs_code=' + cscode;
     }
@@ -402,6 +431,7 @@
         } else if (tap_menu_selection == 3) {
             console.log('나의 문의 탭');
             choose_tab3();
+            getMyCs();
         }
     });
 
@@ -414,8 +444,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         const typeSpan = document.querySelectorAll(".my_type_ex");
-        // 현재 데이터와 뷰가 같이 로드될 때 기준으로 코드가 작성되어 있음
-        // 해당 부분은 ajax 요청을 통해 데이터를 응답받고 나서 innerHTML할 때 style을 주는 방식으로 해야됨.
 
         typeSpan.forEach((typeSpan, index) => {
             const type = typeSpan.innerText.trim();
