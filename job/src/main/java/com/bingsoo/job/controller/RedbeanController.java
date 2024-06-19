@@ -15,8 +15,10 @@ import com.bingsoo.job.dto.ResumeDto;
 import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Career;
 import com.bingsoo.job.entity.Certificate;
+import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.Cover_letter;
 import com.bingsoo.job.entity.Desired_area;
+import com.bingsoo.job.entity.Desired_industry;
 import com.bingsoo.job.entity.Favorite;
 import com.bingsoo.job.entity.RedBean;
 import com.bingsoo.job.entity.Resume;
@@ -104,18 +106,75 @@ public class RedbeanController {
 	
 	@PutMapping("/resumeUpdate")
 	public String resumeUpdate(@RequestBody ResumeDto resumedto, @RequestParam("resume_code") long resume_code) {
+		
 		System.out.println("==============================resumedto : "+resumedto);
+		System.out.println("==============================resume_code : "+resume_code);
 		Resume resume = resumeRepository.findRdCode(resume_code);
 		RedBean redbean =  redBeanRepository.findByRid(resume.getRid()).get(0);
+		
+		Optional<Desired_area>  opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+		Desired_area desired_area = opdesired_area.get();
+		
+		Optional<Desired_industry>  opdesired_industry = desired_industryRepository.findByRid(redbean.getRid());
+		Desired_industry desired_industry = opdesired_industry.get();
+		
+		Career career =  careerRepository.findByRid(redbean.getRid());
+		
+		Optional<Company>  opcompany = companyRepository.findByCid(redbean.getRid());
+		Company company = opcompany.get();
 		
 		redbean.setName(resumedto.getName());
 		redbean.setAddress(resumedto.getAddress());
 		redbean.setTel(resumedto.getTel());
 		redbean.setEmail(resumedto.getEmail());
+		redBeanRepository.save(redbean);
+		
+		
+		resume.setTitle(resumedto.getTitle());
+		resume.setEdu_name(resumedto.getEdu_name());
+		resume.setEdu_type(resumedto.getEdu_type());
+		resume.setEdu_major(resumedto.getEdu_major());
+		resume.setEdu_state(resumedto.getEdu_state());
+		resumeRepository.save(resume);
+		
+		
+		desired_area.setArea_main(resumedto.getArea_main());
+		desired_area.setArea_sub(resumedto.getArea_sub());
+		desired_areaRepository.save(desired_area);
+		
+		
+		desired_industry.setIndustry(resumedto.getIndustry());
+		desired_industry.setJob(resumedto.getJob());
+		desired_industryRepository.save(desired_industry);
 		
 		
 		
-		return "등록성공";
+		company.setCompany_name(resumedto.getCompanyname());
+		companyRepository.save(company);
+		
+		
+		career.setCarDate(resumedto.getCardate());
+		career.setEndDate(resumedto.getEnddate());
+		career.setIndustry(resumedto.getIndustry());
+		career.setPosition(resumedto.getPosition());
+		careerRepository.save(career);
+		
+		
+		Cover_letter cover_letter = cover_letterRepository.findByResume_code(resume_code);
+		cover_letter.setSungjang(resumedto.getSungjang());
+		cover_letter.setJangdanzeum(resumedto.getJangdanzeum());
+		cover_letter.setJuwondongki(resumedto.getJuwondongki());
+		
+		cover_letterRepository.save(cover_letter);
+		
+		
+		
+		
+		
+		
+		
+		
+		return "수정성공";
 	}
 	
 	
@@ -172,6 +231,7 @@ public class RedbeanController {
 		ResumeDto resumeDto = new ResumeDto();
 		Resume resume = resumeRepository.findRdCode(resume_code);
 		System.out.println("==========================================resume: "+resume);
+		System.out.println("==========================================resume_code: "+resume_code);
 		resumeDto.setTitle(resume.getTitle());
 	
 		RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
