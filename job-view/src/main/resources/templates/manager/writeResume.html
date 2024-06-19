@@ -2,109 +2,196 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>YouTube Video</title>
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <title>비디오 선택 및 재생</title>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            overflow: hidden;
-        }
-        #player {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            height: 100%;
-            z-index: 1000;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        header, footer {
+            width: 100%;
+        }
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .video-container iframe {
+            width: 560px;
+            height: 315px;
+            margin-bottom: 20px;
+        }
+        .video-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .video-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF006F;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .video-buttons button:hover {
+            background-color: #D32F2F;
+        }
+        .info-content {
+            display: none;
+            text-align: left;
+            max-width: 800px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
         }
     </style>
-    <script>
-        var player;
-        var redirected = false;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '100%',
-                width: '100%',
-                videoId: 'qu2fhO5jwsY', // 여기에서 비디오 아이디를 변경했습니다.
-                playerVars: {
-                    'playsinline': 1,
-                    'start': 15,
-                    'end': 20,
-                    'autoplay': 1,
-                    'controls': 0
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            event.target.playVideo();
-            player.unMute(); // 음소거 해제
-
-            // 클릭하면 재생/일시정지 토글
-            player.getIframe().addEventListener('click', function() {
-                if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
-            });
-
-            // 전체 화면 처리
-            var iframe = document.getElementById('player');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { 
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { 
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { 
-                iframe.msRequestFullscreen();
-            }
-
-            // ESC 키로 전체 화면 종료 처리
-            document.addEventListener('keydown', function(event) {
-                if (event.key === "Escape" && !redirected) {
-                    redirectToDashboard();
-                }
-            });
-
-            // Fullscreen change 이벤트 처리
-            document.addEventListener('fullscreenchange', handleFullScreenChange);
-            document.addEventListener('webkitfullscreenchange', handleFullScreenChange);
-            document.addEventListener('mozfullscreenchange', handleFullScreenChange);
-            document.addEventListener('MSFullscreenChange', handleFullScreenChange);
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.ENDED && !redirected) {
-                redirectToDashboard();
-            }
-        }
-
-        function handleFullScreenChange() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement && 
-                !document.mozFullScreenElement && !document.msFullscreenElement && !redirected) {
-                redirectToDashboard();
-            }
-        }
-
-        function redirectToDashboard() {
-            redirected = true;
-            window.location.href = '/main/index';
-        }
-    </script>
 </head>
 <body>
-    <div id="player"></div>
+    <div class="container">
+        <header>
+            <th:block th:insert="~{/sub/header.html}"></th:block>
+        </header>
+        <section>
+            <h1>잡빙수가 여러분을 위해 준비한 선물</h1>
+            <div class="video-buttons">
+                <button onclick="playVideoAndShowInfo('eGv5EAMF8OQ', 'resume')">성공적인 이력서 작성법</button>
+                <button onclick="playVideoAndShowInfo('qu2fhO5jwsY', 'coverLetter')">5초만 봐도 합격하는 자소서 작성법</button>
+            </div>
+            <div class="video-container">
+                <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="info-content" id="infoContent">
+                <div id="resume" style="display: none;">
+                    <h2>이력서 기본 구성 요소</h2>
+                    <h3>개인 정보</h3>
+                    <ul>
+                        <li>이름</li>
+                        <li>연락처 (전화번호, 이메일)</li>
+                        <li>주소 (선택 사항)</li>
+                        <li>자기소개서 (선택 사항)</li>
+                    </ul>
+                    <p>짧고 간결하게 자신의 강점을 요약합니다. 지원 동기와 목표를 명확히 합니다.</p>
+                    <h3>경력 사항</h3>
+                    <p>역순으로 최근 직장에서부터 시작하여 이전 직장 순으로 나열합니다. 회사 이름, 직책, 근무 기간, 주요 업무 및 성과를 포함합니다.</p>
+                    <h3>학력</h3>
+                    <p>역순으로 최근 학력부터 시작하여 이전 학력 순으로 나열합니다. 학교 이름, 전공, 학위, 졸업 연도 등을 포함합니다.</p>
+                    <h3>기술 및 능력</h3>
+                    <p>직무와 관련된 기술 및 능력을 나열합니다. 예: 프로그래밍 언어, 소프트웨어, 외국어 능력 등</p>
+                    <h3>자격증 및 수료증</h3>
+                    <p>직무와 관련된 자격증 및 수료증을 나열합니다.</p>
+                    <h3>프로젝트 경험 (선택 사항)</h3>
+                    <p>직무와 관련된 주요 프로젝트를 소개합니다. 프로젝트 이름, 기간, 역할, 주요 성과를 포함합니다.</p>
+                    <h3>수상 및 포상 (선택 사항)</h3>
+                    <p>주요 수상 경력 및 포상 내역을 포함합니다.</p>
+                    <h3>취미 및 관심사 (선택 사항)</h3>
+                    <p>취미나 관심사를 간단히 나열합니다. (일부 고용주가 이를 통해 지원자의 성향을 파악할 수 있습니다.)</p>
+                    <h2>작성 팁</h2>
+                    <h3>간결하고 명확하게</h3>
+                    <p>불필요한 정보를 배제하고 중요한 정보를 중심으로 작성합니다. 각 섹션을 명확하게 구분하고 보기 쉽게 작성합니다.</p>
+                    <h3>맞춤형 작성</h3>
+                    <p>지원하는 직무에 맞춰 이력서를 조정합니다. 직무 설명을 분석하고 관련된 경험과 기술을 강조합니다.</p>
+                    <h3>키워드 사용</h3>
+                    <p>고용주가 주로 사용하는 키워드와 용어를 사용합니다. 많은 기업들이 이력서 관리 시스템(ATS)을 사용하기 때문에 관련 키워드를 포함하는 것이 중요합니다.</p>
+                    <h3>성과 강조</h3>
+                    <p>업무 성과를 구체적으로 작성합니다. 예: "매출 20% 증가" 또는 "프로젝트 완료 기간 단축"</p>
+                    <h3>정확성과 진실성 유지</h3>
+                    <p>모든 정보는 사실에 기반해야 합니다. 잘못된 정보는 신뢰를 떨어뜨릴 수 있습니다.</p>
+                </div>
+                <div id="coverLetter" style="display: none;">
+                    <h2>자기소개서 작성법</h2>
+                    <p>자기소개서는 본인의 강점, 경험, 목표 등을 잘 표현하여 회사나 학교 등에 자신을 효과적으로 어필하는 문서입니다. 다음은 효과적인 자기소개서 작성법에 대한 가이드입니다:</p>
+                    <h3>자기소개서의 구조</h3>
+                    <h4>도입부</h4>
+                    <ul>
+                        <li><strong>자기소개:</strong> 간단한 인사와 함께 자신을 간략히 소개합니다.</li>
+                        <li><strong>지원 동기:</strong> 왜 이 회사나 학교에 지원하게 되었는지 설명합니다. 지원 동기는 구체적이고 진정성 있게 작성해야 합니다.</li>
+                    </ul>
+                    <h4>본론</h4>
+                    <ul>
+                        <li><strong>경험 및 경력:</strong> 관련된 경험이나 경력을 상세히 기술합니다. 경험을 설명할 때는 구체적인 사례와 숫자를 활용하여 신뢰성을 높입니다.</li>
+                        <li><strong>직무 관련 경험:</strong> 지원하는 직무와 관련된 경험을 중심으로 기술합니다.</li>
+                        <li><strong>프로젝트 및 활동:</strong> 프로젝트나 활동 경험을 통해 얻은 교훈과 성과를 강조합니다.</li>
+                        <li><strong>역량 및 강점:</strong> 본인의 강점과 역량을 어필합니다. 강점은 구체적인 경험과 연결 지어 설명합니다.</li>
+                        <li><strong>성장 과정:</strong> 성장 과정에서 어떤 가치관이나 목표를 가지게 되었는지 설명합니다. 이는 인성과 가치관을 보여줄 수 있는 중요한 부분입니다.</li>
+                    </ul>
+                    <h4>결론</h4>
+                    <ul>
+                        <li><strong>미래 계획:</strong> 해당 회사나 학교에서의 목표와 계획을 설명합니다.</li>
+                        <li><strong>맺음말:</strong> 지원 의지를 다시 한 번 강조하며 마무리 인사를 합니다.</li>
+                    </ul>
+                    <h3>작성 팁</h3>
+                    <h4>구체적이고 명확하게</h4>
+                    <p>추상적인 표현보다는 구체적인 예시와 데이터를 사용하여 자신의 경험과 성과를 설명합니다.</p>
+                    <h4>진솔하게 작성</h4>
+                    <p>자신의 경험과 생각을 진솔하게 작성하여 신뢰성을 높입니다. 과장하거나 거짓된 정보를 쓰지 않도록 주의합니다.</p>
+                    <h4>맞춤형 작성</h4>
+                    <p>지원하는 회사나 학교의 특성에 맞춰 자기소개서를 작성합니다. 각각의 지원 기관이 추구하는 가치와 문화에 맞게 내용을 조정합니다.</p>
+                    <h4>간결하고 읽기 쉽게</h4>
+                    <p>불필요한 장황한 설명을 피하고 간결하게 작성합니다. 문단을 적절히 나누고, 가독성을 높이는 표현을 사용합니다.</p>
+                    <h3>자기소개서 예시</h3>
+                    <h4>도입부</h4>
+                    <p>안녕하세요, 지원자 홍길동입니다. 저는 항상 도전과 성장을 추구하며, 새로운 환경에서 배우고 발전하는 것을 좋아합니다. [회사/학교명]의 [직무/과정]에 지원하게 된 동기는 [구체적인 이유]입니다.</p>
+                    <h4>본론</h4>
+                    <p>저는 [직무 관련 경험]을 통해 [특정 기술/역량]을 쌓았습니다. 예를 들어, [구체적인 경험]에서는 [구체적인 성과]를 이루어냈습니다. 또한, [프로젝트/활동]을 통해 [어떤 능력]을 기를 수 있었습니다.</p>
+                    <p>제 강점은 [특정 강점]이며, 이를 통해 [관련된 성과나 경험]을 이뤄냈습니다. 이러한 경험들은 저의 [직무 관련 역량]을 강화하는 데 큰 도움이 되었습니다.</p>
+                    <p>저의 성장 과정에서 [특정한 사건이나 경험]을 통해 [어떤 가치관]을 가지게 되었으며, 이는 저의 목표 설정에 큰 영향을 미쳤습니다.</p>
+                    <h4>결론</h4>
+                    <p>[회사/학교명]에서 저는 [구체적인 목표]를 이루고자 합니다. 이를 통해 [어떤 성과나 발전]을 이루어낼 수 있을 것이라 확신합니다. 제게 이 기회를 주신다면 최선을 다해 [회사/학교]에 기여할 것입니다.</p>
+                    <p>감사합니다.</p>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <th:block th:insert="~{/sub/footer.html}"></th:block>
+        </footer>
+    </div>
+    <script>
+        function playVideo(videoId) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        }
+
+        function playVideoAndShowInfo(videoId, infoType) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const infoContent = document.getElementById('infoContent');
+            const resumeInfo = document.getElementById('resume');
+            const coverLetterInfo = document.getElementById('coverLetter');
+
+            videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            infoContent.style.display = 'block';
+
+            // Display the correct info based on the button clicked
+            if (infoType === 'resume') {
+                resumeInfo.style.display = 'block';
+                coverLetterInfo.style.display = 'none';
+            } else if (infoType === 'coverLetter') {
+                coverLetterInfo.style.display = 'block';
+                resumeInfo.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
-
 
