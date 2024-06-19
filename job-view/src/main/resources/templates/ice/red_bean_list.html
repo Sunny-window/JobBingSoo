@@ -73,7 +73,9 @@
     <th:block th:insert="~{/sub/footer.html}"></th:block>
 </footer>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', getList());
+
+    function getList() {
         const pcode = document.getElementById('postCode').value;
         fetch(`http://localhost:9001/ice/redbean-per-mypost?postcode=` + pcode)
             .then(response => response.json())
@@ -127,7 +129,7 @@
                 });
             })
             .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
-    });
+    }
 
     function searchResume(rid){
         window.location.href = `/red_bean/resume_detail?rid=` + rid;
@@ -150,15 +152,17 @@
         .then(data => {
             console.log('불합격 처리 결과:', data);
             alert('불합격 처리되었습니다.');
+            getList();
         })
         .catch(error => console.error('불합격 처리 중 오류 발생:', error));
     }
 
     function approve(app_code) {
+        const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옴
         fetch(`http://localhost:9001/ice/approve?app_code=` + app_code, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
             }
         })
         .then(response => {
@@ -170,6 +174,7 @@
         .then(data => {
             console.log('합격 처리 결과:', data);
             alert('합격 처리되었습니다.');
+            getList();
         })
         .catch(error => console.error('합격 처리 중 오류 발생:', error));
     }
