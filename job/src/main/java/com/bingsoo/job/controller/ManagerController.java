@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -389,7 +390,7 @@ public class ManagerController {
     }
     
     @GetMapping("/recommendations")
-    public Map<String, Object> getRecommendations(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<Map<String, Object>> getRecommendations(@RequestHeader("Authorization") String token) {
         Map<String, Object> recommendations = new HashMap<>();
 
         // JWT에서 "Bearer " 접두사 제거
@@ -400,7 +401,7 @@ public class ManagerController {
         // JWT 검증 및 사용자 이름 추출
         if (!JWTUtil.validateToken(token)) {
             recommendations.put("error", "Invalid token");
-            return recommendations;
+            return ResponseEntity.status(401).body(recommendations);
         }
         Claims claims = JWTUtil.parseToken(token);
         String username = claims.getSubject();
@@ -427,6 +428,6 @@ public class ManagerController {
             }
         }
 
-        return recommendations;
+        return ResponseEntity.ok(recommendations);
     }
 }

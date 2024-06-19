@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/manager")
-@CrossOrigin(origins = "http://localhost:8080")
 public class ManagerController {
 
 	@GetMapping("/member-all")
@@ -67,5 +66,10 @@ public class ManagerController {
     @RequestMapping("/writeResume")
     public String writeResume() {
     	return "manager/writeResume";
+    }
+    
+    @RequestMapping("/ai")
+    public String ai() {
+    	return "manager/ai";
     }
 }
