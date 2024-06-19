@@ -1,149 +1,198 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <title></title>
-<style>
-* {
-    margin: 0;
-    padding: 0;
-}
-.title{
-	width:100%;
-	margin-top:32px;
-}
-.title h1{
-	text-align:center;
-}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
 
-.write-container{
-	width:700px;
-	margin:56px auto;
-	background: white;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-	padding:20px;
-    font-size:18px;
-    padding-bottom:10px;
-    
-}
-.content_text,
-.type_text,
-.title_text{
-    margin-bottom:10px;
-}
+        .title {
+            width: 100%;
+            margin-top: 32px;
+        }
 
-#type {
-    width: 80px;
-    height: 35px;
-    text-align:center;
-    margin-bottom: 40px;
-}
-input[type="text"]{
-    width: 700px;
-    height: 45px;
-    box-sizing:border-box;
-    margin-bottom: 40px;
-}
-textarea{
-    width:700px;
-    height:350px;
-    padding:5px;
-    box-sizing:border-box; 
-}
-.btn_box{
-	text-align:center;
-	margin-top:50px;
-	margin-bottom:50px;
-}
-.btn_submit{
-    display:inline-block;
-	width:140px;
-	height:auto;
-	border:1px solid #ff006f;
-	text-align:center;
-	font-size:20px;
-	padding:10px 0;
-	cursor:pointer;
-	font-weight:600;
-    background:#ff006f;
-	color:#fff;
-}
-.btn_cancel{
-    display:inline-block;
-	width:140px;
-	height:auto;
-	border:1px solid #ff006f;
-	text-align:center;
-	font-size:20px;
-	padding:10px 0;
-	cursor:pointer;
-	font-weight:600;
-    background:#fff;
-	color:#ff006f;
-}
-.btn_submit:hover{
-    background-color: white;
-    color: #ff006f;
-}
-.btn_cancel:hover {
-    background-color: #ff006f;
-    color: white;
-}
+        .title h1 {
+            text-align: center;
+        }
 
-</style>
+        .write-container {
+            width: 700px;
+            margin: 56px auto;
+            background: white;
+            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+            padding: 20px;
+            font-size: 18px;
+            padding-bottom: 10px;
+
+        }
+
+        .content_text,
+        .type_text,
+        .title_text {
+            margin-bottom: 10px;
+        }
+
+        #type {
+            width: 80px;
+            height: 35px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        input[type="text"] {
+            padding:8px;
+            width: 700px;
+            height: 45px;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+        }
+
+        textarea {
+            width: 700px;
+            height: 350px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn_box {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        .btn_submit,
+        .btn_cancel {
+            display: inline-block;
+            width: 140px;
+            height: auto;
+            border: 1px solid #ff006f;
+            text-align: center;
+            font-size: 20px;
+            padding: 10px 0;
+            cursor: pointer;
+            font-weight: 600;
+            background: #ff006f;
+            color: #fff;
+        }
+
+        .btn_cancel {
+            background: #fff;
+            color: #ff006f;
+        }
+
+        .btn_submit:hover {
+            background-color: white;
+            color: #ff006f;
+        }
+
+        .btn_cancel:hover {
+            background-color: #ff006f;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
-<header>
-    <th:block th:insert="~{/sub/header.html}"></th:block>
-</header>
-<section>
-    <div class="title">
-        <h1> 문의 / 작성 </h1>
-    </div>
-    <div class="write-container">
+    <header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
+    <section>
+        <div class="title">
+            <h1> 문의 / 작성 </h1>
+        </div>
+        <div class="write-container">
             <p class="type_text">문의 종류</p>
             <select name="type" id="type">
                 <option id="aa" value="A">문의</option>
                 <option id="bb" value="B">신고</option>
             </select>
-            <input type="radio" id="public" name="public_type" value="Y" checked>
+            <input type="radio" id="public" name="public_type" value="공개" checked>
             <label for="public">공개</label>
-            <input type="radio" id="private" name="public_type" value="N">
+            <input type="radio" id="private" name="public_type" value="비공개">
             <label for="private">비공개</label><br>
             <p class="title_text">제목</p>
             <input type="text" name="title" placeholder="제목을 입력하세요...">
             <p class="content_text">내용</p>
             <textarea id="content" name="content" placeholder="내용을 입력하세요..." rows="4" cols="50"></textarea>
             <div class="btn_box">
-                <input type="submit" value="작성" class="btn_submit">
+                <input type="button" value="작성" class="btn_submit" onclick="postCS()">
                 <input type="button" class="btn_cancel" onclick="goCsList()" value="취소">
             </div>
-    </div>
-</section>
-<footer>
-    <th:block th:insert="~{/sub/footer.html}"></th:block>
-</footer>
-<script>
-    document.getElementById("type").addEventListener("change", function() {
-        const type = document.getElementById("type").value;
-        const publicRadio = document.getElementById("public");
-        const privateRadio = document.getElementById("private");
+        </div>
+    </section>
+    <footer>
+        <th:block th:insert="~{/sub/footer.html}"></th:block>
+    </footer>
+    <script>
+        function postCS() {
+            var input_title = document.querySelector('input[name="title"]').value;
+            var input_content = document.querySelector('textarea[name="content"]').value;
+            var input_type = document.querySelector('select[name="type"]').value;
+            var input_public = document.querySelector('input[name="public_type"]:checked').value;
+            var token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옴
+            if(input_type =='B'){
+                input_type = '신고';
+            }
+            else{
+                input_type = '문의';
+            }
+            console.log(input_type)
+            console.log(input_public)
+            var csData = {
+                title: input_title,
+                content: input_content,
+                type: input_type,
+                public_type: input_public
+            };
 
-        if (type === "B") {
-            publicRadio.checked = false;
-            publicRadio.disabled = true;
-            privateRadio.checked = true;
-        } else {
-            publicRadio.checked = true;
-            publicRadio.disabled = false; 
+            fetch('http://localhost:9001/cs/cs', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(csData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    console.log(data); // 성공 시 서버의 응답 출력
+                    window.location.href = '/cs/list?menu_select=3';
+                })
+                .catch(error => {
+                    console.error('Error posting cs:', error);
+                });
         }
-    });
 
-    function goCsList() {
-        if (confirm("문의 게시판으로 돌아가시겠습니까?")) {
-            window.location.href = "/cs/list";
+        document.getElementById("type").addEventListener("change", function () {
+            const type = document.getElementById("type").value;
+            const publicRadio = document.getElementById("public");
+            const privateRadio = document.getElementById("private");
+
+            if (type === "B") {
+                publicRadio.checked = false;
+                publicRadio.disabled = true;
+                privateRadio.checked = true;
+            } else {
+                publicRadio.checked = true;
+                publicRadio.disabled = false;
+            }
+        });
+
+        function goCsList() {
+            if (confirm("문의 게시판으로 돌아가시겠습니까?")) {
+                window.location.href = "/cs/list";
+            }
         }
-    }
-</script>
+    </script>
 </body>
+
 </html>

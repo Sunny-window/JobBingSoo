@@ -14,4 +14,7 @@ public interface CsRepository extends JpaRepository<Cs, Long> {
 
 	@Query(value="SELECT * FROM cs WHERE public_type = '공개' ",nativeQuery = true)
 	List<Cs> findPublicAll();
+
+	@Query(value="SELECT * FROM cs WHERE rid = :rid",nativeQuery = true)
+	List<Cs> getMyList(@Param("rid") String rid);
 }
