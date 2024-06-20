@@ -67,7 +67,6 @@
             padding-left: 80px !important;
             box-sizing: border-box;
             margin-right: 0;
-            cursor: pointer;
         }
         #header_search_input:focus {
             border-color: #ff006f;
@@ -98,9 +97,10 @@
         }
         .search_glasses {
             position: absolute;
-            right: 10px;
-            top: 5px;
+            right: -2px;
+            top: -7px;
             cursor: pointer;
+            padding: 12px;
         }
         .head_bottom {
             display: flex;
@@ -209,9 +209,9 @@
             <label for="search_input" class="search_label">
                 <input type="text" id="header_search_input" name="search">
                 <div class="header_search_bar_select">
-                    <select>
-                        <option value="기업">기업</option>
-                        <option value="공고">공고</option>
+                    <select id="search-type">
+                        <option value="com">기업</option>
+                        <option value="post">공고</option>
                     </select>
                 </div>
                 <img src="/images/search.png" class="search_glasses" onclick="search()">
@@ -304,6 +304,18 @@
                         + '<span id="notice-type">' + data.type
                         + '</span><span id="notice-message">' + data.message + '</span></a>';
                 });
+                document.getElementById('notice-bell-container').innerHTML += '<span id="clear-my-notice"> 전체삭제 </span>';
+                deleteallbtn = document.getElementById('clear-my-notice');
+                deleteallbtn.addEventListener('click', ()=>{
+                    fetch('http://localhost:9001/sub/notice-all',{
+                        method: 'DELETE',
+                        headers:{
+                            'Authorization': 'Bearer'+ token, // Authorization 헤더에 토큰을 추가
+                        }
+                    })
+                    .then(r => r.text())
+                    .then(message => alert(message))
+                });
             })
     }
 
@@ -325,7 +337,12 @@
     }
 
     function search() {
-        alert('Search!');
+        var search_type = document.getElementById('search-type').value;
+        var keyword = document.getElementById('header_search_input').value;
+
+        console.log(search_type)
+        console.log(keyword)
+        window.location.href='/sub/search?type='+search_type+'&keyword='+keyword;
     }
 
     // JWT 토큰에서 페이로드를 디코드하는 함수
