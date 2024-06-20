@@ -12,18 +12,22 @@
             padding: 0;
             min-width: 1240px;
         }
+
         section {
             min-height: calc(96vh - 210px);
             max-width: 1240px;
             margin: 6px auto 36px auto;
         }
+
         ul {
             list-style: none;
         }
+
         a {
             text-decoration: none;
             color: #333;
         }
+
         header {
             margin: 0 auto;
             height: 150px;
@@ -32,20 +36,24 @@
             background: #fff;
             box-sizing: border-box;
         }
+
         .head {
             width: 1240px;
             height: 100%;
             margin: 0 auto;
         }
+
         .head_top {
             padding-top: 20px;
             display: flex;
             justify-content: space-between;
             position: relative;
         }
+
         .head_top .logo {
             padding-left: 25px;
         }
+
         .logo img,
         .logo2 img,
         img#youtube {
@@ -53,11 +61,13 @@
             padding: 0 4px;
             margin-right: 16px;
         }
+
         .search_bar {
             position: absolute;
             top: 20px;
             left: calc(50% - 206.5px);
         }
+
         #header_search_input {
             width: 413px;
             height: 47px;
@@ -68,13 +78,16 @@
             box-sizing: border-box;
             margin-right: 0;
         }
+
         #header_search_input:focus {
             border-color: #ff006f;
             outline: none;
         }
+
         .search_label {
             position: relative;
         }
+
         .header_search_bar_select {
             width: 65px;
             height: 25px;
@@ -84,6 +97,7 @@
             border-right: 1px solid #ff006f;
             box-sizing: border-box;
         }
+
         .header_search_bar_select select {
             height: 22px;
             border: none;
@@ -92,9 +106,11 @@
             padding-right: 10px;
             cursor: pointer;
         }
+
         .header_search_bar_select select:focus {
             outline: none;
         }
+
         .search_glasses {
             position: absolute;
             right: -2px;
@@ -102,32 +118,40 @@
             cursor: pointer;
             padding: 12px;
         }
+
         .head_bottom {
             display: flex;
             justify-content: space-between;
         }
+
         .head_bottom .menu_list #menu_list_item {
             display: flex;
             padding-left: 0;
         }
+
         .head_bottom .menu_list #menu_list_item li a {
             padding: 0px 25px;
             font-size: 18px;
             font-weight: 600;
         }
+
         .head_bottom .menu_list #menu_list_item li a:hover {
             color: #ff006f;
         }
+
         .user_log_list ul {
             display: flex;
-            align-items: center; /* 중앙 정렬 추가 */
+            align-items: center;
+            /* 중앙 정렬 추가 */
         }
+
         .user_log_list ul li a {
             padding: 0px 5px;
             margin: 0px 4px;
             font-size: 16px;
             font-weight: 600;
         }
+
         #head_menu_slide_container {
             width: 100%;
             background: #fff;
@@ -135,33 +159,41 @@
             position: relative;
             z-index: 9999;
         }
+
         .active {
             display: none;
         }
+
         #head_menu_slide {
             width: 1240px;
             margin: 0 auto;
             display: flex;
         }
+
         #head_menu_slide ul {
             padding: 0px 25px;
         }
+
         #head_menu_slide ul li {
             text-align: center;
         }
+
         #head_menu_slide ul li a {
             display: inline-block;
             font-size: 18px;
             padding-bottom: 15px;
             color: #666;
         }
+
         #head_menu_slide ul li a:hover {
             color: #ff006f;
         }
+
         #notice-bell {
             width: 30px;
-            margin:0 12px;
+            margin: 0 12px;
         }
+
         #notice-bell-container {
             flex-direction: column;
             position: absolute;
@@ -176,11 +208,13 @@
             padding-top: 2px;
             display: none;
         }
+
         #notice-bell-container a {
             margin: 10px 20px;
             display: flex;
             align-items: center;
         }
+
         #notice-bell-container a span#notice-type {
             border-radius: 8px;
             background-color: #ddd;
@@ -190,220 +224,240 @@
             margin-right: 15px;
             text-align: center;
         }
+
         #notice-bell-container a span {
             display: inline-block;
         }
+
         #notice-bell-container a span#notice-message {
             width: 250px;
+        }
+        span#clear-my-notice{
+            text-align: center;
+            width:64px;
+            padding: 2px 8px;
+            margin: 4px 8px 6px auto;
+            border:1px solid #333;
+            border-radius: 15%;
+            cursor:pointer;
         }
     </style>
 </head>
 
 <body>
-<div class="head">
-    <div class="head_top">
-        <div class="logo">
-            <a href="/main/index"><img src="/images/logo.png"></a>
+    <div class="head">
+        <div class="head_top">
+            <div class="logo">
+                <a href="/main/index"><img src="/images/logo.png"></a>
+            </div>
+            <div class="search_bar">
+                <label for="search_input" class="search_label">
+                    <input type="text" id="header_search_input" name="search">
+                    <div class="header_search_bar_select">
+                        <select id="search-type">
+                            <option value="com">기업</option>
+                            <option value="post">공고</option>
+                        </select>
+                    </div>
+                    <img src="/images/search.png" class="search_glasses" onclick="search()">
+                </label>
+            </div>
+            <div class="logo2">
+                <a href="/manager/writeResume"><img id="youtube" src="/images/youtube-icon.png"></a>
+                <a href="/manager/managerLogin"><img src="/images/manager_icon.png"></a>
+            </div>
         </div>
-        <div class="search_bar">
-            <label for="search_input" class="search_label">
-                <input type="text" id="header_search_input" name="search">
-                <div class="header_search_bar_select">
-                    <select id="search-type">
-                        <option value="com">기업</option>
-                        <option value="post">공고</option>
-                    </select>
-                </div>
-                <img src="/images/search.png" class="search_glasses" onclick="search()">
-            </label>
-        </div>
-        <div class="logo2">
-            <a href="/manager/writeResume"><img id="youtube" src="/images/youtube-icon.png"></a>
-            <a href="/manager/managerLogin"><img src="/images/manager_icon.png"></a>
+        <div class="head_bottom">
+            <div class="menu_list">
+                <ul id="menu_list_item">
+                    <li><a href="/main/index">채용공고</a></li>
+                    <li><a href="/main/comList">기업·인재</a></li>
+                    <li><a href="/cs/list">고객센터</a></li>
+                </ul>
+            </div>
+
+            <div class="user_log_list">
+                <ul id="log-info-list">
+                    <li id="user-name" style="font-size: 16px; font-weight: 600;">GUEST</li> <!-- 사용자 이름 표시 -->
+                    <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
+                    <li id="login-li"><a href="/main/loginForm">로그인</a></li>
+                    <li id="signup-li"><a href="/main/regForm">회원가입</a></li>
+                    <li id="bean-mypage-li" style="display: none;"><a href="/redbean/mypage">마이페이지</a></li>
+                    <li id="ice-mypage-li" style="display: none;"><a href="/ice/mypage">마이페이지</a></li>
+                    <li id="logout-li" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></li>
+                </ul>
+            </div>
         </div>
     </div>
-    <div class="head_bottom">
-        <div class="menu_list">
-            <ul id="menu_list_item">
-                <li><a href="/main/index">채용공고</a></li>
-                <li><a href="/main/comList">기업·인재</a></li>
-                <li><a href="/cs/list">고객센터</a></li>
+    <div id="head_menu_slide_container" class="active">
+        <div id="head_menu_slide">
+            <ul>
+                <li><a href="/manager/recommand">추천공고</a></li>
+                <li><a href="/manager/ai">AI추천공고</a></li>
+            </ul>
+            <ul>
+                <li><a href="/main/comList">기업전체</a></li>
+                <li><a href="#">인재정보</a></li>
+            </ul>
+            <ul>
+                <li><a href="/cs/list?menu_select=1">FAQ</a></li>
+                <li><a href="/cs/list?menu_select=2">문의/신고</a></li>
+                <li><a href="/cs/list?menu_select=3">나의문의</a></li>
             </ul>
         </div>
-
-        <div class="user_log_list">
-            <ul id="log-info-list">
-                <li id="user-name" style="font-size: 16px; font-weight: 600;">GUEST</li> <!-- 사용자 이름 표시 -->
-                <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
-                <li id="login-li"><a href="/main/loginForm">로그인</a></li>
-                <li id="signup-li"><a href="/main/regForm">회원가입</a></li>
-                <li id="bean-mypage-li" style="display: none;"><a href="/redbean/mypage">마이페이지</a></li>
-                <li id="ice-mypage-li" style="display: none;"><a href="/ice/mypage">마이페이지</a></li>
-                <li id="logout-li" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></li>
-            </ul>
-        </div>
     </div>
-</div>
-<div id="head_menu_slide_container" class="active">
-    <div id="head_menu_slide">
-        <ul>
-            <li><a href="/manager/recommand">추천공고</a></li>
-            <li><a href="/manager/ai">AI추천공고</a></li>
-        </ul>
-        <ul>
-            <li><a href="/main/comList">기업전체</a></li>
-            <li><a href="#">인재정보</a></li>
-        </ul>
-        <ul>
-            <li><a href="/cs/list?menu_select=1">FAQ</a></li>
-            <li><a href="/cs/list?menu_select=2">문의/신고</a></li>
-            <li><a href="/cs/list?menu_select=3">나의문의</a></li>
-        </ul>
+    <div id="notice-bell-container">
+        <!-- 알림 리스트 -->
     </div>
-</div>
-<div id="notice-bell-container">
-    <!-- 알림 리스트 -->
-</div>
-<script>
-    const slide = document.getElementById("head_menu_slide_container");
-    const menu = document.getElementById("menu_list_item");
+    <script>
+        const slide = document.getElementById("head_menu_slide_container");
+        const menu = document.getElementById("menu_list_item");
 
-    menu.addEventListener("mouseover", () => {
-        slide.classList.remove("active");
-    });
-    slide.addEventListener("mouseleave", () => {
-        slide.classList.add("active");
-    });
+        menu.addEventListener("mouseover", () => {
+            slide.classList.remove("active");
+        });
+        slide.addEventListener("mouseleave", () => {
+            slide.classList.add("active");
+        });
 
-    const bell = document.getElementById('notice-bell');
+        const bell = document.getElementById('notice-bell');
 
-    let cnt = 1;
+        let cnt = 1;
 
-    function reloadnotice() {
-        const token = localStorage.getItem("token");
-        fetch('http://localhost:9001/sub/notice',{
-            method: 'GET',
-            headers:{
-                'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
-            }
-        })
-            .then(r => r.json())
-            .then(list => {
-                document.getElementById('notice-bell-container').innerHTML = "";
-                list.forEach((data, i) => {
-                    var link = '<a href="#">';
-                    if (data.type.trim() == '채용공고') {
-                        link = '<a href="/redbean/mypage">';
-                    } else if (data.type.trim() == '기업알림') {
-                        link = '<a href="/main/comList">';
-                    } else if (data.type.trim() == '공지사항' || data.type.trim() == '고객센터') {
-                        link = '<a href="/cs/list">';
-                    }
-                    document.getElementById('notice-bell-container').innerHTML
-                        += link
-                        + '<span id="notice-type">' + data.type
-                        + '</span><span id="notice-message">' + data.message + '</span></a>';
-                });
-                document.getElementById('notice-bell-container').innerHTML += '<span id="clear-my-notice"> 전체삭제 </span>';
-                deleteallbtn = document.getElementById('clear-my-notice');
-                deleteallbtn.addEventListener('click', ()=>{
-                    fetch('http://localhost:9001/sub/notice-all',{
-                        method: 'DELETE',
-                        headers:{
-                            'Authorization': 'Bearer'+ token, // Authorization 헤더에 토큰을 추가
-                        }
-                    })
-                    .then(r => r.text())
-                    .then(message => alert(message))
-                });
+        function reloadnotice() {
+            const token = localStorage.getItem("token");
+            fetch('http://localhost:9001/sub/notice', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
+                }
             })
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        bell.addEventListener('click', f);
-        bell.addEventListener('click', reloadnotice);
-        setInterval(reloadnotice, 30000);
-    });
-
-    function f() {
-        const noticecontainer = document.getElementById('notice-bell-container');
-        if (cnt === 0) {
-            noticecontainer.style.display = "none";
-            cnt = 1;
-        } else {
-            noticecontainer.style.display = 'flex';
-            cnt = 0;
+                .then(r => r.json())
+                .then(list => {
+                    document.getElementById('notice-bell-container').innerHTML = "";
+                    list.forEach((data, i) => {
+                        var link = '<a href="#">';
+                        if (data.type.trim() == '채용공고') {
+                            link = '<a href="/redbean/mypage">';
+                        } else if (data.type.trim() == '기업알림') {
+                            link = '<a href="/main/comList">';
+                        } else if (data.type.trim() == '공지사항' || data.type.trim() == '고객센터') {
+                            link = '<a href="/cs/list">';
+                        }
+                        document.getElementById('notice-bell-container').innerHTML
+                            += link
+                            + '<span id="notice-type">' + data.type
+                            + '</span><span id="notice-message">' + data.message + '</span></a>';
+                        });
+                    create_delete_btn();
+                })
         }
-    }
 
-    function search() {
-        var search_type = document.getElementById('search-type').value;
-        var keyword = document.getElementById('header_search_input').value;
+        function create_delete_btn() {
+            document.getElementById('notice-bell-container').innerHTML += '<span id="clear-my-notice"> 전체삭제 </span>';
+            deleteallbtn = document.getElementById('clear-my-notice');
+            const token = localStorage.getItem("token");
 
-        console.log(search_type)
-        console.log(keyword)
-        window.location.href='/sub/search?type='+search_type+'&keyword='+keyword;
-    }
-
-    // JWT 토큰에서 페이로드를 디코드하는 함수
-    function parseJwt(token) {
-        try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
-        } catch (error) {
-            console.error('Error parsing JWT:', error);
-            return null;
+            deleteallbtn.addEventListener('click', () => {
+                fetch('http://localhost:9001/sub/notice-all', {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
+                    }
+                })
+                    .then(r => r.text())
+                    .then(message => {
+                        alert(message);
+                        reloadnotice();
+                    })
+            });
         }
-    }
 
-    // 로그인 상태 확인 및 UI 업데이트
-    function updateLoginUI() {
-        const token = localStorage.getItem('token');
-        const userNameElement = document.getElementById('user-name');
-        
-        if (token) {
-            const decodedToken = parseJwt(token);
-            if (decodedToken && decodedToken.sub) {
-                userNameElement.textContent = decodedToken.sub; // JWT의 'sub' 클레임을 사용자 이름으로 사용
+        document.addEventListener('DOMContentLoaded', () => {
+            bell.addEventListener('click', f);
+            bell.addEventListener('click', reloadnotice);
+            setInterval(reloadnotice, 30000);
+        });
+
+        function f() {
+            const noticecontainer = document.getElementById('notice-bell-container');
+            if (cnt === 0) {
+                noticecontainer.style.display = "none";
+                cnt = 1;
+            } else {
+                noticecontainer.style.display = 'flex';
+                cnt = 0;
+            }
+        }
+
+        function search() {
+            var search_type = document.getElementById('search-type').value;
+            var keyword = document.getElementById('header_search_input').value;
+
+            console.log(search_type)
+            console.log(keyword)
+            window.location.href = '/sub/search?type=' + search_type + '&keyword=' + keyword;
+        }
+
+        // JWT 토큰에서 페이로드를 디코드하는 함수
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error parsing JWT:', error);
+                return null;
+            }
+        }
+
+        // 로그인 상태 확인 및 UI 업데이트
+        function updateLoginUI() {
+            const token = localStorage.getItem('token');
+            const userNameElement = document.getElementById('user-name');
+
+            if (token) {
+                const decodedToken = parseJwt(token);
+                if (decodedToken && decodedToken.sub) {
+                    userNameElement.textContent = decodedToken.sub; // JWT의 'sub' 클레임을 사용자 이름으로 사용
+                } else {
+                    userNameElement.textContent = 'GUEST';
+                }
+                document.getElementById('login-li').style.display = 'none';
+                document.getElementById('signup-li').style.display = 'none';
+                if (decodedToken.role == 'COM') {
+                    document.getElementById('ice-mypage-li').style.display = 'block';
+                }
+                else if (decodedToken.role == 'BEAN') {
+                    document.getElementById('bean-mypage-li').style.display = 'block';
+                }
+                document.getElementById('logout-li').style.display = 'block';
             } else {
                 userNameElement.textContent = 'GUEST';
+                document.getElementById('login-li').style.display = 'block';
+                document.getElementById('signup-li').style.display = 'block';
+                document.getElementById('bean-mypage-li').style.display = 'none';
+                document.getElementById('ice-mypage-li').style.display = 'none';
+                document.getElementById('logout-li').style.display = 'none';
             }
-            document.getElementById('login-li').style.display = 'none';
-            document.getElementById('signup-li').style.display = 'none';
-            if(decodedToken.role == 'COM'){
-                document.getElementById('ice-mypage-li').style.display = 'block';
-            }
-            else if(decodedToken.role == 'BEAN'){
-                document.getElementById('bean-mypage-li').style.display = 'block';
-            }
-            document.getElementById('logout-li').style.display = 'block';
-        } else {
-            userNameElement.textContent = 'GUEST';
-            document.getElementById('login-li').style.display = 'block';
-            document.getElementById('signup-li').style.display = 'block';
-            document.getElementById('bean-mypage-li').style.display = 'none';
-            document.getElementById('ice-mypage-li').style.display = 'none';
-            document.getElementById('logout-li').style.display = 'none';
         }
-    }
 
-    // 로그아웃 함수
-    function logout() {
-        localStorage.removeItem('token');
-        updateLoginUI();
-        window.location.href = '/main/index';
-    }
+        // 로그아웃 함수
+        function logout() {
+            localStorage.removeItem('token');
+            updateLoginUI();
+            window.location.href = '/main/index';
+        }
 
-    // 페이지 로드 시 로그인 상태 확인
-    document.addEventListener('DOMContentLoaded', () => {
-        updateLoginUI();
-    });
-</script>
+        // 페이지 로드 시 로그인 상태 확인
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLoginUI();
+        });
+    </script>
 </body>
 
 </html>
