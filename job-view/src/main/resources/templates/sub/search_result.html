@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title> 검색 결과 페이지 </title>
+    <!-- 폰트 첨부 -->
+    <link href="https://fonts.googleapis.com/css2?family=Poor+Story&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <style>
+        #tab-type-btns{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tab-btns{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80px;
+            height: 40px;
+            border: 1px solid #ff006f;
+            border-radius: 5px;
+            background-color: white;
+            color:#ff006f;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .tab-btns:hover{
+            background-color: #ff006f;
+            color:white;
+        }
+    </style>
+</head>
+<body>
+<header>
+<th:block th:insert="~{/sub/header.html}"></th:block>
+</header>
+<section>
+    <h2 style="text-align: center;"> 검색 결과 페이지 </h2>
+    <div id="tab-type-btns">
+        <div class="tab-btns" id="posting-tab-btn"> <span>공고</span> </div> <div class="tab-btns" id="company-tab-btn"> <span>기업</span> </div>
+    </div>
+    <div id="tab-posting-results">
+        공고 검색 결과 로딩중...
+    </div>
+    <div id="tab-company-results" style="display:none;">
+        기업 검색 결과 로딩중...
+    </div>
+</section>
+<footer>
+    <th:block th:insert="~{/sub/footer.html}"></th:block>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", () =>{
+        addBtnEvent();
+        const urlParams = new URLSearchParams(window.location.search);
+        const search_type = urlParams.get('type');
+        const search_keyword = urlParams.get('keyword');
+        if(search_type == 'com'){
+            getCompanyResults(search_keyword);
+        }
+        else if(search_type == 'post'){
+            getPostingResults(search_keyword);
+        }
+    })
+
+    function addBtnEvent(){
+        var posting_btn = document.getElementById('posting-tab-btn');
+        var company_btn = document.getElementById('company-tab-btn');
+
+        posting_btn.addEventListener('click', function(){
+            document.getElementById('tab-posting-results').style.display = 'flex';
+            document.getElementById('tab-company-results').style.display = 'none';
+        });
+        company_btn.addEventListener('click', function(){
+            document.getElementById('tab-posting-results').style.display = 'none';
+            document.getElementById('tab-company-results').style.display = 'flex';
+        });
+    }
+
+    function getPostingResults(keyword){
+
+    }
+
+    function getCompanyResults(keyword){
+
+    }
+</script>
+</body>
+</html>

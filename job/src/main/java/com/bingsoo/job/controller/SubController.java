@@ -21,7 +21,7 @@ import com.bingsoo.job.entity.Posting;
 import com.bingsoo.job.jwtToken.JWTUtil;
 import com.bingsoo.job.repository.NoticeRepository;
 
-@CrossOrigin("*")
+// @CrossOrigin("*")
 @RequestMapping("/sub")
 @RestController
 public class SubController {
@@ -61,6 +61,7 @@ public class SubController {
 
     @DeleteMapping("/notice-all")
     public ResponseEntity<String> deleteAllMyNotice(@RequestHeader("Authorization") String token){
+        System.out.println("!!!!! TOKEN : "  + token);
         boolean isValid = JWTUtil.validateToken(token.substring(7));
         if (!isValid) {
             return ResponseEntity.badRequest().body("Wrong Request. Need to login ");
