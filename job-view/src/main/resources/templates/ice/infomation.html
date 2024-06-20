@@ -26,7 +26,7 @@
         function populateForm() {
             const token = localStorage.getItem('token');
 
-            fetch(`http://localhost:9001/ice/infomation/`, {
+            fetch(`http://localhost:9001/ice/infomation`, {
                 method: "GET",
                 headers: {
                     'Authorization': 'Bearer ' + token

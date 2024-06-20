@@ -37,7 +37,7 @@ import com.bingsoo.job.repository.RedBeanRepository;
 import com.bingsoo.job.repository.SubCategoryRepository;
 import com.bingsoo.job.repository.SubscribeRepository;
 
-@CrossOrigin("*")
+// @CrossOrigin("*")
 @RestController
 @RequestMapping("/ice")
 public class IceController {
