@@ -35,11 +35,12 @@
             background-color: #ff006f;
             color: white;
         }
-        .name-search-input{
-            width:240px;
-            height:36px;
+
+        .name-search-input {
+            width: 240px;
+            height: 36px;
             text-align: center;
-            font-size:20px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -49,13 +50,15 @@
         <th:block th:insert="~{/sub/header.html}"></th:block>
     </header>
     <section>
+        <input type="hidden" id="search-type" />
         <h2 style="text-align: left;"> 검색 결과 페이지 </h2>
         <div id="tab-type-btns">
             <div class="tab-btns" id="posting-tab-btn"> <span>공고</span> </div>
             <div class="tab-btns" id="company-tab-btn"> <span>기업</span> </div>
         </div>
         <div id="search-parameters">
-            <input type="text" class="name-search-input" id="search-name"/>
+            <input type="text" class="name-search-input" id="search-keyword" />
+            <button type="button" onclick="reset_input()"> 초기화 </button>
         </div>
         <div id="tab-posting-results">
             공고 검색 결과 로딩중...
@@ -70,46 +73,64 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             addBtnEvent();
+
             const urlParams = new URLSearchParams(window.location.search);
-            var search_type = urlParams.get('type');
-            var search_keyword = urlParams.get('keyword');
-            console.log(search_keyword);
-            console.log(search_keyword);
-            console.log(search_keyword);
-            if (search_type == 'post') {
-                display_post(search_keyword)
+            var search_type_url = urlParams.get('type');
+            var search_keyword_url = urlParams.get('keyword');
+
+            document.getElementById('search-type').value = search_type_url;
+            document.getElementById('search-keyword').value = search_keyword_url;
+
+            document.getElementById('search-keyword').addEventListener('input', () => {
+                var search_type = document.getElementById('search-type').value;
+                
+                if (search_type == 'post') {
+                    getPostingResults();
+                }
+                if (search_type == 'com') {
+                    getCompanyResults();
+                }
+            });
+
+            if (search_type_url == 'post') {
+                display_post();
+                getPostingResults();
             }
-            if (search_type == 'com') {
-                display_com(search_keyword);
+            if (search_type_url == 'com') {
+                display_com();
+                getCompanyResults();
             }
         })
-
-        function display_com(search_keyword) {
-            // var search_keyword = document.getElementById('search-name').value;
-            document.getElementById('tab-posting-results').style.display = 'flex';
-            document.getElementById('tab-company-results').style.display = 'none';
-            getPostingResults(search_keyword);
-        }
-
-        function display_post(search_keyword) {
-            // var search_keyword = document.getElementById('search-name').value;
-            document.getElementById('tab-posting-results').style.display = 'none';
-            document.getElementById('tab-company-results').style.display = 'flex';
-            getCompanyResults(search_keyword);
-        }
-
+        
         function addBtnEvent() {
             var posting_btn = document.getElementById('posting-tab-btn');
             var company_btn = document.getElementById('company-tab-btn');
 
-            posting_btn.addEventListener('click', display_post());
-            company_btn.addEventListener('click', display_com());
+            posting_btn.addEventListener('click', () => display_post());
+            company_btn.addEventListener('click', () => display_com());
         }
 
-        function getPostingResults(keyword) {
+        function display_post() {
+            document.getElementById('tab-posting-results').style.display = 'flex';
+            document.getElementById('tab-company-results').style.display = 'none';
+            document.getElementById('search-type').value = 'post';
+            getPostingResults();
+        }
+
+        function display_com() {
+            document.getElementById('tab-posting-results').style.display = 'none';
+            document.getElementById('tab-company-results').style.display = 'flex';
+            document.getElementById('search-type').value = 'com';
+            getCompanyResults();
+        }
+
+        function getPostingResults() {
+            var search_keyword = document.getElementById('search-keyword').value;
+            console.log('keyword : ' + search_keyword);
+            
             const token = localStorage.getItem('token');
-            fetch('http://localhost:9001/sub/post/' + keyword, {
-                method:'GET',
+            fetch('http://localhost:9001/sub/post/' + search_keyword, {
+                method: 'GET',
                 headers: {
                     'authorization': 'Bearer ' + token
                 }
@@ -117,16 +138,19 @@
                 .then(res => res.json())
                 .then(result_list => {
                     document.getElementById('tab-posting-results').innerHTML = '';
-                    relsult_list.forEach(p => {
+                    result_list.forEach(p => {
                         document.getElementById('tab-posting-results').innerHTML += p.title;
                     });
                 })
         }
 
-        function getCompanyResults(keyword) {
+        function getCompanyResults() {
+            var search_keyword = document.getElementById('search-keyword').value;
+            console.log('keyword : ' + search_keyword);
+
             const token = localStorage.getItem('token');
-            fetch('http://localhost:9001/sub/company/' + keyword, {
-                method:'GET',
+            fetch('http://localhost:9001/sub/company/' + search_keyword, {
+                method: 'GET',
                 headers: {
                     'authorization': 'Bearer ' + token
                 }
@@ -138,6 +162,13 @@
                         document.getElementById('tab-company-results').innerHTML += c.company_name;
                     });
                 })
+        }
+
+        function reset_input(){
+            document.getElementById('search-keyword').value = '';
+            var search_type = document.getElementById('search-type').value;
+            getPostingResults();
+            getCompanyResults();
         }
     </script>
 </body>

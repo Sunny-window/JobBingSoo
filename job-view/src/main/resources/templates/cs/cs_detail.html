@@ -37,7 +37,7 @@
         function loadCsDetail() {
             const urlParams = new URLSearchParams(window.location.search);
             const csCode = urlParams.get('cs_code');
-            fetch(`http://localhost:9001/manager/cs-detail?cs_code=${csCode}`)
+            fetch(`http://localhost:9001/cs/cs-detail?cs_code=${csCode}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.cs) {

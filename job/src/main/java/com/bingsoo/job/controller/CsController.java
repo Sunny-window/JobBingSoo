@@ -1,7 +1,10 @@
 package com.bingsoo.job.controller;
 
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bingsoo.job.entity.Cs;
+import com.bingsoo.job.entity.Cs_reply;
 import com.bingsoo.job.entity.FAQ;
 import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.jwtToken.JWTUtil;
@@ -48,7 +52,7 @@ public class CsController {
     }
 
     @GetMapping("/my-list")
-    public List<Cs> getMyCsList(@RequestHeader("Authorization") String token ){
+    public List<Cs> getMyCsList(@RequestHeader("Authorization") String token) {
         String logged = JWTUtil.getUsername(token.substring(7));
 
         return cr.getMyList(logged);
@@ -88,4 +92,17 @@ public class CsController {
         cr.save(cs);
         return ResponseEntity.ok().body("저장완료");
     }
+
+    @GetMapping("/cs-detail")
+    public Map<String, Object> getCsDetail(@RequestParam("cs_code") long csCode) {
+        Map<String, Object> response = new HashMap<>();
+        Cs cs = cr.findById(csCode).orElse(null);
+        if (cs != null) {
+            response.put("cs", cs);
+            List<Cs_reply> replies = crrepo.findByCsCode(cs);
+            response.put("replies", replies);
+        }
+        return response;
+    }
+
 }

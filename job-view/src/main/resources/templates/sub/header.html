@@ -232,14 +232,15 @@
         #notice-bell-container a span#notice-message {
             width: 250px;
         }
-        span#clear-my-notice{
+
+        span#clear-my-notice {
             text-align: center;
-            width:64px;
+            width: 64px;
             padding: 2px 8px;
             margin: 4px 8px 6px auto;
-            border:1px solid #333;
+            border: 1px solid #333;
             border-radius: 15%;
-            cursor:pointer;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -320,6 +321,12 @@
             slide.classList.add("active");
         });
 
+        header_search_input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                search();
+            }
+        });
+
         const bell = document.getElementById('notice-bell');
 
         let cnt = 1;
@@ -348,7 +355,7 @@
                             += link
                             + '<span id="notice-type">' + data.type
                             + '</span><span id="notice-message">' + data.message + '</span></a>';
-                        });
+                    });
                     create_delete_btn();
                 })
         }
