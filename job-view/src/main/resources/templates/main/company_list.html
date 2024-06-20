@@ -13,10 +13,36 @@
 
         .filter-table ul {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start; /* 왼쪽 정렬 */
             list-style-type: none;
             padding: 0;
         }
+        
+        #high-table {
+	        padding-left: 20px; /* 왼쪽 패딩 추가 */
+	        padding-right: 20px; /* 오른쪽 패딩 추가 */
+	        margin-left: 20px; /* 왼쪽 마진 추가 */
+	        margin-right: 20px; /* 오른쪽 마진 추가 */
+	    }
+	    
+	    #last-table{
+	    	padding-left: 20px; /* 왼쪽 패딩 추가 */
+	        padding-right: 20px; /* 오른쪽 패딩 추가 */
+	        margin-left: 20px; /* 왼쪽 마진 추가 */
+	        margin-right: 20px; /* 오른쪽 마진 추가 */
+	    }
+	
+	    #high-table ul {
+	        display: flex;
+	        justify-content: flex-start; /* 왼쪽 정렬 */
+	        list-style-type: none;
+	        padding: 0;
+	    }
+	
+	    #high-table li {
+	        margin-right: 100px; /* li 요소들 간의 거리 추가 */
+	    }
+	        
 
         .filter-box {
             margin-bottom: 10px;
@@ -95,17 +121,40 @@
         }
 
         .industry-columns {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .industry-column {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 45%; /* 각 열을 더 넓게 설정 */
-            padding: 10px;
-        }
+	        display: flex;
+	        flex-wrap: wrap;
+	        width: 120%;
+	        justify-content: space-around; /* 좌우 여백을 추가 */
+	        padding: 20px; /* 패딩 추가 */
+	        margin: 20px 0; /* 상하 여백 추가 */
+	    }
+	
+	    .industry-column {
+	        display: flex;
+	        flex-direction: column;
+	        flex-basis: 28%; /* 네 개씩 출력되도록 설정 */
+	        padding: 20px; /* 패딩 추가 */
+	        margin: 10px; /* 마진 추가 */
+	    }
+	
+	    .industry-columns ul {
+	        display: flex;
+	        flex-wrap: wrap;
+	        width: 100%;
+	    }
+	
+	    .industry-columns li {
+	        flex: 1 1 22%; /* 네 개씩 출력되도록 설정 */
+	        margin: 10px; /* 마진 추가 */
+	    }
+	
+	    #companyName {
+	        width: calc(100%); /* 옆으로 늘리기 위해 너비 조정 */
+	        padding: 10px;
+	        border: 2px solid #FF006F; /* 테두리 색상 설정 */
+	        border-radius: 5px;
+	        box-sizing: border-box; /* 패딩 포함한 너비 계산 */
+    }
     </style>
 </head>
 <body>
@@ -115,149 +164,170 @@
             <h2 class="tip">필터링</h2>
         </div>
         <div class="filter-table">
-            <ul>
-                <li>
-                    <h4>매출액</h4>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword1_1" class="chkwrd" value="~3000" name="keyword1">
-                        <label for="keyword1_1">~3000</label>
-                    </div>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword1_2" class="chkwrd" value="3000~5000" name="keyword1">
-                        <label for="keyword1_2">3000~5000</label>
-                    </div>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword1_3" class="chkwrd" value="5000~7000" name="keyword1">
-                        <label for="keyword1_3">5000~7000</label>
-                    </div>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword1_4" class="chkwrd" value="7000~" name="keyword1">
-                        <label for="keyword1_4">7000~</label>
-                    </div>
-                </li>
-                <li>
-                    <h4>회사 규모</h4>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword2_5" class="chkwrd" value="300 이상" name="keyword2">
-                        <label for="keyword2_5">300 이상</label>
-                    </div>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword2_6" class="chkwrd" value="100~300" name="keyword2">
-                        <label for="keyword2_6">100~300</label>
-                    </div>
-                    <div class="filter-box">
-                        <input type="checkbox" id="keyword2_7" class="chkwrd" value="100 미만" name="keyword2">
-                        <label for="keyword2_7">100 미만</label>
-                    </div>
-                </li>
-                <li>
-                    <h4>업종</h4>
-                    <div class="industry-columns">
-                        <div class="industry-column">
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_8" class="chkwrd" value="01. 사업관리" name="keyword3">
-                                <label for="keyword3_8">사업관리</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_9" class="chkwrd" value="02. 경영·회계·사무" name="keyword3">
-                                <label for="keyword3_9">경영·회계·사무</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_10" class="chkwrd" value="03. 금융·보험" name="keyword3">
-                                <label for="keyword3_10">금융·보험</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_11" class="chkwrd" value="04. 교육·자연·사회과학" name="keyword3">
-                                <label for="keyword3_11">교육·자연·사회과학</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_12" class="chkwrd" value="05. 법률·경찰·소방·교도·국방" name="keyword3">
-                                <label for="keyword3_12">법률·경찰·소방·교도·국방</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_13" class="chkwrd" value="06. 보건·의료" name="keyword3">
-                                <label for="keyword3_13">보건·의료</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_14" class="chkwrd" value="07. 사회복지·종교" name="keyword3">
-                                <label for="keyword3_14">사회복지·종교</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_15" class="chkwrd" value="08. 문화·예술·디자인·방송" name="keyword3">
-                                <label for="keyword3_15">문화·예술·디자인·방송</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_16" class="chkwrd" value="09. 운전·운송" name="keyword3">
-                                <label for="keyword3_16">운전·운송</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_17" class="chkwrd" value="10. 영업판매" name="keyword3">
-                                <label for="keyword3_17">영업판매</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_18" class="chkwrd" value="11. 경비·청소" name="keyword3">
-                                <label for="keyword3_18">경비·청소</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_19" class="chkwrd" value="12. 이용·숙박·여행·오락·스포츠" name="keyword3">
-                                <label for="keyword3_19">이용·숙박·여행·오락·스포츠</label>
-                            </div>                            
-                        </div>
-                        <div class="industry-column">
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_20" class="chkwrd" value="13. 음식서비스" name="keyword3">
-                                <label for="keyword3_20">음식서비스</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_21" class="chkwrd" value="14. 건설" name="keyword3">
-                                <label for="keyword3_21">건설</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_22" class="chkwrd" value="15. 기계" name="keyword3">
-                                <label for="keyword3_22">기계</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_23" class="chkwrd" value="16. 재료" name="keyword3">
-                                <label for="keyword3_23">재료</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_24" class="chkwrd" value="17. 화학·바이오" name="keyword3">
-                                <label for="keyword3_24">화학·바이오</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_25" class="chkwrd" value="18. 섬유·의복" name="keyword3">
-                                <label for="keyword3_25">섬유·의복</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_26" class="chkwrd" value="19. 전기·전자" name="keyword3">
-                                <label for="keyword3_26">전기·전자</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_27" class="chkwrd" value="20. 정보통신" name="keyword3">
-                                <label for="keyword3_27">정보통신</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_28" class="chkwrd" value="21. 식품가공" name="keyword3">
-                                <label for="keyword3_28">식품가공</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_29" class="chkwrd" value="22. 인쇄·목재·가구·공예" name="keyword3">
-                                <label for="keyword3_29">인쇄·목재·가구·공예</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_30" class="chkwrd" value="23. 환경·에너지·안전" name="keyword3">
-                                <label for="keyword3_30">환경·에너지·안전</label>
-                            </div>
-                            <div class="filter-box">
-                                <input type="checkbox" id="keyword3_31" class="chkwrd" value="24. 농림어업" name="keyword3">
-                                <label for="keyword3_31">농림어업</label>
-                            </div>
-                        </div>
-                        <div class="industry-column">
-                        </div>
-                    </div>
-                </li>
-            </ul>
+	        <div id="high-table">
+	            <ul>
+	                <li>
+	                    <h4>매출액</h4>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword1_1" class="chkwrd"
+
+ value="~3000" name="keyword1">
+	                        <label for="keyword1_1">~3000</label>
+	                    </div>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword1_2" class="chkwrd" value="3000~5000" name="keyword1">
+	                        <label for="keyword1_2">3000~5000</label>
+	                    </div>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword1_3" class="chkwrd" value="5000~7000" name="keyword1">
+	                        <label for="keyword1_3">5000~7000</label>
+	                    </div>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword1_4" class="chkwrd" value="7000~" name="keyword1">
+	                        <label for="keyword1_4">7000~</label>
+	                    </div>
+	                </li>
+	                <li>
+	                    <h4>회사 규모</h4>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword2_5" class="chkwrd" value="대기업" name="keyword2">
+	                        <label for="keyword2_5">대기업</label>
+	                    </div>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword2_6" class="chkwrd" value="중견기업" name="keyword2">
+	                        <label for="keyword2_6">중견기업</label>
+	                    </div>
+	                    <div class="filter-box">
+	                        <input type="checkbox" id="keyword2_7" class="chkwrd" value="중소기업" name="keyword2">
+	                        <label for="keyword2_7">중소기업</label>
+	                    </div>
+	                </li>
+	            </ul>	
+	        </div>
+	        <div id="row-table" class="filter-table">
+	            <ul>
+	                <li>
+	                    <h4>업종</h4>
+	                    <div class="industry-columns">
+	                        <ul>
+		                        <li class="industry-column">
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_8" class="chkwrd" value="01. 사업관리" name="keyword3">
+		                                <label for="keyword3_8">사업관리</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_9" class="chkwrd" value="02. 경영·회계·사무" name="keyword3">
+		                                <label for="keyword3_9">경영·회계·사무</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_10" class="chkwrd" value="03. 금융·보험" name="keyword3">
+		                                <label for="keyword3_10">금융·보험</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_11" class="chkwrd" value="04. 교육·자연·사회과학" name="keyword3">
+		                                <label for="keyword3_11">교육·자연·사회과학</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_12" class="chkwrd" value="05. 법률·경찰·소방·교도·국방" name="keyword3">
+		                                <label for="keyword3_12">법률·경찰·소방·교도·국방</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_13" class="chkwrd" value="06. 보건·의료" name="keyword3">
+		                                <label for="keyword3_13">보건·의료</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_14" class="chkwrd" value="07. 사회복지·종교" name="keyword3">
+		                                <label for="keyword3_14">사회복지·종교</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_15" class="chkwrd" value="08. 문화·예술·디자인·방송" name="keyword3">
+		                                <label for="keyword3_15">문화·예술·디자인·방송</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_16" class="chkwrd" value="09. 운전·운송" name="keyword3">
+		                                <label for="keyword3_16">운전·운송</label>
+		                            </div>
+		                        </li>
+		                        <li class="industry-column">
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_17" class="chkwrd" value="10. 영업판매" name="keyword3">
+		                                <label for="keyword3_17">영업판매</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_18" class="chkwrd" value="11. 경비·청소" name="keyword3">
+		                                <label for="keyword3_18">경비·청소</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_19" class="chkwrd" value="12. 이용·숙박·여행·오락·스포츠" name="keyword3">
+		                                <label for="keyword3_19">이용·숙박·여행·오락·스포츠</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_20" class="chkwrd" value="13. 음식서비스" name="keyword3">
+		                                <label for="keyword3_20">음식서비스</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_21" class="chkwrd" value="14. 건설" name="keyword3">
+		                                <label for="keyword3_21">건설</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_22" class="chkwrd" value="15. 기계" name="keyword3">
+		                                <label for="keyword3_22">기계</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_23" class="chkwrd" value="16. 재료" name="keyword3">
+		                                <label for="keyword3_23">재료</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_24" class="chkwrd" value="17. 화학·바이오" name="keyword3">
+		                                <label for="keyword3_24">화학·바이오</label>
+		                            </div>
+		                        </li>
+		                        <li class="industry-column">
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_25" class="chkwrd" value="18. 섬유·의복" name="keyword3">
+		                                <label for="keyword3_25">섬유·의복</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_26" class="chkwrd" value="19. 전기·전자" name="keyword3">
+		                                <label for="keyword3_26">전기·전자</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_27" class="chkwrd" value="20. 정보통신" name="keyword3">
+		                                <label for="keyword3_27">정보통신</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_28" class="chkwrd" value="21. 식품가공" name="keyword3">
+		                                <label for="keyword3_28">식품가공</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_29" class="chkwrd" value="22. 인쇄·목재·가구·공예" name="keyword3">
+		                                <label for="keyword3_29">인쇄·목재·가구·공예</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_30" class="chkwrd" value="23. 환경·에너지·안전" name="keyword3">
+		                                <label for="keyword3_30">환경·에너지·안전</label>
+		                            </div>
+		                            <div class="filter-box">
+		                                <input type="checkbox" id="keyword3_31" class="chkwrd" value="24. 농림어업" name="keyword3">
+		                                <label for="keyword3_31">농림어업</label>
+		                            </div>
+		                        </li>
+	                        </ul>
+	                    </div>
+	                </li>
+
+	            </ul>
+	        </div>
+	        <div id="last-table">
+	        	<ul>
+	        		<li>
+	                    <h4>회사명</h4>
+	                    <div class="filter-box">
+	                        <input type="text" id="companyName" placeholder="회사명을 입력하세요" />
+	                    </div>
+	                </li>
+	        	</ul>
+	        </div>
             <div class="keyword-btns">
                 <button class="search" id="kwrdSearch">선택된 조건 검색</button>
             </div>
@@ -284,7 +354,8 @@
                     const filters = {
                         sales: [],
                         size: [],
-                        industry: []
+                        industry: [],
+                        companyName: document.getElementById("companyName").value
                     };
 
                     document.querySelectorAll('input[name="keyword1"]:checked').forEach(checkbox => {

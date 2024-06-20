@@ -165,6 +165,7 @@ public class MainController {
             .filter(company -> filterBySales(company, filterRequest.getSales()))
             .filter(company -> filterBySize(company, filterRequest.getSize()))
             .filter(company -> filterByIndustry(company, filterRequest.getIndustry()))
+            .filter(company -> filterByCompanyName(company, filterRequest.getCompanyName()))
             .collect(Collectors.toList());
 
         return filteredCompanies.stream().map(this::convertToResponse).collect(Collectors.toList());
@@ -220,10 +221,16 @@ public class MainController {
         return false;
     }
     
+    private boolean filterByCompanyName(Company company, String companyName) {
+        if (companyName == null || companyName.isEmpty()) return true;
+        return company.getCompany_name().toLowerCase().contains(companyName.toLowerCase());
+    }
+    
     static class FilterRequest {
         private List<String> sales;
         private List<String> size;
         private List<String> industry;
+        private String companyName;
 
         public List<String> getSales() {
             return sales;
@@ -247,6 +254,14 @@ public class MainController {
 
         public void setIndustry(List<String> industry) {
             this.industry = industry;
+        }
+        
+        public String getCompanyName() {
+            return companyName;
+        }
+
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
         }
     }
     
