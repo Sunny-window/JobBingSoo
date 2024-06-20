@@ -3,6 +3,7 @@ package com.bingsoo.job.jwtToken;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
@@ -10,7 +11,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+@Component
 public class JWTFilter extends OncePerRequestFilter{
 	
 	@Override
@@ -63,6 +64,12 @@ public class JWTFilter extends OncePerRequestFilter{
 	        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access to this path is forbidden.");
 	        return;
 	    }
+	    
+	    if (path.startsWith("/content") && !"BEAN".equals(role)) {
+	        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access to this path is forbidden.");
+	        return;
+	    }
+
 
 	    if (path.startsWith("/manager") && !"ADMIN".equals(role)) {
 	        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access to this path is forbidden.");
