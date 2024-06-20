@@ -76,7 +76,7 @@
         async function fetchResumes() {
             const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
             try {
-                const response = await fetch('http://localhost:9001/manager/resumes', {
+                const response = await fetch('http://localhost:9001/content/resumes', {
                     headers: {
                     	 'Authorization': 'Bearer ' + token
                     }
@@ -115,7 +115,7 @@
             const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
 
             try {
-                const response = await fetch('http://localhost:9001/manager/apply', {
+                const response = await fetch('http://localhost:9001/content/apply', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
