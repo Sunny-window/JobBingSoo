@@ -89,7 +89,7 @@ public class IceController {
 
     @DeleteMapping("/posting/{post_code}")
     public void deletePostingById(@PathVariable("post_code") Long postCode) {
-
+        
         postingRepository.deleteById(postCode);
     }
 
@@ -109,7 +109,7 @@ public class IceController {
             Notice notice = new Notice();
             notice.setReciever(subscribe.getRid());
             notice.setSender(posting.getCid());
-            notice.setMessage(company.getCompany_name() + "에서 새로운 공고가 등록되었습니다.");
+            notice.setMessage(company.getCompany_name() + "에 새로운 공고가 등록되었습니다.");
             notice.setType("기업알림");
             noticeRepository.save(notice);
         }
