@@ -242,35 +242,34 @@ public class ManagerController {
 		workbook.close();
 	}
 
-	 @GetMapping("/find-postings")
-	    public List<Posting> findPostingsForUser(@RequestHeader("Authorization") String token) {
-	        // JWT에서 "Bearer " 접두사 제거
-	        if (token.startsWith("Bearer ")) {
-	            token = token.substring(7);
-	        }
+    @GetMapping("/find-postings")
+    public List<Posting> findPostingsForUser(@RequestHeader("Authorization") String token) {
+        // JWT에서 "Bearer " 접두사 제거
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
 
-	        // JWT 검증 및 사용자 이름 추출
-	        if (!JWTUtil.validateToken(token)) {
-	            return null;
-	        }
-	        Claims claims = JWTUtil.parseToken(token);
-	        String username = claims.getSubject();
+        // JWT 검증 및 사용자 이름 추출
+        if (!JWTUtil.validateToken(token)) {
+            return null;
+        }
+        Claims claims = JWTUtil.parseToken(token);
+        String username = claims.getSubject();
 
-	        Optional<Member> memberOptional = memberRepository.findById(username);
-	        if (memberOptional.isPresent()) {
-	            Member member = memberOptional.get();
-	            Optional<Desired_area> desiredAreaOptional = desiredAreaRepository.findByRid(member);
-	            Optional<Desired_industry> desiredIndustryOptional = desiredIndustryRepository.findByRid(member);
+        Optional<Member> memberOptional = memberRepository.findById(username);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            List<Desired_area> desiredAreas = desiredAreaRepository.findAllByRid(member);
+            List<Desired_industry> desiredIndustries = desiredIndustryRepository.findAllByRid(member);
 
-	            if (desiredAreaOptional.isPresent() && desiredIndustryOptional.isPresent()) {
-	                Desired_area desiredArea = desiredAreaOptional.get();
-	                Desired_industry desiredIndustry = desiredIndustryOptional.get();
+            return postingRepository.findAll().stream()
+                .filter(posting -> desiredAreas.stream().anyMatch(da -> da.getArea_main().equals(posting.getArea())) &&
+                                   desiredIndustries.stream().anyMatch(di -> di.getIndustry().equals(posting.getIndustry())))
+                .collect(Collectors.toList());
+        }
+        return null;
+    }
 
-	                return postingRepository.findByAreaAndIndustry(desiredArea.getArea_main(), desiredIndustry.getIndustry());
-	            }
-	        }
-	        return null;
-	    }
 
 //	 @PostMapping("/subscribe")
 //	 public String subscribe(@RequestBody SubscribeRequest request) {
