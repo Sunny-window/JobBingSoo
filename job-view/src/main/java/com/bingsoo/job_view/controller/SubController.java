@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/sub")
 @Controller
 public class SubController {
-    @RequestMapping("/")
+    @RequestMapping("/search")
     public String sub(){
-        return "main/main";
+        return "sub/search_result";
     }
 }
