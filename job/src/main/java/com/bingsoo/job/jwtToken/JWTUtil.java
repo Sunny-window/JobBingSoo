@@ -8,11 +8,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+//@Component
 public class JWTUtil {
 
 	private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 최소 32바이트
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
-    private static final long EXPIRATION_TIME = 86400000; // 1 day
+    private static final long EXPIRATION_TIME = 60*60*100000L; // 1 day
 
     public static String generateToken(String username, String role) {
         return Jwts.builder()

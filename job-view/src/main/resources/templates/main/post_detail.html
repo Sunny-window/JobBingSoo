@@ -362,7 +362,7 @@
         const postCode = urlParams.get('postCode');
         const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
 
-        const response = await fetch(`http://localhost:9001/manager/favorite`, {
+        const response = await fetch(`http://localhost:9001/content/favorite`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

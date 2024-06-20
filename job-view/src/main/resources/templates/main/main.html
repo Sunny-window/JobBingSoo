@@ -299,7 +299,7 @@
         async function findPostingsForUser() {
             const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
             try {
-                const response = await fetch('http://localhost:9001/manager/find-postings', {
+                const response = await fetch('http://localhost:9001/content/find-postings', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
@@ -470,7 +470,7 @@
             const postCode = document.getElementById('modalTitle').dataset.postCode;
             const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
 
-            const response = await fetch(`http://localhost:9001/manager/favorite`, {
+            const response = await fetch(`http://localhost:9001/content/favorite`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

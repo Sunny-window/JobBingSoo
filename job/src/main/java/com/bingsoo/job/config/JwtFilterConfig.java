@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 import com.bingsoo.job.jwtToken.JWTFilter;
 
-@Configuration
+//@Configuration
 public class JwtFilterConfig {
 
-    @Bean
+	//@Bean
     public FilterRegistrationBean<JWTFilter> jwtFilter() {
         FilterRegistrationBean<JWTFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JWTFilter());
