@@ -81,14 +81,22 @@ public class SubController {
     @GetMapping("/post/{keyword}")
     public List<Posting> searchPostings(@PathVariable("keyword") String keyword){
 
+        return pr.searchList(keyword);
+    } 
 
+    @GetMapping("/post/")
+    public List<Posting> searchAllPostings(){
         return pr.findAll();
     } 
 
     @GetMapping("/company/{keyword}")
     public List<Company> searchCompanys(@PathVariable("keyword") String keyword){
-        
 
+        return cr.searchList(keyword);
+    } 
+
+    @GetMapping("/company/")
+    public List<Company> searchAllCompanys(){
         return cr.findAll();
     } 
 }
