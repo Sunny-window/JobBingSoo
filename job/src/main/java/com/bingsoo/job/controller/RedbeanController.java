@@ -248,33 +248,36 @@ public class RedbeanController {
 
 	@GetMapping("/showFavoriteList")
 	public List<FavoriteForNameDto> showFavoriteList(@RequestHeader("Authorization") String token) {
-		System.out.println("==============================redBean : ");
-		String actualToken = token.substring(7);
-		String tokenname = JWTUtil.getUsername(actualToken);
-		Member mem = new Member();
-		mem.setUsername(tokenname);
-		//List<Favorite> list = favoriteRepository.findByRid(mem);
-		FavoriteForNameDto favoriteForNameDto = new FavoriteForNameDto();
-		List<FavoriteForNameDto> list2 = new ArrayList<>();
-		//
-		//
-		//
-		//
-		//
-		
-//		for (int i = 0; i < list.size(); i++) {
-//
-//			Optional<Posting> opposting = postingRepository;
-//			Company company = opcompany.get();
-//
-//			//favoriteForNameDto.set (list.get(i).getCid().getUsername());
-//			favoriteForNameDto.setPost_code(i)
-//			favoriteForNameDto.setRid(list.get(i).getRid().getUsername());
-//			favoriteForNameDto.setCompany_name(company.getCompany_name());
-//			list2.add(subscribeForNameDto);
-//		}
+	    System.out.println("==============================redBean : ");
+	    String actualToken = token.substring(7);
+	    String tokenname = JWTUtil.getUsername(actualToken);
+	    Member mem = new Member();
+	    mem.setUsername(tokenname);
+	    List<Favorite> list = favoriteRepository.findByUsername(mem);
+	    List<FavoriteForNameDto> list2 = new ArrayList<>();
 
-		return list2;
+	    for (int i = 0; i < list.size(); i++) {
+	        Posting post = postingRepository.findByPostCode(list.get(i).getPostCode().getPost_code());
+
+	        FavoriteForNameDto favoriteForNameDto = new FavoriteForNameDto();
+	        favoriteForNameDto.setFavor_code(list.get(i).getFavorCode());
+	        favoriteForNameDto.setPost_code(list.get(i).getPostCode().getPost_code());
+	        favoriteForNameDto.setUsername(list.get(i).getUsername().getUsername());
+
+	        Optional<Company> opcompany = companyRepository.findByCid(post.getCid());
+	        System.out.println("======================================post.getCid() : "+post.getCid());
+	        if (opcompany.isPresent()) {
+	            Company company = opcompany.get();
+	            favoriteForNameDto.setCompany_name(company.getCompany_name());
+	        } else {
+	            // 회사가 없는 경우에 대한 예외 처리
+	            favoriteForNameDto.setCompany_name("회사 정보를 찾을 수 없습니다.");
+	        }
+
+	        list2.add(favoriteForNameDto);
+	    }
+
+	    return list2;
 	}
 
 	@GetMapping("/showApplicationList")

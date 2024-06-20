@@ -54,6 +54,9 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 	
 	Page<Posting> findAllByOrderByPostedDateDesc(Pageable pageable);
 
+	  @Query(value = "SELECT * FROM posting WHERE post_code = :postCode", nativeQuery = true)
+	  Posting findByPostCode(@Param("postCode") long postCode);
+
 
 	
 }
