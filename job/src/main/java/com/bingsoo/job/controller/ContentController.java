@@ -2,6 +2,7 @@ package com.bingsoo.job.controller;
 
 
 import java.util.HashMap;
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,35 +78,37 @@ public class ContentController {
 	@Autowired
 	ResumeRepository resumeRepository;
 	
-	 @GetMapping("/find-postings")
-	    public List<Posting> findPostingsForUser(@RequestHeader("Authorization") String token) {
-	        // JWT에서 "Bearer " 접두사 제거
-	        if (token.startsWith("Bearer ")) {
-	            token = token.substring(7);
-	        }
+	@GetMapping("/find-postings")
+	public List<Posting> findPostingsForUser(@RequestHeader("Authorization") String token) {
+	    // JWT에서 "Bearer " 접두사 제거
+	    if (token.startsWith("Bearer ")) {
+	        token = token.substring(7);
+	    }
 
-	        // JWT 검증 및 사용자 이름 추출
-	        if (!JWTUtil.validateToken(token)) {
-	            return null;
-	        }
-	        Claims claims = JWTUtil.parseToken(token);
-	        String username = claims.getSubject();
-
-	        Optional<Member> memberOptional = memberRepository.findById(username);
-	        if (memberOptional.isPresent()) {
-	            Member member = memberOptional.get();
-	            Optional<Desired_area> desiredAreaOptional = desiredAreaRepository.findByRid(member);
-	            Optional<Desired_industry> desiredIndustryOptional = desiredIndustryRepository.findByRid(member);
-
-	            if (desiredAreaOptional.isPresent() && desiredIndustryOptional.isPresent()) {
-	                Desired_area desiredArea = desiredAreaOptional.get();
-	                Desired_industry desiredIndustry = desiredIndustryOptional.get();
-
-	                return postingRepository.findByAreaAndIndustry(desiredArea.getArea_main(), desiredIndustry.getIndustry());
-	            }
-	        }
+	    // JWT 검증 및 사용자 이름 추출
+	    if (!JWTUtil.validateToken(token)) {
 	        return null;
 	    }
+	    Claims claims = JWTUtil.parseToken(token);
+	    String username = claims.getSubject();
+
+	    Optional<Member> memberOptional = memberRepository.findById(username);
+	    if (memberOptional.isPresent()) {
+	        Member member = memberOptional.get();
+	        List<Desired_area> desiredAreas = desiredAreaRepository.findAllByRid(member);
+	        List<Desired_industry> desiredIndustries = desiredIndustryRepository.findAllByRid(member);
+
+	        if (!desiredAreas.isEmpty() && !desiredIndustries.isEmpty()) {
+	            // 여러 지역 및 산업을 고려한 공고 검색
+	            List<Posting> postings = postingRepository.findByAreaInAndIndustryIn(
+	                    desiredAreas.stream().map(Desired_area::getArea_main).collect(Collectors.toList()),
+	                    desiredIndustries.stream().map(Desired_industry::getIndustry).collect(Collectors.toList())
+	            );
+	            return postings;
+	        }
+	    }
+	    return null;
+	}
 	
 	 @GetMapping("/resumes")
 	    public List<Resume> getResumes(@RequestHeader("Authorization") String token) {
