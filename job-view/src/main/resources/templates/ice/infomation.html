@@ -5,17 +5,101 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--반응형-->
 <title>기업 정보 수정 페이지</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script><!--jquery 의존성 주입-->
+<style>
+    section {
+        max-width: 800px;
+        margin: 100px auto 20px auto;
+        width: 740px;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 10px #eee;
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    hr {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    label {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    input[type="text"], input[type="number"], textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box; 
+    }
+    textarea {
+        height: 150px;
+        resize: vertical;
+    }
+    button {
+        padding: 12px 40px; 
+        background-color: #ff006f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #d6006c;
+    }
+</style>
 </head>
+
 <body>
-    <header>
-        <th:block th:insert="~{/sub/header.html}"></th:block>
-    </header>
-    <section>
-        <h1>기업정보수정 페이지</h1>
-        <hr>
-        <input type="text" id="company_name">
-        <input type="text" id="ceo">
-    </section>
+<header>
+    <th:block th:insert="~{/sub/header.html}"></th:block>
+</header>
+<section>
+    <h1>기업정보수정 페이지</h1>
+    <hr>
+    <form id="companyForm">
+        <label for="company_name">기업 이름</label>
+        <input type="text" id="company_name" placeholder="기업 이름">
+        
+        <label for="ceo">대표자 이름</label>
+        <input type="text" id="ceo" placeholder="대표자 이름">
+        
+        <label for="size">기업 규모</label>
+        <input type="text" id="size" placeholder="기업 규모">
+        
+        <label for="tel">전화번호</label>
+        <input type="text" id="tel" placeholder="전화번호">
+        
+        <label for="address">주소</label>
+        <input type="text" id="address" placeholder="주소">
+        
+        <label for="manager_name">담당자 이름</label>
+        <input type="text" id="manager_name" placeholder="담당자 이름">
+        
+        <label for="manager_email">담당자 이메일</label>
+        <input type="text" id="manager_email" placeholder="담당자 이메일">
+        
+        <label for="manager_tel">담당자 전화번호</label>
+        <input type="text" id="manager_tel" placeholder="담당자 전화번호">
+        
+        <label for="sales">연매출</label>
+        <input type="text" id="sales" placeholder="연매출">
+        
+        <button type="submit" onclick="updateCompany()">수정</button>
+    </form>
+</section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
     </footer>
@@ -37,6 +121,13 @@
                 console.log('Fetched company:', company);
                 document.getElementById('company_name').value = company.company_name;
                 document.getElementById('ceo').value = company.ceo;
+                document.getElementById('size').value = company.size;
+                document.getElementById('tel').value = company.tel;
+                document.getElementById('address').value = company.address;
+                document.getElementById('manager_name').value = company.manager_name;
+                document.getElementById('manager_email').value = company.manager_email;
+                document.getElementById('manager_tel').value = company.manager_tel;
+                document.getElementById('sales').value = company.sales;
             })
             .catch(error => {
                 console.error('Error fetching posting:', error);
