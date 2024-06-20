@@ -12,4 +12,6 @@ import com.bingsoo.job.entity.Subscribe;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long>{
 	
 	 boolean existsByPostCodeAndUsername(Posting postCode, Member username);
+	 
+	  List<Favorite> findByUsername(Member member);
 }

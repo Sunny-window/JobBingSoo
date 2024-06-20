@@ -691,9 +691,9 @@ function createFavoriteTable(jsonData) {
 	
 	jsonData.forEach(item => {
 		html += '<tr>';
-		html += '<td>' + item.favorCode + '</td>';
-		html += '<td>' + item.postCode.post_code + '</td>';
-		html += '<td>' + item.cid+ '</td>';
+		html += '<td>' + item.favor_code + '</td>';
+		html += '<td>' + item.post_code + '</td>';
+		html += '<td>' + item.company_name+ '</td>';
 		html += '</tr>';
 	});
 
