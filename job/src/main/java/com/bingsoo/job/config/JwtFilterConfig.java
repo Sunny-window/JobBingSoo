@@ -13,7 +13,8 @@ public class JwtFilterConfig {
     public FilterRegistrationBean<JWTFilter> jwtFilter() {
         FilterRegistrationBean<JWTFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JWTFilter());
-        registrationBean.addUrlPatterns("/api/*");
+        registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
+    
 }
