@@ -112,6 +112,75 @@ public class RedbeanController {
 		return redbean;
 	}
 
+	@PutMapping("/resumeWrite")
+	public String resumeWrite(@RequestBody ResumeDto resumedto, @RequestHeader("Authorization") String token) {
+
+		System.out.println("==============================resumedto : " + resumedto);
+		//Resume resume = resumeRepository.findRdCode(resume_code);
+		Resume resume = new Resume();
+		//RedBean redbean = redBeanRepository.findByRid(resume.getRid()).get(0);
+		RedBean redbean = new RedBean();
+		
+		String actualToken = token.substring(7);
+		String tokenname = JWTUtil.getUsername(actualToken);
+		
+		
+		Desired_area desired_area = new Desired_area();
+//		Optional<Desired_area> opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
+//		if (!opdesired_area.isPresent()) {
+//			return "원하는 지역 정보를 찾을 수 없습니다.";
+//		}
+//		Desired_area desired_area = opdesired_area.get();
+		
+	    Desired_industry desired_industry = new Desired_industry();
+	
+
+		Career career = careerRepository.findByRid(redbean.getRid());
+
+		redbean.setName(resumedto.getName());
+		redbean.setAddress(resumedto.getAddress());
+		redbean.setTel(resumedto.getTel());
+		redbean.setEmail(resumedto.getEmail());
+		redBeanRepository.save(redbean);
+
+		resume.setTitle(resumedto.getTitle());
+		resume.setEdu_name(resumedto.getEdu_name());
+		resume.setEdu_type(resumedto.getEdu_type());
+		resume.setEdu_major(resumedto.getEdu_major());
+		resume.setEdu_state(resumedto.getEdu_state());
+		resumeRepository.save(resume);
+
+		desired_area.setArea_main(resumedto.getArea_main());
+		desired_area.setArea_sub(resumedto.getArea_sub());
+		desired_areaRepository.save(desired_area);
+
+		desired_industry.setIndustry(resumedto.getIndustry());
+		desired_industry.setJob(resumedto.getJob());
+		desired_industryRepository.save(desired_industry);
+
+		career.setCompanyName(resumedto.getCompanyname());
+		careerRepository.save(career);
+
+		career.setCarDate(resumedto.getCardate());
+		career.setEndDate(resumedto.getEnddate());
+		career.setIndustry(resumedto.getIndustry());
+		career.setPosition(resumedto.getPosition());
+		careerRepository.save(career);
+		
+		Cover_letter cover_letter = new Cover_letter();
+//		Cover_letter cover_letter = cover_letterRepository.findByResume_code(resume_code);
+		cover_letter.setSungjang(resumedto.getSungjang());
+		cover_letter.setJangdanzeum(resumedto.getJangdanzeum());
+		cover_letter.setJuwondongki(resumedto.getJuwondongki());
+
+		cover_letterRepository.save(cover_letter);
+
+		//List<Certificate> certificate = certificateRepository.findByResume_code(resume_code);
+		//System.out.println("=============================certificate: " + certificate);
+		System.out.println("일=============================resumedto: " + resumedto);
+		return "이력서 등록성공";
+	}
+
 //	@PutMapping("/resumeUpdate")
 //	public String resumeUpdate(@RequestBody Resume resume
 //			,@RequestBody Cover_letter cover_letter
@@ -132,7 +201,7 @@ public class RedbeanController {
 
 	@PutMapping("/resumeUpdate")
 	public String resumeUpdate(@RequestBody ResumeDto resumedto, @RequestParam("resume_code") long resume_code) {
-
+		
 		System.out.println("==============================resumedto : " + resumedto);
 		System.out.println("==============================resume_code : " + resume_code);
 		Resume resume = resumeRepository.findRdCode(resume_code);
@@ -346,5 +415,7 @@ public class RedbeanController {
 		resumeRepository.deleteByRdCode(resume_code);
 		return resume_code + "번 삭제완료";
 	}
-
+	
+	
+	
 }
