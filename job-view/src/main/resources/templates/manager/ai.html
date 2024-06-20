@@ -271,7 +271,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // JWT 토큰을 헤더에 포함
+                'Authorization': 'Bearer ' + token
             },
             body: JSON.stringify({
                 postCode: postCode
@@ -308,6 +308,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        
                         'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({

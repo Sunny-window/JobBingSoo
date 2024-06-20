@@ -128,8 +128,15 @@
         }
     </style>
     <script>
-        function loadData() {
-            fetch('http://localhost:9001/manager/member-all')
+    const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+    function loadData() {
+        fetch('http://localhost:9001/manager/member-all', {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
                 .then(response => response.json())
                 .then(data => {
                     let type = document.querySelector('input[name="type"]:checked').value;

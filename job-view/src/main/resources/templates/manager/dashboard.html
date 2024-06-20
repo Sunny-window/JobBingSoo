@@ -148,11 +148,18 @@
         }
     </style>
     <script>
-        async function fetchData() {
-            const response = await fetch('http://localhost:9001/manager/dashboard-data');
-            const data = await response.json();
-            return data;
-        }
+    const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+    async function fetchData() {
+        const response = await fetch('http://localhost:9001/manager/dashboard-data', {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        return data;
+    }
 
         async function fetchOpenAI(prompt) {
             const apiKey = '';

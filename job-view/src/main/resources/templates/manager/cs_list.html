@@ -60,10 +60,15 @@ th {
 }
 </style>
 <script>
-        function loadCsList(type) {
-            fetch(`http://localhost:9001/manager/admin-csList?type=${type}`,{
-            	
-            })
+const token = localStorage.getItem('token'); // JWT 토큰을 로컬 스토리지에서 가져옴
+
+function loadCsList(type) {
+    fetch(`http://localhost:9001/manager/admin-csList?type=${type}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+    })
                 .then(response => response.json())
                 .then(data => {
                     let tableBody = document.getElementById("csTableBody");
