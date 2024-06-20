@@ -17,12 +17,17 @@
         }
         h1 {
             color: #333;
+            margin-bottom: 20px;
         }
         hr {
             margin-top: 10px;
             margin-bottom: 20px;
             border: 0;
             border-top: 1px solid #eee;
+        }
+        label {
+            font-size: 18px;
+            font-weight: bold;
         }
         .content {
             display: flex;
@@ -34,78 +39,74 @@
         }
         input[type="text"], input[type="number"], select, textarea, input[type="datetime-local"] {
             width: 100%;
-            margin-bottom: 10px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            font-family: 'Gowun Dodum', sans-serif;
+            box-sizing: border-box;
         }
         textarea {
             height: 150px;
+            resize: vertical;
         }
-        
         button {
-            padding: 12px 20px;
+            padding: 12px 40px;
             background-color: #ff006f;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            font-family: 'Gowun Dodum', sans-serif;
             transition: background-color 0.3s ease;
+            width: 200px;
         }
         button:hover {
             background-color: #d6006c;
         }
-        footer a {
-            text-decoration: none;
-            color: #ff006f;
-            margin-left: 10px;
-        }
     </style>
+</head>
+
 <body>
-    <header>
-        <th:block th:insert="~{/sub/header.html}"></th:block>
-    </header>
-    <section>
-        <h1>공고 수정 페이지</h1>
-        <hr>
-        <div class="content">
-            <input type="text" id="title" placeholder="제목">
-            <input type="number" id="head_count" placeholder="채용인원">
-            <label for="edu_type">학력</label>
-            <select id="edu_type" name="edu_type">
-                <option value="elementary">초졸</option>
-                <option value="middle">중졸</option>
-                <option value="high">고졸</option>
-                <option value="associate">초대졸</option>
-                <option value="bachelor">대졸</option>
-                <option value="etc">기타</option>
+<header>
+    <th:block th:insert="~{/sub/header.html}"></th:block>
+</header>
+<section>
+    <h1>공고 수정 페이지</h1>
+    <hr>
+    <div class="content">
+        <input type="text" id="title" placeholder="제목">
+        <input type="number" id="head_count" placeholder="채용인원">
+        <label for="edu_type">학력</label>
+        <select id="edu_type" name="edu_type">
+            <option value="elementary">초졸</option>
+            <option value="middle">중졸</option>
+            <option value="high">고졸</option>
+            <option value="associate">초대졸</option>
+            <option value="bachelor">대졸</option>
+            <option value="etc">기타</option>
+        </select>
+        <label for="employment_type">경력</label>
+        <select id="employment_type" name="employment_type">
+            <option value="freshman">신입</option>
+            <option value="experienced">경력</option>
+        </select>
+        <input type="text" id="career" placeholder="경력 ex)3년이상...">
+        <input type="text" id="pay" placeholder="연봉">
+        <input type="text" id="area" placeholder="근무지역">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <select id="main_category" name="main_category" style="flex: 1;">
+                <option value="">메인 카테고리 선택</option>
             </select>
-            <label for="employment_type">경력</label>
-            <select id="employment_type" name="employment_type">
-                <option value="freshman">신입</option>
-                <option value="experienced">경력</option>
+            <select id="sub_category" name="sub_category" style="flex: 1;">
+                <option value="">서브 카테고리 선택</option>
             </select>
-            <input type="text" id="career" placeholder="경력 ex)3년이상...">
-            <input type="text" id="pay" placeholder="연봉">
-            <input type="text" id="area" placeholder="근무지역">
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <select id="main_category" name="main_category" style="flex: 1;">
-                    <option value="">메인 카테고리 선택</option>
-                </select>
-                <select id="sub_category" name="sub_category" style="flex: 1;">
-                    <option value="">서브 카테고리 선택</option>
-                </select>
-                <input type="datetime-local" id="deadline" placeholder="마감일" style="flex: 1;">
-            </div>
-            <input type="text" id="manager_tel" placeholder="담당자 번호">
-            <textarea id="main_content" placeholder="공고 내용"></textarea>
-            <button onclick="updatePosting()">수정</button>
+            <input type="datetime-local" id="deadline" placeholder="마감일" style="flex: 1;">
         </div>
-    </section>
+        <input type="text" id="manager_tel" placeholder="담당자 번호">
+        <textarea id="main_content" placeholder="공고 내용"></textarea>
+        <button onclick="updatePosting()">수정</button>
+    </div>
+</section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
     </footer>
