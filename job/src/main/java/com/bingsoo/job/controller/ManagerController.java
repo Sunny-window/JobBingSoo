@@ -157,24 +157,25 @@ public class ManagerController {
 	}
 
 	@PostMapping("/send-notice")
-	public Notice sendNotice(@RequestBody NoticeDto noticeDto) {
-		Member sender = memberRepository.findById("manager")
-				.orElseThrow(() -> new RuntimeException("발신자 계정을 찾을 수 없습니다."));
-		String[] receiverUsernames = noticeDto.getReceivers().split(", ");
-		Notice notice = new Notice();
-		notice.setSender(sender);
-		notice.setMessage(noticeDto.getTitle() + ": " + noticeDto.getContent());
-		notice.setType("관리자");
-
-		for (String receiverUsername : receiverUsernames) {
-			Member receiver = memberRepository.findById(receiverUsername)
-					.orElseThrow(() -> new RuntimeException("수신자 계정을 찾을 수 없습니다."));
-			notice.setReciever(receiver);
-			noticeRepository.save(notice);
-		}
-		return notice;
+	public ResponseEntity<Map<String, String>> sendNotice(@RequestBody NoticeDto noticeDto) {
+	    Member sender = memberRepository.findById("manager")
+	            .orElseThrow(() -> new RuntimeException("발신자 계정을 찾을 수 없습니다."));
+	    String[] receiverUsernames = noticeDto.getReceivers().split(", ");
+	    for (String receiverUsername : receiverUsernames) {
+	        Member receiver = memberRepository.findById(receiverUsername)
+	                .orElseThrow(() -> new RuntimeException("수신자 계정을 찾을 수 없습니다."));
+	        Notice notice = new Notice();
+	        notice.setSender(sender);
+	        notice.setReciever(receiver);
+	        notice.setMessage(noticeDto.getTitle() + ": " + noticeDto.getContent());
+	        notice.setType("관리자");
+	        noticeRepository.save(notice);
+	    }
+	    Map<String, String> response = new HashMap<>();
+	    response.put("message", "전송성공");
+	    return ResponseEntity.ok(response);
 	}
-
+	
 	@GetMapping("/notices")
 	public List<Notice> getAllNotices() {
 		return noticeRepository.findAll();
@@ -215,9 +216,9 @@ public class ManagerController {
 			throws IOException {
 		List<Member> members;
 		if (type.equals("member")) {
-			members = memberRepository.findByRole("ROLE_RED_BEAN");
+			members = memberRepository.findByRole("BEAN");
 		} else {
-			members = memberRepository.findByRole("ROLE_ICE");
+			members = memberRepository.findByRole("COM");
 		}
 
 		Workbook workbook = new XSSFWorkbook();
