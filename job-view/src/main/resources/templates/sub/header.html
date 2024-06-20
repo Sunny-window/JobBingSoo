@@ -15,7 +15,7 @@
         section {
             min-height: calc(96vh - 210px);
             max-width: 1240px;
-            margin: 8px auto;
+            margin: 6px auto 36px auto;
         }
         ul {
             list-style: none;
@@ -160,7 +160,7 @@
         }
         #notice-bell {
             width: 30px;
-            margin-right: 10px;
+            margin:0 12px;
         }
         #notice-bell-container {
             flex-direction: column;
@@ -237,7 +237,8 @@
                 <li><img id="notice-bell" src="/images/yestice_bell.png"></li>
                 <li id="login-li"><a href="/main/loginForm">로그인</a></li>
                 <li id="signup-li"><a href="/main/regForm">회원가입</a></li>
-                <li id="mypage-li" style="display: none;"><a href="/redbean/mypage">마이페이지</a></li>
+                <li id="bean-mypage-li" style="display: none;"><a href="/redbean/mypage">마이페이지</a></li>
+                <li id="ice-mypage-li" style="display: none;"><a href="/ice/mypage">마이페이지</a></li>
                 <li id="logout-li" style="display: none;"><a href="#" onclick="logout()">로그아웃</a></li>
             </ul>
         </div>
@@ -279,14 +280,20 @@
     let cnt = 1;
 
     function reloadnotice() {
-        fetch('http://localhost:9001/sub/notice/1')
+        const token = localStorage.getItem("token");
+        fetch('http://localhost:9001/sub/notice',{
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
+            }
+        })
             .then(r => r.json())
             .then(list => {
                 document.getElementById('notice-bell-container').innerHTML = "";
                 list.forEach((data, i) => {
                     var link = '<a href="#">';
                     if (data.type.trim() == '채용공고') {
-                        link = '<a href="/red_bean/mypage">';
+                        link = '<a href="/redbean/mypage">';
                     } else if (data.type.trim() == '기업알림') {
                         link = '<a href="/main/comList">';
                     } else if (data.type.trim() == '공지사항' || data.type.trim() == '고객센터') {
@@ -351,13 +358,19 @@
             }
             document.getElementById('login-li').style.display = 'none';
             document.getElementById('signup-li').style.display = 'none';
-            document.getElementById('mypage-li').style.display = 'block';
+            if(decodedToken.role == 'COM'){
+                document.getElementById('ice-mypage-li').style.display = 'block';
+            }
+            else if(decodedToken.role == 'BEAN'){
+                document.getElementById('bean-mypage-li').style.display = 'block';
+            }
             document.getElementById('logout-li').style.display = 'block';
         } else {
             userNameElement.textContent = 'GUEST';
             document.getElementById('login-li').style.display = 'block';
             document.getElementById('signup-li').style.display = 'block';
-            document.getElementById('mypage-li').style.display = 'none';
+            document.getElementById('bean-mypage-li').style.display = 'none';
+            document.getElementById('ice-mypage-li').style.display = 'none';
             document.getElementById('logout-li').style.display = 'none';
         }
     }

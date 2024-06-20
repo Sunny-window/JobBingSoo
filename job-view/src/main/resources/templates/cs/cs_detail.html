@@ -32,14 +32,6 @@
             background-color: #FF006F;
         }
 
-        textarea {
-            width: calc(100% - 36px);
-            height: 100px;
-            margin: 10px 8px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
     </style>
     <script>
         function loadCsDetail() {
@@ -96,7 +88,6 @@
                 <input type="hidden" id="cs_code_input" name="cs_code" value="">
                 <input type="hidden" id="type_input" name="type" value="">
                 <input type="hidden" id="reply_id_input" name="reply_id" value=""> <!-- Hidden input for reply ID -->
-                <textarea id="comment" name="comment" placeholder="답변을 작성하세요"></textarea><br>
                 <button type="button" class="button" id="delete_btn" onclick="deletecs()">삭제</button>
             </form>
         </div>

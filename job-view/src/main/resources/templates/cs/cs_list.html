@@ -5,28 +5,24 @@
     <meta charset="UTF-8">
     <title>고객센터</title>
     <style>
-        #tab-1 {
-            width: 800px;
-            margin: 0 auto;
-        }
-
-        #tab-2 {
-            width: 1100px;
-            height: 500px;
-            margin: 0 auto;
-        }
-
+        #tab-1,
+        #tab-2,
         #tab-3 {
             width: 1100px;
-            height: 500px;
-            margin: 0 auto;
+            min-height: 500px;
+            margin: 20px auto;
+        }
+
+        #tab-1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .tabs {
             list-style-type: none;
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
             padding: 0;
         }
 
@@ -46,7 +42,7 @@
         }
 
         .faq_box {
-            width: 800px;
+            width: 1000px;
             min-height: 60px;
             border: 1px solid #ccc;
             padding: 15px;
@@ -291,7 +287,7 @@
         btn1.classList.add("current");
         btn2.classList.remove("current");
         btn3.classList.remove("current");
-        tabContent1.style.display = "block";
+        tabContent1.style.display = "flex";
         tabContent2.style.display = "none";
         tabContent3.style.display = "none";
     }
@@ -390,12 +386,12 @@
                 list.forEach(cs => {
                     document.getElementById('my-cs-list').innerHTML
                         += '<div class="my_box" onclick="gotoDetail(' + cs.cs_code + ')">'
-                            + '<p class="cs_num2">' + cs.cs_code + '</p>'
-                            + '<p class="cs_title2">' + cs.title + '</p>'
-                            + '<p class="cs_user2">' + cs.rid.username + '</p>'
-                            + '<p class="cs_result2"><span class="cs_result_ex" id="resultSpan">' + cs.result + '</span></p>'
-                            + '<p class="cs_date2">' + cs.date + '</p>'
-                            + '</div>'
+                        + '<p class="cs_num2">' + cs.cs_code + '</p>'
+                        + '<p class="cs_title2">' + cs.title + '</p>'
+                        + '<p class="cs_user2">' + cs.rid.username + '</p>'
+                        + '<p class="cs_result2"><span class="cs_result_ex" id="resultSpan">' + cs.result + '</span></p>'
+                        + '<p class="cs_date2">' + cs.date + '</p>'
+                        + '</div>'
                         ;
 
                 })
@@ -438,9 +434,6 @@
     document.getElementById("writeButton").addEventListener("click", function () {
         window.location.href = "/cs/regForm";
     });
-
-
-
 
     document.addEventListener("DOMContentLoaded", function () {
         const typeSpan = document.querySelectorAll(".my_type_ex");
