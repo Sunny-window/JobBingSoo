@@ -97,13 +97,49 @@
         <label for="sales">연매출</label>
         <input type="text" id="sales" placeholder="연매출">
         
-        <button type="submit" onclick="updateCompany()">수정</button>
+        <button type="submit" onclick="infoUpdate()">수정</button>
     </form>
 </section>
     <footer>
         <th:block th:insert="~{/sub/footer.html}"></th:block>
     </footer>
     <script>
+        function infoUpdate() {
+            const token = localStorage.getItem('token');
+            const infoData = {
+                companyName: document.getElementById('companyName').value,
+                ceo: document.getElementById('ceo').value,
+                size: document.getElementById('size').value,
+                tel: document.getElementById('tel').value,
+                address: document.getElementById('address').value,
+                managerName: document.getElementById('managerName').value,
+                managerEmail: document.getElementById('managerEmail').value,
+                managerTel: document.getElementById('managerTel').value,
+                sales: document.getElementById('sales').value
+            };
+            
+            fetch("http://localhost:9001/ice/infoUpdate", {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(infoData)
+                
+            })
+            .then(response => response.json())
+            .then(company => {
+                console.log('Updated company:', company);
+                alert('기업정보가 성공적으로 수정되었습니다.');
+                window.location.href = "/ice/employ_notice_list";
+            })
+            .catch(error => {
+                console.error('Error updating posting:', error);
+                alert('기업정보 수정 중 오류가 발생했습니다.');
+            });
+        }
+
+
         document.addEventListener('DOMContentLoaded', function() {
             populateForm();
         });

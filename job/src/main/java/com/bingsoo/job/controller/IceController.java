@@ -136,6 +136,28 @@ public class IceController {
         return postingRepository.findById(postCode).orElse(null);
     }
 
+
+    @PutMapping("/infoUpdate")
+    public Company infoUpdate(@RequestBody Company company, @RequestHeader("Authorization") String token){
+        String actualToken = token.substring(7);
+        String tokenname = JWTUtil.getUsername(actualToken);
+        Member member = new Member();
+        member.setUsername(tokenname);
+        Company company2 = companyRepository.findByCid(member).get();
+
+        company2.setCompany_name(company.getCompany_name());
+        company2.setCeo(company.getCeo());
+        company2.setSize(company.getSize());
+        company2.setTel(company.getTel());
+        company2.setAddress(company.getAddress());
+        company2.setManager_name(company.getManager_name());
+        company2.setManager_email(company.getManager_email());
+        company2.setManager_tel(company.getManager_tel());
+        company2.setSales(company.getSales());
+
+        return companyRepository.save(company2);
+    }
+
     @PutMapping("/posting/{post_code}")
     public Posting updatePosting(@PathVariable("post_code") Long postCode, @RequestBody Posting posting) {
         Posting posting2 = postingRepository.findById(postCode).get();
