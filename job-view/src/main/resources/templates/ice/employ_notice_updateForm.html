@@ -116,8 +116,12 @@
         });
 
         function MainCategories() {
+            const token = localStorage.getItem('token');
             fetch(`http://localhost:9001/ice/categories`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             .then(response => response.json())
             .then(mainCategories => {
@@ -150,8 +154,12 @@
         }
 
         function SubCategories(mccode) {
+            const token = localStorage.getItem('token');
             fetch(`http://localhost:9001/ice/categories/${mccode}/subcategories`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             .then(response => response.json())
             .then(subCategories => {
@@ -179,6 +187,7 @@
         }
 
         function populateForm() {
+            const token = localStorage.getItem('token');
             const urlParams = new URLSearchParams(window.location.search);
             const postCode = urlParams.get('postCode');
 
@@ -189,7 +198,10 @@
             }
 
             fetch(`http://localhost:9001/ice/posting/${postCode}`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             .then(response => response.json())
             .then(posting => {
@@ -215,6 +227,7 @@
         }
 
         function updatePosting() {
+            const token = localStorage.getItem('token');
             const urlParams = new URLSearchParams(window.location.search);
             const postCode = urlParams.get('postCode');
 
@@ -236,7 +249,8 @@
             fetch(`http://localhost:9001/ice/posting/${postCode}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(postingData)
             })

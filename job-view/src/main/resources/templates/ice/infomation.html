@@ -24,6 +24,7 @@
             populateForm();
         });
         function populateForm() {
+            const token = localStorage.getItem('token');
             const urlParams = new URLSearchParams(window.location.search);
             const cno = urlParams.get('cno');
 
@@ -34,7 +35,10 @@
             }
 
             fetch(`http://localhost:9001/ice/infomation/${cno}`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
             })
             .then(response => response.json())
             .then(company => {

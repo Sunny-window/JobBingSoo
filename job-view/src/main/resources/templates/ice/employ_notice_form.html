@@ -116,8 +116,12 @@
         });
 
         function MainCategories() {
+            const token = localStorage.getItem('token');
             fetch(`http://localhost:9001/ice/categories`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             .then(response => response.json())
             .then(mainCategories => {
@@ -150,8 +154,12 @@
         }
 
         function SubCategories(mccode) {
+            const token = localStorage.getItem('token');
             fetch(`http://localhost:9001/ice/categories/${mccode}/subcategories`, {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
             })
             .then(response => response.json())
             .then(subCategories => {
@@ -174,6 +182,8 @@
         }
 
         function submitPosting() {
+            const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옴
+
             const postingData = {
                 title: document.getElementById('title').value,
                 head_count: parseInt(document.getElementById('head_count').value),
@@ -192,7 +202,8 @@
             fetch('http://localhost:9001/ice/posting', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(postingData)
             })

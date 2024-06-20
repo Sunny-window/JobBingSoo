@@ -33,7 +33,7 @@
         padding: 10px;
         background-color: #ffffff;
         border-radius: 8px;
-        box-shadow: 0px 2px 10px #eee;
+        box-shadow: 0px 10px 50px #eee;
     }
     .application-info {
         display: flex;
@@ -76,8 +76,13 @@
     document.addEventListener('DOMContentLoaded', getList());
 
     function getList() {
+        const token = localStorage.getItem('token');
         const pcode = document.getElementById('postCode').value;
-        fetch(`http://localhost:9001/ice/redbean-per-mypost?postcode=` + pcode)
+        fetch(`http://localhost:9001/ice/redbean-per-mypost?postcode=` + pcode ,{
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log('data:', data);
@@ -137,9 +142,11 @@
     }
 
     function reject(app_code) {
+        const token = localStorage.getItem('token');
         fetch(`http://localhost:9001/ice/reject?app_code=` + app_code, {
             method: 'POST',
             headers: {
+                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             }
         })
@@ -162,7 +169,7 @@
         fetch(`http://localhost:9001/ice/approve?app_code=` + app_code, {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token, // Authorization 헤더에 토큰을 추가
+                'Authorization': 'Bearer ' + token // Authorization 헤더에 토큰을 추가
             }
         })
         .then(response => {
