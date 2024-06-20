@@ -173,8 +173,7 @@ th {
 	    .then(data => {
 	    	var htmlContent = `
 				<div>
-					기본키 <input type="text" id="rb_code" name="rb_code" value="${data.rb_code}" readonly><br>
-					rid <input type="hidden" id="rid_" name="rid_" value="${data.rid}" readonly><br>
+					기본키 <input type="hidden" id="rb_code" name="rb_code" value="${data.rb_code}" readonly><br>
 					rid <input type="text" id="rid" name="rid" value="${data.rid.username}" readonly><br>
 					이름 <input type="text" id="name" name="name" value="${data.name}"><br>
 					생일 <input type="text" id="birth" name="birth" value="${data.birth}" ><br>
@@ -246,10 +245,12 @@ function updateInfo(event){
 		    }
 	console.log("============= member"+member);
 	const sendData = JSON.stringify(member);
+	const token = localStorage.getItem("token");
     fetch("http://localhost:9001/redbean/updateInfo?rid="+rid, { // 서버에 요청을 보냅니다.
         method: "PUT",
         headers: {
-            "Content-Type": "application/json" // 요청의 헤더 설정
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token // 요청의 헤더 설정// 요청의 헤더 설정
         },
         body: sendData // 전송할 데이터
     })
@@ -302,9 +303,11 @@ function createResumeTable(jsonData) {
 		html += `<td id="resumeUpdateBtn" class="resume-update-btn" onclick="showResumeUpdateForm(event, '${item.resume_code}')">수정</td>`;
 		html += `<td id="resumeDeleteBtn" class="delete-update-btn" onclick="deleteResume(event, '${item.resume_code}')">삭제</td>`;
 		html += '</tr>';
+		
 	});
 
 	html += '</table>';
+	html += '<button onclick="showResumeWriteForm(event)">이력서 등록하기</button>';
 	
 	return html;
 }
@@ -363,6 +366,75 @@ function resumeUpdateInfo(event, resume_code) {
     const sendData = JSON.stringify(ResumeDto);
     let token = localStorage.getItem("token");
     fetch("http://localhost:9001/redbean/resumeUpdate?resume_code=" + resume_code, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token // 요청의 헤더 설정
+        },
+        body: sendData
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("totalResult").innerHTML = data;
+    })
+    .catch(error => {
+        document.getElementById("totalResult").innerHTML = error;
+    });
+}
+function resumeWrite(event) {
+    event.preventDefault();
+    var cer_stack_old = Array.from(document.querySelectorAll('input[id="cer_stack"]'));
+    var cer_stack = [];
+    cer_stack_old.forEach(input => {
+        cer_stack.push(input.value);
+    });
+    
+    var title = document.querySelector('input[id="title"]').value;
+    var name = document.querySelector('input[id="name"]').value;
+    var address = document.querySelector('input[id="address"]').value;
+    var tel = document.querySelector('input[id="tel"]').value;
+    var email = document.querySelector('input[id="email"]').value;
+    var edu_name = document.querySelector('input[id="edu_name"]').value;
+    var edu_major = document.querySelector('input[id="edu_major"]').value;
+    var edu_type = document.querySelector('input[id="edu_type"]').value;
+    var edu_state= document.querySelector('input[id="edu_state"]').value;
+    var area_main= document.querySelector('input[id="area_main"]').value;
+    var area_sub= document.querySelector('input[id="area_sub"]').value;
+    var companyname= document.querySelector('input[id="companyname"]').value;
+    var cardate= document.querySelector('input[id="cardate"]').value;
+    var industry = document.querySelector('input[id="industry"]').value;
+    var position= document.querySelector('input[id="position"]').value;
+    var job= document.querySelector('input[id="job"]').value;
+    // var cer_stack_old= document.querySelectorAll('input[id="cer_stack"]');
+    var optain_date= document.querySelector('input[id="optain_date"]').value;
+    var sungjang= document.querySelector('textarea[id="sungjang"]').value;
+    var juwondongki= document.querySelector('textarea[id="juwondongki"]').value;
+    var jangdanzeum= document.querySelector('textarea[id="jangdanzeum"]').value;
+    var issuer = document.querySelector('input[id="issuer"]').value;
+
+    const ResumeDto = {
+    	title:title,
+        name: name,
+        address: address,
+        tel: tel,
+        email: email,
+        edu_name: edu_name,
+        edu_type: edu_type,
+        edu_major: edu_major,
+        edu_state: edu_state,
+        area_main: area_main,
+        area_sub: area_sub,
+        job: job,
+        optain_date: optain_date,
+        issuer: issuer,
+        sungjang: sungjang,
+        juwondongki: juwondongki,
+        jangdanzeum: jangdanzeum,
+       // cer_stack: cer_stack
+    }
+    const sendData = JSON.stringify(ResumeDto);
+    let token = localStorage.getItem("token");
+    fetch("http://localhost:9001/redbean/resumeWrite", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -661,6 +733,81 @@ function showSubscribeList(event) {
 			document.getElementById("subscribeList").innerHTML = error;
 		});
 }
+
+function showResumeWriteForm(event) {
+	event.preventDefault();
+	let token = localStorage.getItem("token");
+	console.log("=============");
+	 var htmlContent = `
+         이력서제목<input type="text" id="title" name="title"><br>
+         <hr>
+         인적사항
+         <hr>
+         성명<input type="text" id="name" name="name" ><br>
+         주소<input type="text" id="address" name="address"><br>
+         휴대전화<input type="text" id="tel" name="tel" ><br>
+         이메일<input type="text" id="email" name="email"><br>
+         <hr>
+         학력사항
+         <hr>
+         학력<input type="text" id="edu_name" name="edu_name" ><br>
+         학력구분<input type="text" id="edu_type" name="edu_type" ><br>
+         전공<input type="text" id="edu_major" name="edu_major"><br>
+         학력상태<input type="text" id="edu_state" name="edu_state"><br>
+         <hr>
+         자소서<br>
+         성장과정<br>
+         <textarea id="sungjang" name="sungjang"></textarea><br>
+         지원동기<br>
+         <textarea id="juwondongki" name="juwondongki"></textarea><br>
+         장단점<br>
+         <textarea id="jangdanzeum" name="jangdanzeum"></textarea><br>
+         <hr>
+         희망근무지역
+         <hr>
+         1지망<input type="text" id="area_main" name="area_main"><br>
+         2지망<input type="text" id="area_sub" name="area_sub"><br>
+         희망직무산업
+         <hr>
+         산업<input type="text" id="industry" name="industry"><br>
+         직무<input type="text" id="job" name="job"><br>
+         <hr>
+         경력사항
+         <hr>
+         사명<input type="text" id="companyname" name="companyname"><br>
+         입사일<input type="text" id="cardate" name="cardate"><br>
+         퇴사일<input type="text" id="enddate" name="enddate"><br>
+         산업군<input type="text" id="industry" name="industry"><br>
+         직책<input type="text" id="position" name="position"><br>
+         직무<input type="text" id="job" name="job"><br>
+         <hr>
+         이력서 기술스택
+         <hr>
+         <br>
+         <hr>
+			보유 자격증
+			<hr>
+			<div id="certiContainer">
+				<div class="certi-container">
+					자격증명 <input type="text" id="cer_stack" name="cer_stack" ><br>
+					취득일 <input type="text" id="optain_date" name="optain_date"><br>
+					발급기관 <input type="text" id="issuer" name="issuer"><br>
+				</div>
+			</div>
+			<button id="addCertiBtn">자격증 추가</button>
+         <button onclick="resumeWrite(event)">등록하기</button>
+         <form action="review" method="post" enctype="multipart/form-data">
+         <input type="file" name="imageFile">
+
+         </form>
+         </div>
+         <div id="subscribeListDiv"></div>
+         <div id="showFavoriteListDiv"></div>
+         <div id="totalResult"></div>
+     `;
+     $("#totalResult").html(htmlContent);
+}
+
 
 function showApplicationList(event) {
 	let token = localStorage.getItem("token");
