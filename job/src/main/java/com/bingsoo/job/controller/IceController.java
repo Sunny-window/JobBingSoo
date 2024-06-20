@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.SubCategory;
 import com.bingsoo.job.entity.Subscribe;
+import com.bingsoo.job.jwtToken.JWTUtil;
 import com.bingsoo.job.repository.ApplicationRepository;
 import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.MainCategoryRepository;
@@ -39,7 +41,7 @@ import com.bingsoo.job.repository.SubscribeRepository;
 @RestController
 @RequestMapping("/ice")
 public class IceController {
-    
+
     @Autowired
     private PostingRepository postingRepository;
 
@@ -61,45 +63,48 @@ public class IceController {
     @Autowired
     private SubscribeRepository subscribeRepository;
 
-
-
     // @GetMapping("/redbean-per-mypost/{postCode}")
-    // public List<Application> redBeanApplication(@PathVariable("postCode") Long postCode) {
-    //     Posting posting = new Posting();
-    //     posting.setPost_code(postCode);
-    //     return applicationRepository.findByPostCode(posting);
+    // public List<Application> redBeanApplication(@PathVariable("postCode") Long
+    // postCode ) {
+    // Posting posting = new Posting();
+    // posting.setPost_code(postCode);
+    // return applicationRepository.findByPostCode(posting);
     // }
 
     @GetMapping("/redbean-per-mypost")
     public List<RedBeanDto> RedBeanList(@RequestParam("postcode") Long postCode) {
-        
+
         List<RedBeanDto> reds = applicationRepository.findRedBeanByRid(postCode);
-        
+
         return reds;
 
     }
 
     @GetMapping("/my-postings")
-    public List<PostingDto> postingList(@RequestParam("cid") String cid) {
-        
-        List<PostingDto> dtos = postingRepository.findPostingListDtosByCid(cid);
-        
+    public List<PostingDto> postingList(@RequestHeader("Authorization") String token) {
+        String actualToken = token.substring(7);
+        String tokenname = JWTUtil.getUsername(actualToken);
+        System.out.println(tokenname);
+        List<PostingDto> dtos = postingRepository.findPostingListDtosByCid(tokenname);
+
         return dtos;
     }
 
     @DeleteMapping("/posting/{post_code}")
     public void deletePostingById(@PathVariable("post_code") Long postCode) {
-        
+
         postingRepository.deleteById(postCode);
     }
 
     @PostMapping("/posting")
-    public Posting posting(@RequestBody Posting posting) {
+    public Posting posting(@RequestBody Posting posting, @RequestHeader("Authorization") String token) {
+        String actualToken = token.substring(7);
+        String tokenname = JWTUtil.getUsername(actualToken);
         // 로그인 전 임시 member
-        Member mem = new Member();
-        mem.setUsername("홍길동");        
+        Member member = new Member();
+        member.setUsername(tokenname);
         // 공고를 저장하고 반환
-        posting.setCid(mem);
+        posting.setCid(member);
         postingRepository.save(posting);
         // 해당 기업을 관심기업으로 설정한 회원들에게 알림 생성 및 저장
         Company company = companyRepository.findByCid(posting.getCid()).get();
@@ -117,11 +122,13 @@ public class IceController {
         return postingRepository.save(posting);
     }
 
-
-    @GetMapping("/infomation/{cno}")
-    public Company infomation(@PathVariable("cno") String cno) {
-        
-        return companyRepository.findById(cno).get();
+    @GetMapping("/infomation")
+    public Company infomation(@RequestHeader("Authorization") String token) {
+        String actualToken = token.substring(7);
+        String tokenname = JWTUtil.getUsername(actualToken);
+        Member member = new Member();
+        member.setUsername(tokenname);
+        return companyRepository.findByCid(member).get();
     }
 
     @GetMapping("/posting/{post_code}")
@@ -174,9 +181,8 @@ public class IceController {
         Application application = applicationRepository.findById(appCode).get();
 
         application.setResult("합격");
-        
+
         return applicationRepository.save(application);
     }
-
 
 }

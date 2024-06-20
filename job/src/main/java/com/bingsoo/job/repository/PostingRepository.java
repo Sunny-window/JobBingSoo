@@ -30,7 +30,6 @@ public interface PostingRepository extends JpaRepository<Posting, Long> {
 	List<Object[]> postingListDtosByCid(@Param("username") String username);
 
 	default List<PostingDto> findPostingListDtosByCid(String hid) {
-
 		List<Object[]> db_result_list = postingListDtosByCid(hid);
 		List<PostingDto> dtos = new ArrayList<>();
 

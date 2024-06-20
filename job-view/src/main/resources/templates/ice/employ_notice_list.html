@@ -140,7 +140,7 @@
 
         function noticeList() {
             const token = localStorage.getItem('token');
-            fetch("http://localhost:9001/ice/my-postings?cid=홍길동", {
+            fetch(`http://localhost:9001/ice/my-postings`, {
                     method: "GET",
                     headers: {
                         'Authorization': 'Bearer ' + token
