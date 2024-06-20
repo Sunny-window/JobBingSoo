@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,9 @@ import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
 import com.bingsoo.job.jwtToken.JWTUtil;
+import com.bingsoo.job.repository.CompanyRepository;
 import com.bingsoo.job.repository.NoticeRepository;
+import com.bingsoo.job.repository.PostingRepository;
 
 // @CrossOrigin("*")
 @RequestMapping("/sub")
@@ -28,6 +29,12 @@ public class SubController {
 
     @Autowired
     private NoticeRepository nr;
+
+    @Autowired
+    private PostingRepository pr;
+
+    @Autowired
+    private CompanyRepository cr;
     
     @GetMapping("/notice")
     public List<Notice> myNoticeList(@RequestHeader("Authorization") String token){
@@ -75,13 +82,13 @@ public class SubController {
     public List<Posting> searchPostings(@PathVariable("keyword") String keyword){
 
 
-        return null;
+        return pr.findAll();
     } 
 
     @GetMapping("/company/{keyword}")
     public List<Company> searchCompanys(@PathVariable("keyword") String keyword){
         
 
-        return null;
+        return cr.findAll();
     } 
 }
