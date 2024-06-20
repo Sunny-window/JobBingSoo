@@ -158,7 +158,7 @@ public class ManagerController {
 
 	@PostMapping("/send-notice")
 	public ResponseEntity<Map<String, String>> sendNotice(@RequestBody NoticeDto noticeDto) {
-	    Member sender = memberRepository.findById("manager")
+	    Member sender = memberRepository.findFirstByRole("ADMIN")
 	            .orElseThrow(() -> new RuntimeException("발신자 계정을 찾을 수 없습니다."));
 	    String[] receiverUsernames = noticeDto.getReceivers().split(", ");
 	    for (String receiverUsername : receiverUsernames) {

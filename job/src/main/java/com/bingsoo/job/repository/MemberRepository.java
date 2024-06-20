@@ -17,5 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, String>{
 	List<Member> findByJoinDateBetween(LocalDate startDate, LocalDate endDate);
 
 	Optional<Member> findById(String username);
+	
+	Optional<Member> findFirstByRole(String role);
 
 }
