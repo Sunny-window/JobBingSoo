@@ -24,7 +24,7 @@ public class RedbeanController {
 
 		model.addAttribute("rid", rid);
 		
-		return "red_bean/mypage";
+		return "red_bean/resume_detail";
 	}
 	
 	
