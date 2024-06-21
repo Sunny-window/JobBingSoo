@@ -17,5 +17,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long>{
 	void deleteByRdCode(@Param("resume_code") long resume_code);
 
 	List<Resume> findByRid(Member member);
+
 	
 }

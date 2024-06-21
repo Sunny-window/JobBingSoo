@@ -23,6 +23,7 @@ import com.bingsoo.job.entity.Member;
 import com.bingsoo.job.entity.Notice;
 import com.bingsoo.job.entity.Posting;
 import com.bingsoo.job.entity.RedBean;
+import com.bingsoo.job.entity.Resume;
 import com.bingsoo.job.entity.Application;
 import com.bingsoo.job.entity.Company;
 import com.bingsoo.job.entity.SubCategory;
@@ -34,6 +35,7 @@ import com.bingsoo.job.repository.MainCategoryRepository;
 import com.bingsoo.job.repository.NoticeRepository;
 import com.bingsoo.job.repository.PostingRepository;
 import com.bingsoo.job.repository.RedBeanRepository;
+import com.bingsoo.job.repository.ResumeRepository;
 import com.bingsoo.job.repository.SubCategoryRepository;
 import com.bingsoo.job.repository.SubscribeRepository;
 
@@ -62,6 +64,9 @@ public class IceController {
 
     @Autowired
     private SubscribeRepository subscribeRepository;
+
+    @Autowired
+    private ResumeRepository resumeRepository;
 
     // @GetMapping("/redbean-per-mypost/{postCode}")
     // public List<Application> redBeanApplication(@PathVariable("postCode") Long
@@ -205,6 +210,21 @@ public class IceController {
         application.setResult("합격");
 
         return applicationRepository.save(application);
+    }
+
+    @GetMapping("/resumeList")
+    public List<Resume> getList(@RequestParam("rid") String rid){
+        Member member = new Member();
+        member.setUsername(rid);
+        List<Resume> list = resumeRepository.findByRid(member);
+
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + list);
+        return list;
     }
 
 }

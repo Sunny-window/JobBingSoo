@@ -5,56 +5,68 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<section>
-	<div class="content" id="content"></div>
-	</section>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const rid = urlParams.get('rid');
-
-            if (rid) {
-                showResumeDetail(rid);
-            } else {
-                const div = document.createElement('div');
-                div.textContent = 'rid가 없습니다.';
-                document.getElementById('resumeDetailSection').appendChild(div);
-            }
-        });
-
-        function showResumeDetail(rid) {
-            let token = localStorage.getItem("token");
-            fetch("http://localhost:9001/redbean/showResumeUpdateForm?resume_code=" + rid, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + token
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                var resumeDetailSection = document.getElementById("resumeDetailSection");
-
-                var htmlContent = `
-                    <h2>이력서 제목: ${data.title}</h2>
-                    <hr>
-                    <h3>인적사항</h3>
-                    <p>성명: ${data.name}<br>
-                    주소: ${data.address}<br>
-                    휴대전화: ${data.tel}<br>
-                    이메일: ${data.email}</p>
-                    <!-- 학력사항, 자소서, 경력사항 등 필요한 정보 추가 -->
-                `;
-
-                // 이력서 상세 정보를 resumeDetailSection에 삽입
-                resumeDetailSection.innerHTML = htmlContent;
-            })
-            .catch(error => {
-                var resumeDetailSection = document.getElementById("resumeDetailSection");
-                resumeDetailSection.innerHTML = "<p>이력서를 불러오는 중 오류가 발생했습니다.</p>";
-                console.error('Error fetching resume details:', error);
-            });
+    <style>
+        .resume {
+            margin: 20px auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
-    </script>
+
+        .resume strong {
+            font-weight: bold;
+        }
+    </style>
+    <header>
+        <th:block th:insert="~{/sub/header.html}"></th:block>
+    </header>
+	<section>
+        <h1>이력서 디테일</h1>
+        <hr>
+        <input type="text" id="rid" th:value="${rid}" hidden>
+	<div id="content"></div>
+	</section>
+
+    <footer>
+        <th:block th:insert="~{/sub/footer.html}"></th:block>
+    </footer>
+    
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        List();
+    });
+    
+    function List() {
+        const token = localStorage.getItem('token');
+        const rid = document.getElementById('rid').value;
+        fetch(`http://localhost:9001/ice/resumeList?rid=${rid}`, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('data:', data);
+    
+            data.forEach(resume => {
+                const div = document.createElement('div');
+                div.classList.add('resume');
+                div.innerHTML = `<div>
+                    <strong>제목:</strong> ${resume.title} <br>
+                    <strong>경력:</strong> ${resume.employmemt_type} <br>
+                    <strong>학력:</strong> ${resume.edu_type}<br>
+                    <strong>학교:</strong> ${resume.edu_name}<br>
+                    <strong>전공:</strong> ${resume.edu_major}<br>
+                    <strong></strong> <br>
+                    </div>`;
+    
+                document.getElementById('content').appendChild(div); 
+            });
+        })
+        .catch(error => console.error('데이터 가져오기나 파싱 중 오류 발생:', error));
+    }
+        </script>
 </html>
