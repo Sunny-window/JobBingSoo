@@ -11,4 +11,5 @@ public class SubscribeForNameDto {
 	private String rid;
 	private String cid;
 	private String company_name;
+	private String cno;
 }

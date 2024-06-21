@@ -317,6 +317,7 @@ public class RedbeanController {
 			subscribeForNameDto.setCid(list.get(i).getCid().getUsername());
 			subscribeForNameDto.setRid(list.get(i).getRid().getUsername());
 			subscribeForNameDto.setCompany_name(company.getCompany_name());
+			subscribeForNameDto.setCno(company.getCno());
 			list2.add(subscribeForNameDto);
 		}
 		return list2;
