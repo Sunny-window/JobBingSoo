@@ -110,7 +110,7 @@
                     const searchResumeButton = document.createElement('button');
                     searchResumeButton.textContent = '이력서보기';
                     searchResumeButton.addEventListener('click', function(){
-                        searchResume(application.rid);
+                        searchResume(application.resume_code);
                     });
 
                     const approveButton = document.createElement('button');
@@ -137,7 +137,7 @@
     }
 
     function searchResume(rid){
-        window.location.href = `/red_bean/resume_detail?rid=` + rid;
+        window.location.href = `/redbean/mypage?rid=` + rid;
         console.log(rid);
     }
 

@@ -6,21 +6,54 @@
 </head>
 <body>
 	<section>
-	
+	<div class="content" id="content"></div>
 	</section>
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        const rid = urlParams.get('rid');
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rid = urlParams.get('rid');
 
-        if (rid) {
-            const div = document.createElement('div');
-            div.textContent = `rid: ${rid}`;
-            document.body.appendChild(div);
-        } else {
-            const div = document.createElement('div');
-            div.textContent = 'rid 없음';
-            document.body.appendChild(div);
+            if (rid) {
+                showResumeDetail(rid);
+            } else {
+                const div = document.createElement('div');
+                div.textContent = 'rid가 없습니다.';
+                document.getElementById('resumeDetailSection').appendChild(div);
+            }
+        });
+
+        function showResumeDetail(rid) {
+            let token = localStorage.getItem("token");
+            fetch("http://localhost:9001/redbean/showResumeUpdateForm?resume_code=" + rid, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + token
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                var resumeDetailSection = document.getElementById("resumeDetailSection");
+
+                var htmlContent = `
+                    <h2>이력서 제목: ${data.title}</h2>
+                    <hr>
+                    <h3>인적사항</h3>
+                    <p>성명: ${data.name}<br>
+                    주소: ${data.address}<br>
+                    휴대전화: ${data.tel}<br>
+                    이메일: ${data.email}</p>
+                    <!-- 학력사항, 자소서, 경력사항 등 필요한 정보 추가 -->
+                `;
+
+                // 이력서 상세 정보를 resumeDetailSection에 삽입
+                resumeDetailSection.innerHTML = htmlContent;
+            })
+            .catch(error => {
+                var resumeDetailSection = document.getElementById("resumeDetailSection");
+                resumeDetailSection.innerHTML = "<p>이력서를 불러오는 중 오류가 발생했습니다.</p>";
+                console.error('Error fetching resume details:', error);
+            });
         }
     </script>
 </body>

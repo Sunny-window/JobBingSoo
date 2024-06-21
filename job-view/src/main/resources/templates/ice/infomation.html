@@ -97,7 +97,7 @@
         <label for="sales">연매출</label>
         <input type="text" id="sales" placeholder="연매출">
         
-        <button type="submit" onclick="infoUpdate()">수정</button>
+        <button type="button" onclick="infoUpdate()">수정</button>
     </form>
 </section>
     <footer>
@@ -131,7 +131,7 @@
             .then(company => {
                 console.log('Updated company:', company);
                 alert('기업정보가 성공적으로 수정되었습니다.');
-                window.location.href = "/ice/employ_notice_list";
+                window.location.href = "/ice/mypage";
             })
             .catch(error => {
                 console.error('Error updating posting:', error);
