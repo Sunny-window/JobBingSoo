@@ -130,9 +130,12 @@
         }
 
         .head_bottom .menu_list #menu_list_item li a {
-            padding: 0px 25px;
+            padding: 0px;
+            display:inline-block;
+            width:136px;
             font-size: 18px;
             font-weight: 600;
+            text-align: center;
         }
 
         .head_bottom .menu_list #menu_list_item li a:hover {
@@ -171,7 +174,7 @@
         }
 
         #head_menu_slide ul {
-            padding: 0px 25px;
+            padding: 0;
         }
 
         #head_menu_slide ul li {
@@ -180,6 +183,7 @@
 
         #head_menu_slide ul li a {
             display: inline-block;
+            width:136px;
             font-size: 18px;
             padding-bottom: 15px;
             color: #666;
@@ -271,9 +275,9 @@
         <div class="head_bottom">
             <div class="menu_list">
                 <ul id="menu_list_item">
-                    <li><a href="/main/index">채용공고</a></li>
-                    <li><a href="/main/comList">기업·인재</a></li>
-                    <li><a href="/cs/list">고객센터</a></li>
+                    <li><a href="/main/index">📑채용공고</a></li>
+                    <li><a href="/main/comList">🏢기업</a></li>
+                    <li><a href="/cs/list">🙆‍♀️고객센터</a></li>
                 </ul>
             </div>
 
@@ -430,7 +434,7 @@
             if (token) {
                 const decodedToken = parseJwt(token);
                 if (decodedToken && decodedToken.sub) {
-                    userNameElement.textContent = decodedToken.sub; // JWT의 'sub' 클레임을 사용자 이름으로 사용
+                    userNameElement.textContent = decodedToken.sub+' 님 '; // JWT의 'sub' 클레임을 사용자 이름으로 사용
                 } else {
                     userNameElement.textContent = 'GUEST';
                 }
