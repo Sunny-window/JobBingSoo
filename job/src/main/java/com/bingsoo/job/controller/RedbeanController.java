@@ -133,16 +133,22 @@ public class RedbeanController {
 //		Desired_area desired_area = opdesired_area.get();
 		
 	    Desired_industry desired_industry = new Desired_industry();
-	
-
-		Career career = careerRepository.findByRid(redbean.getRid());
-
+	    Career career = new Career();
+	    career.setCompanyName(resumedto.getCompanyname());
+	    career.setCarDate(resumedto.getCardate());
+	    career.setEndDate(resumedto.getEnddate());
+	    career.setIndustry(resumedto.getIndustry());
+	    career.setJob(resumedto.getJob());
+	    career.setPosition(resumedto.getPosition());
+	    
 		redbean.setName(resumedto.getName());
 		redbean.setAddress(resumedto.getAddress());
 		redbean.setTel(resumedto.getTel());
 		redbean.setEmail(resumedto.getEmail());
 		redBeanRepository.save(redbean);
-
+		Member member = new Member();
+		member.setUsername(tokenname);
+		resume.setRid(member);
 		resume.setTitle(resumedto.getTitle());
 		resume.setEdu_name(resumedto.getEdu_name());
 		resume.setEdu_type(resumedto.getEdu_type());
@@ -219,7 +225,8 @@ public class RedbeanController {
 		Desired_industry desired_industry = opdesired_industry.get();
 		System.out.println("==============================redbean.getRid() : " + redbean.getRid());
 
-		Career career = careerRepository.findByRid(redbean.getRid());
+		List<Career> careerlist = careerRepository.findByRid(redbean.getRid());
+		Career career = careerlist.get(0);
 
 		redbean.setName(resumedto.getName());
 		redbean.setAddress(resumedto.getAddress());
@@ -297,12 +304,12 @@ public class RedbeanController {
 		String tokenname = JWTUtil.getUsername(actualToken);
 		Member mem = new Member();
 		mem.setUsername(tokenname);
-		SubscribeForNameDto subscribeForNameDto = new SubscribeForNameDto();
 
 		List<Subscribe> list = subscribeRepository.findByRid(mem);
 		List<SubscribeForNameDto> list2 = new ArrayList<>();
 		// List<Subscribe> list =subscribeRepository.findAll();
 		for (int i = 0; i < list.size(); i++) {
+			SubscribeForNameDto subscribeForNameDto = new SubscribeForNameDto();
 
 			Optional<Company> opcompany = companyRepository.findByCid(list.get(i).getCid());
 			Company company = opcompany.get();
@@ -378,11 +385,10 @@ public class RedbeanController {
 		List<Certificate> cerStackList = certificateRepository.findByRid(resume.getRid());
 		System.out.println("==========================================cerStackList: " + cerStackList);
 
-		Optional<Desired_area> opdesired_area = desired_areaRepository.findByRid(redbean.getRid());
-		Desired_area desired_area = opdesired_area.get();
+		List<Career> careerlist = careerRepository.findByRid(redbean.getRid());
+		Career career = careerlist.get(0);
+		Desired_area desired_area = desired_areaRepository.findByResume_code(resume_code);
 		System.out.println("==========================================desired_area: " + desired_area);
-		Career career = careerRepository.findByRid(redbean.getRid());
-
 		Cover_letter cover_letter = cover_letterRepository.findByResume_code(resume_code);
 		resumeDto.setName(redbean.getName());
 		resumeDto.setAddress(redbean.getAddress());

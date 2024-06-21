@@ -16,4 +16,7 @@ public interface Desired_areaRepository extends JpaRepository<Desired_area, Long
 	 @Query("SELECT da FROM Desired_area da WHERE da.rid = :member")
 	    List<Desired_area> findAllByRid(@Param("member") Member member);
 	
+	    
+	@Query(value = "SELECT * FROM Desired_area WHERE resume_code = :resume_code", nativeQuery=true)    
+	Desired_area findByResume_code(@Param("resume_code") long resume_code);
 }

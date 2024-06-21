@@ -174,7 +174,7 @@ th {
 	    	var htmlContent = `
 				<div>
 					기본키 <input type="hidden" id="rb_code" name="rb_code" value="${data.rb_code}" readonly><br>
-					rid <input type="text" id="rid" name="rid" value="${data.rid.username}" readonly><br>
+					<input type="hidden" id="rid" name="rid" value="${data.rid.username}" readonly><br>
 					이름 <input type="text" id="name" name="name" value="${data.name}"><br>
 					생일 <input type="text" id="birth" name="birth" value="${data.birth}" ><br>
 					전화 <input type="text" id="tel" name="tel" value="${data.tel}"><br>
@@ -741,13 +741,6 @@ function showResumeWriteForm(event) {
 	 var htmlContent = `
          이력서제목<input type="text" id="title" name="title"><br>
          <hr>
-         인적사항
-         <hr>
-         성명<input type="text" id="name" name="name" ><br>
-         주소<input type="text" id="address" name="address"><br>
-         휴대전화<input type="text" id="tel" name="tel" ><br>
-         이메일<input type="text" id="email" name="email"><br>
-         <hr>
          학력사항
          <hr>
          학력<input type="text" id="edu_name" name="edu_name" ><br>
@@ -794,7 +787,7 @@ function showResumeWriteForm(event) {
 					발급기관 <input type="text" id="issuer" name="issuer"><br>
 				</div>
 			</div>
-			<button id="addCertiBtn">자격증 추가</button>
+			<button id="addCertiBtn">자격증 추가</button><br>
          <button onclick="resumeWrite(event)">등록하기</button>
          <form action="review" method="post" enctype="multipart/form-data">
          <input type="file" name="imageFile">
@@ -831,15 +824,11 @@ function showApplicationList(event) {
 function createFavoriteTable(jsonData) {
 	var html = '<table border="1">';
 	html += '<tr>';
-	html += '<th>favor_code</th>';
-	html += '<th>post_code</th>';
-	html += '<th>사명(username)</th>';
+	html += '<th>사명</th>';
 	html += '</tr>';
 	
 	jsonData.forEach(item => {
 		html += '<tr>';
-		html += '<td>' + item.favor_code + '</td>';
-		html += '<td>' + item.post_code + '</td>';
 		html += '<td>' + item.company_name+ '</td>';
 		html += '</tr>';
 	});
