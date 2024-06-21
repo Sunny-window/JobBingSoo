@@ -828,8 +828,10 @@ function createFavoriteTable(jsonData) {
 	html += '</tr>';
 	
 	jsonData.forEach(item => {
+		var postCode = item.post_code;
 		html += '<tr>';
-		html += '<td>' + item.company_name+ '</td>';
+		html += '<td>' +'<a href =http://localhost:8080/main/postDetail?postCode='+postCode+'>'+ item.company_name + '</a>'+'</td>';
+
 		html += '</tr>';
 	});
 
@@ -841,13 +843,16 @@ function createFavoriteTable(jsonData) {
 
 function createSubscribeTable(jsonData) {
 	var html = '<table border="1">';
+	
 	html += '<tr>';
 	html += '<th>사명</th>';
 	html += '</tr>';
 	
 	jsonData.forEach(item => {
+		var cno = item.cno
+		console.log("============== cno: "+cno)
 		html += '<tr>';
-		html += '<td>' + item.company_name + '</td>';
+		html += '<td>' +'<a href =http://localhost:8080/main/comDetail?cno='+cno+'>'+ item.company_name + '</a>'+'</td>';
 		html += '</tr>';
 	});
 
@@ -859,17 +864,16 @@ function createSubscribeTable(jsonData) {
 function createApplicationTable(jsonData) {
 	var html = '<table border="1">';
 	html += '<tr>';
-	html += '<th>appcode</th>';
-	html += '<th>post_code</th>';
-	html += '<th>rid</th>';
-	html += '<th>result</th>';
+	html += '<th>공고제목</th>';
+	html += '<th>공고결과</th>';
 	html += '</tr>';
 	
 	jsonData.forEach(item => {
+		var postCode = item.postCode.post_code;
+
 		html += '<tr>';
-		html += '<td>' + item.app_code + '</td>';
-		html += '<td>' + item.postCode.post_code+ '</td>';
-		html += '<td>' + item.rid.username +'</td>';
+		html += '<td>' +'<a href =http://localhost:8080/main/postDetail?postCode='+postCode+'>'+ item.postCode.title + '</a>'+'</td>';
+
 		html += '<td>' + item.result +'</td>';
 		html += '</tr>';
 	});
