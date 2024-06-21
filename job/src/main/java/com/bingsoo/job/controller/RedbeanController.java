@@ -278,8 +278,12 @@ public class RedbeanController {
 	}
 
 	@GetMapping("/showResumeList")
-	public List<Resume> showResumeList() {
-		List<Resume> list = resumeRepository.findAll();
+	public List<Resume> showResumeList(@RequestHeader("Authorization") String token) {
+		String actualToken = token.substring(7);
+		String tokenname = JWTUtil.getUsername(actualToken);
+		Member mem = new Member();
+		mem.setUsername(tokenname);
+		List<Resume> list = resumeRepository.findAllByRid(mem);
 		System.out.println("==============================showResumeList : " + list);
 		return list;
 	}
