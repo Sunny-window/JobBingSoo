@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watch Stream</title>
+</head>
+<body>
+    <h1>Watch Stream</h1>
+    <div id="streamStatus"></div>
+    <script>
+        async function checkStreamStatus() {
+            const response = await fetch('http://localhost:9001/is-streaming');
+            const isStreaming = await response.json();
+            if (isStreaming) {
+                document.getElementById('streamStatus').innerHTML = '<img src="http://<DroidCam-IP>:<DroidCam-Port>/video" />';
+            } else {
+                document.getElementById('streamStatus').innerHTML = 'No active stream';
+            }
+        }
+        checkStreamStatus();
+        setInterval(checkStreamStatus, 5000); // 5초마다 스트리밍 상태 확인
+    </script>
+</body>
+</html>

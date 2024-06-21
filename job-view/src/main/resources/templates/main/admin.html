@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <button id="startStreaming">Start Streaming</button>
+    <script>
+        document.getElementById('startStreaming').onclick = async function() {
+            const response = await fetch('http://localhost:9001/start-streaming', {
+                method: 'POST'
+            });
+            const data = await response.text();
+            alert(data);
+        };
+    </script>
+</body>
+</html>
