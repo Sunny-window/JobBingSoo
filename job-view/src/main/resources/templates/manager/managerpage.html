@@ -137,99 +137,127 @@
                 'Content-Type': 'application/json'
             }
         })
-                .then(response => response.json())
-                .then(data => {
-                    let type = document.querySelector('input[name="type"]:checked').value;
-                    if (type === "member") {
-                        loadMembers(data.members);
-                        document.getElementById("downloadButton").onclick = function() {
-                            window.location.href = 'http://localhost:9001/manager/download/excel?type=member';
-                        };
-                    } else {
-                        loadMembers(data.companies);
-                        document.getElementById("downloadButton").onclick = function() {
-                            window.location.href = 'http://localhost:9001/manager/download/excel?type=company';
-                        };
-                    }
-                });
-        }
-
-        function loadMembers(members) {
-            let memberTableBody = document.getElementById("memberTableBody");
-            memberTableBody.innerHTML = "";
-            members.forEach(member => {
-                let row = `<tr>
-                    <td><input type="checkbox" name="receiver" value="${member.username}"></td>
-                    <td>${member.username}</td>
-                    <td>${member.kakaoId}</td>
-                    <td>${member.role}</td>
-                </tr>`;
-                memberTableBody.innerHTML += row;
-            });
-        }
-
-        function searchMembers() {
-            let input = document.getElementById("memberSearch").value.toLowerCase();
-            let rows = document.querySelectorAll("#memberTableBody tr");
-            rows.forEach(row => {
-                let username = row.querySelector("td:nth-child(2)").innerText.toLowerCase();
-                row.style.display = username.includes(input) ? "" : "none";
-            });
-        }
-
-        function handleTypeChange() {
+        .then(response => response.json())
+        .then(data => {
             let type = document.querySelector('input[name="type"]:checked').value;
-            document.getElementById("listTitle").innerText = type === "member" ? "회원 리스트" : "기업 리스트";
-            loadData();
-        }
-
-        function showModal() {
-            let selectedReceivers = Array.from(document.querySelectorAll('input[name="receiver"]:checked'))
-                .map(input => input.value)
-                .join(", ");
-            if (selectedReceivers) {
-                document.getElementById('receivers').value = selectedReceivers;
-                document.getElementById('myModal').style.display = "block";
+            if (type === "member") {
+                loadMembers(data.members);
+                document.getElementById("downloadButton").onclick = function() {
+                    downloadExcel('member');
+                };
             } else {
-                alert("수신자를 선택하세요.");
+                loadMembers(data.companies);
+                document.getElementById("downloadButton").onclick = function() {
+                    downloadExcel('company');
+                };
             }
-        }
+        });
+    }
 
-        function closeModal() {
-            document.getElementById('myModal').style.display = "none";
-        }
+    function loadMembers(members) {
+        let memberTableBody = document.getElementById("memberTableBody");
+        memberTableBody.innerHTML = "";
+        members.forEach(member => {
+            let row = `<tr>
+                <td><input type="checkbox" name="receiver" value="${member.username}"></td>
+                <td>${member.username}</td>
+                <td>${member.kakaoId}</td>
+                <td>${member.role}</td>
+            </tr>`;
+            memberTableBody.innerHTML += row;
+        });
+    }
 
-        function sendNotice() {
-            let receivers = document.getElementById('receivers').value;
-            let title = document.getElementById('title').value;
-            let content = document.getElementById('content').value;
-            const token = localStorage.getItem('token');
-            fetch('http://localhost:9001/manager/send-notice', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    receivers: receivers,
-                    title: title,
-                    content: content
-                })
+    function searchMembers() {
+        let input = document.getElementById("memberSearch").value.toLowerCase();
+        let rows = document.querySelectorAll("#memberTableBody tr");
+        rows.forEach(row => {
+            let username = row.querySelector("td:nth-child(2)").innerText.toLowerCase();
+            row.style.display = username.includes(input) ? "" : "none";
+        });
+    }
+
+    function handleTypeChange() {
+        let type = document.querySelector('input[name="type"]:checked').value;
+        document.getElementById("listTitle").innerText = type === "member" ? "회원 리스트" : "기업 리스트";
+        loadData();
+    }
+
+    function showModal() {
+        let selectedReceivers = Array.from(document.querySelectorAll('input[name="receiver"]:checked'))
+            .map(input => input.value)
+            .join(", ");
+        if (selectedReceivers) {
+            document.getElementById('receivers').value = selectedReceivers;
+            document.getElementById('myModal').style.display = "block";
+        } else {
+            alert("수신자를 선택하세요.");
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    function sendNotice() {
+        let receivers = document.getElementById('receivers').value;
+        let title = document.getElementById('title').value;
+        let content = document.getElementById('content').value;
+        const token = localStorage.getItem('token');
+        fetch('http://localhost:9001/manager/send-notice', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                receivers: receivers,
+                title: title,
+                content: content
             })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message); // JSON 응답에서 메시지 추출
-                closeModal();
-            })
-            .catch(error => console.error('Error:', error));
-        }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message); // JSON 응답에서 메시지 추출
+            closeModal();
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-        window.onload = function() {
-            document.getElementById("sendNoticeButton").addEventListener("click", showModal);
-            document.getElementById("typeMember").addEventListener("change", handleTypeChange);
-            document.getElementById("typeCompany").addEventListener("change", handleTypeChange);
-            handleTypeChange();
-        }
+    function downloadExcel(type) {
+        fetch(`http://localhost:9001/manager/download/excel?type=${type}`, {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.status === 401) {
+                alert('인증 실패. 로그인 정보를 확인하세요.');
+                window.location.href = '/login';
+                return;
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'members.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    window.onload = function() {
+        document.getElementById("sendNoticeButton").addEventListener("click", showModal);
+        document.getElementById("typeMember").addEventListener("change", handleTypeChange);
+        document.getElementById("typeCompany").addEventListener("change", handleTypeChange);
+        handleTypeChange();
+    }
     </script>
 </head>
 <body>
